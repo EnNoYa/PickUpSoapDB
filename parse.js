@@ -45,11 +45,11 @@ if (!String.prototype.format) {
   };
 }
 
-
+     
 
 
 	//var query =$('#searbo').val(); 
-		var url   = 'https://opendata.epa.gov.tw/webapi/api/rest/datastore/355000000I-000136/?format=json&token=eongM8uzv0eKlLhGrOBQCw';//.format(query);
+		var url   = 'http://opendata.epa.gov.tw/webapi/Data/REWIQA/?$orderby=SiteName&$skip=0&$top=1000&format=json&token=eongM8uzv0eKlLhGrOBQCw';//.format(query);
 	
 	// ajax prepare in jQuery
 		$.ajaxPrefilter(function (options) {
@@ -66,18 +66,23 @@ if (!String.prototype.format) {
 				}}); 
 
 
-	(function() {
+/*	(function() {
   
   //加上&callback=?
-  $.post( url, function(){
+  $.get( url, function(){
     format: "json"
   }).done(function(data) {
     	console.log(data);
     });
-})(); 
+})(); */
+$.get( url, function(response){
+      var res=response;
+     x=res;
+
+ });
 
 
-
+     //7~14
 
 	//新北 新莊 eongM8uzv0eKlLhGrOBQCw
 			     
