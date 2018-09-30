@@ -17,7 +17,7 @@
     var TYPES = require('tedious').TYPES;  
 
     function executeStatement1() {  
-        request = new Request("INSERT TestDB.ttest (name, time) OUTPUT INSERTED.ProductID VALUES (@name, CURRENT_TIMESTAMP);", function(err) {  
+        request = new Request("INSERT TestDB.ttest (id, time) OUTPUT INSERTED.ProductID VALUES (@name, CURRENT_TIMESTAMP);", function(err) {  
          if (err) {  
             console.log(err);}  
         });  
