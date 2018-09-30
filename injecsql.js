@@ -1,10 +1,14 @@
+ 
+
+function sqlinj(){
+     console.log("sql injecting");
  var Connection = require('tedious').Connection;  
     var config = {  
         userName: 'SA',  
         password: '1qaz@WSX',  
         server: 'localhost',  
         // If you are on Azure SQL Database, you need these next options.  
-        options: {encrypt: true, database: 'AdventureWorks'}  
+        options: {encrypt: true, database: 'TestDB'}  
     };  
     var connection = new Connection(config);  
     connection.on('connect', function(err) {  
@@ -32,4 +36,7 @@
             });  
         });       
         connection.execSql(request);  
-    }  
+
+    } 
+console.log("sql finish");
+     }
