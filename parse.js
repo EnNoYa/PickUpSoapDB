@@ -1,38 +1,14 @@
-var express = 'express';
 
+var jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
 
-var db = '../config/db';
-var sql = 'mssql';
+var $ = jQuery = require('jquery')(window);
 
 var x;
 
-function sqladd(req, res, next) {
-
-  sql.connect(db, function (err) {
-    if (err)
-      console.log(err);
-
-    var request = new sql.Request();
-    request.input('userid', sql.NVarChar(50), req.body.userid)
-      .input('pwd', sql.NVarChar(50), req.body.pwd)
-      .input('username', sql.NVarChar(50), req.body.username)
-      .input('email', sql.NVarChar(50), req.body.email)
-      .query('insert into UserList (userid, pwd, username, email) values (@userid, @pwd, @username, @email)', function (err, result) {
-
-        if (err) {
-          console.log(err);
-          res.send(err);
-        }
-        sql.close();
-        res.redirect('/');
-      });
-  });
-}
-
-
-
- 
-  
 if (!String.prototype.format) {
   String.prototype.format = function() {
   var args = arguments;
@@ -78,12 +54,10 @@ if (!String.prototype.format) {
 $.get( url, function(response){
       var res=response;
      x=res;
-     sqlinj();
+    console.log('fin');
+    console.log(x);
 
  });
 
 
-     //7~14
 
-  //新北 新莊 eongM8uzv0eKlLhGrOBQCw
-           

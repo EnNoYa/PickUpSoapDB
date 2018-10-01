@@ -21,8 +21,8 @@ var Connection = require('tedious').Connection;
          if (err) {  
             console.log(err);}  
         });  
-        request.addParameter('id', TYPES.Int,5);  
-        request.addParameter('name', TYPES.NVarChar , 'S');  
+        request.addParameter('id', TYPES.Int,9);  
+        request.addParameter('name', TYPES.NVarChar , 'X');  
         request.on('row', function(columns) {  
             columns.forEach(function(column) {  
               if (column.value === null) {  
