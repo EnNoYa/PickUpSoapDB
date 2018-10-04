@@ -31,7 +31,7 @@ if (!String.prototype.format) {
   
   // ajax prepare in jQuery
     $.ajaxPrefilter(function (options) {
-           
+           console.log('ajax');
         if (options.crossDomain && jQuery.support.cors) {
         // check the protocol which the browser is using
           var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
@@ -49,39 +49,56 @@ $.get( url, function(response){
      tem=res;
 
     console.log(tem);
-    insertsql();
+
+console.log('********************************************');  
+
+  insertsql();
 
  });
 
-
-var Connection = require('tedious').Connection;  
-    var config = {  
+var cont=0;
+function insertsql(){ var Connection = require('tedious').Connection;     
+ var config = {  
         userName: 'SA',  
         password: '1qaz@WSX',  
         server: '127.0.0.1',  
         // If you are on Azure SQL Database, you need these next options.  
        // options: {encrypt: true, database: 'AdventureWorks'}  
     };  
-    var connection = new Connection(config);  
+  var connection = new Connection(config);  
     
-    function insertsql() {connection.on('connect', function(err) {  
+ connection.on('connect', function(err) {  
         // If no error, then good to proceed.  
         console.log("Connected");  
-        executeStatement1();  
-    });  }
+        executeStatement1();
+       console.log("ALL FINISH");  
+    });
+   
+   
 
     var Request = require('tedious').Request  
     var TYPES = require('tedious').TYPES;  
 
     function executeStatement1() {  
-        var cont=0;
-        while(tem.length>0){var tem2=tem.pop();  cont++; console.log("N "+cont);
-            request = new Request("use TestDB; INSERT into weather values(@site,@status) ;", function(err) {  
+        
+      // var tem2=tem.pop();  cont++;
+           // console.log(cont);
+          // console.log(tem2.SiteName);
+            // console.log(tem2.Status); 
+            var sqlquery="use TestDB; INSERT into weather values";           
+          for(var i=1;i<=tem.length;i++){
+if(i>1){sqlquery+=',';}
+sqlquery+="(@a"+i+",@b"+i+")"}
+            sqlquery+=';';
+	 request = new Request(sqlquery, function(err) {  
          if (err) {  
             console.log(err);}  
         });  
-        request.addParameter('site', TYPES.NvarChar(10),tem2.SiteName);  
-        request.addParameter('status', TYPES.NVarChar(10) , tem2.Status);  
+            var temlen=tem.length;
+         for(var i=1;i<=temlen;i++){var tem2=tem.pop();
+                  var site="a"+i; var status="b"+i;
+        request.addParameter(site, TYPES.NVarChar,tem2.SiteName);  
+        request.addParameter(status, TYPES.NVarChar , tem2.Status); } 
         request.on('row', function(columns) {  
             columns.forEach(function(column) {  
               if (column.value === null) {  
@@ -92,7 +109,7 @@ var Connection = require('tedious').Connection;
             });  
         });       
         connection.execSql(request); 
-        } 
-        console.log("ALL FIN");
+        
+      return;   
     }
-
+}
