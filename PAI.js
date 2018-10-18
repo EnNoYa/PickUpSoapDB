@@ -1,4 +1,9 @@
 
+var timer=setInterval(getdata, 60000);
+
+
+function getdata (){
+
 var jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
@@ -112,4 +117,5 @@ sqlquery+="(@a"+i+",@b"+i+")"}
         
       return;   
     }
+}
 }
