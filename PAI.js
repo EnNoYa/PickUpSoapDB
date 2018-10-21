@@ -64,7 +64,7 @@ console.log('********************************************');
 var cont=0;
 function insertsql(){ var Connection = require('tedious').Connection;     
  var config = {  
-        userName: 'SA',  
+        userName: 'ENY',  
         password: '1qaz@WSX',  
         server: '127.0.0.1',  
         // If you are on Azure SQL Database, you need these next options.  
@@ -126,12 +126,12 @@ sqlquery+="(@a"+i+",@b"+i+",getdate()"+",@d"+i+",@e"+i+",@f"+i+",@g"+i+",@h"+i+"
         request.addParameter(PM10, TYPES.Decimalr,tem2.PM10);  
         request.addParameter(PM25, TYPES.Decimal , tem2["PM2.5"]); 
         request.addParameter(NO2, TYPES.Decimal,tem2.NO2);  
-        request.addParameter(SO2Ans, TYPES.Integer , null); 
-        request.addParameter(COAns, TYPES.Integer,null);  
-        request.addParameter(O3Ans, TYPES.Integer , null); 
-        request.addParameter(PM10Ans, TYPES.Integer,tem2.PM10_AVG);  
-        request.addParameter(PM25Ans, TYPES.Integer , tem2["PM2.5_AVG"]); 
-        request.addParameter(NO2Ans, TYPES.Integer,null);   
+        request.addParameter(SO2Ans, TYPES.Int , null); 
+        request.addParameter(COAns, TYPES.Int,null);  
+        request.addParameter(O3Ans, TYPES.Int , null); 
+        request.addParameter(PM10Ans, TYPES.Int,tem2.PM10_AVG);  
+        request.addParameter(PM25Ans, TYPES.Int , tem2["PM2.5_AVG"]); 
+        request.addParameter(NO2Ans, TYPES.Int,null);   
         } 
         request.on('row', function(columns) {  
             columns.forEach(function(column) {  
