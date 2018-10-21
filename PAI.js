@@ -93,17 +93,46 @@ function insertsql(){ var Connection = require('tedious').Connection;
             var sqlquery="use TestDB; INSERT into weather values";           
           for(var i=1;i<=tem.length;i++){
 if(i>1){sqlquery+=',';}
-sqlquery+="(@a"+i+",@b"+i+")"}
+sqlquery+="(@a"+i+",@b"+i+",getdate()"+",@d"+i+",@e"+i+",@f"+i+",@g"+i+",@h"+i+",@i"+i+",@j"+i+",@k"+i+",@l"+i+",@m"+i+",@n"+i+",@o"+i+")"}
             sqlquery+=';';
 	 request = new Request(sqlquery, function(err) {  
          if (err) {  
             console.log(err);}  
         });  
             var temlen=tem.length;
-         for(var i=1;i<=temlen;i++){var tem2=tem.pop();
-                  var site="a"+i; var status="b"+i;
-        request.addParameter(site, TYPES.NVarChar,tem2.SiteName);  
-        request.addParameter(status, TYPES.NVarChar , tem2.Status); } 
+         for(var i=1;i<=temlen;i++){
+                  var tem2=tem.pop();
+                  var SiteName="a"+i; 
+                  var County="b"+i;
+                  //var TestTime="c"+i; 
+                  var SO2="d"+i;
+                  var CO="e"+i; 
+                  var O3="f"+i;
+                  var PM10="g"+i; 
+                  var PM25="h"+i;
+                  var NO2="i"+i; 
+                  var SO2Ans="j"+i;
+                  var COAns="k"+i; 
+                  var O3Ans="l"+i;
+                  var PM10Ans="m"+i; 
+                  var PM25Ans="n"+i;
+                  var NO2Ans="o"+i;
+        request.addParameter(SiteName, TYPES.NVarChar,tem2.SiteName);  
+        request.addParameter(County, TYPES.NVarChar , tem2.County);
+       // request.addParameter(TestTime, TYPES.DateTime,);  
+        request.addParameter(SO2, TYPES.Decimal , tem2.SO2); 
+        request.addParameter(CO, TYPES.Decimal,tem2.CO);  
+        request.addParameter(O3, TYPES.Decimal , tem2.O3); 
+        request.addParameter(PM10, TYPES.Decimalr,tem2.PM10);  
+        request.addParameter(PM25, TYPES.Decimal , tem2["PM2.5"]); 
+        request.addParameter(NO2, TYPES.Decimal,tem2.NO2);  
+        request.addParameter(SO2Ans, TYPES.Integer , null); 
+        request.addParameter(COAns, TYPES.Integer,null);  
+        request.addParameter(O3Ans, TYPES.Integer , null); 
+        request.addParameter(PM10Ans, TYPES.Integer,tem2.PM10_AVG);  
+        request.addParameter(PM25Ans, TYPES.Integer , tem2["PM2.5_AVG"]); 
+        request.addParameter(NO2Ans, TYPES.Integer,null);   
+        } 
         request.on('row', function(columns) {  
             columns.forEach(function(column) {  
               if (column.value === null) {  
