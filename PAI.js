@@ -1,7 +1,7 @@
 
-var timer=setInterval(getdata, 60000);
+//var timer=setInterval(getdata, 60000);
 
-
+getdata();
 function getdata (){
 
 var jsdom = require('jsdom');
@@ -64,8 +64,8 @@ console.log('********************************************');
 var cont=0;
 function insertsql(){ var Connection = require('tedious').Connection;     
  var config = {  
-        userName: 'ENY',  
-        password: '1qaz@WSX',  
+        userName: 'SA',  
+        password: 'qM1agSB0FD1v',  
         server: '127.0.0.1',  
         // If you are on Azure SQL Database, you need these next options.  
        // options: {encrypt: true, database: 'AdventureWorks'}  
@@ -90,10 +90,10 @@ function insertsql(){ var Connection = require('tedious').Connection;
            // console.log(cont);
           // console.log(tem2.SiteName);
             // console.log(tem2.Status); 
-            var sqlquery="use TestDB; INSERT into weather values";           
+            var sqlquery="use weatherDB; INSERT into weather values";           
           for(var i=1;i<=tem.length;i++){
 if(i>1){sqlquery+=',';}
-sqlquery+="(@a"+i+",@b"+i+",getdate()"+",@d"+i+",@e"+i+",@f"+i+",@g"+i+",@h"+i+",@i"+i+",@j"+i+",@k"+i+",@l"+i+",@m"+i+",@n"+i+",@o"+i+")"}
+sqlquery+="(@a"+i+",@b"+i+",getdate()"+",@d"+i+",@e"+i+",@f"+i+",@g"+i+",@h"+i+",@i"+i+",null"+",null"+",null"+",null"+",null"+",null"+")"}
             sqlquery+=';';
 	 request = new Request(sqlquery, function(err) {  
          if (err) {  
@@ -111,27 +111,15 @@ sqlquery+="(@a"+i+",@b"+i+",getdate()"+",@d"+i+",@e"+i+",@f"+i+",@g"+i+",@h"+i+"
                   var PM10="g"+i; 
                   var PM25="h"+i;
                   var NO2="i"+i; 
-                  var SO2Ans="j"+i;
-                  var COAns="k"+i; 
-                  var O3Ans="l"+i;
-                  var PM10Ans="m"+i; 
-                  var PM25Ans="n"+i;
-                  var NO2Ans="o"+i;
         request.addParameter(SiteName, TYPES.NVarChar,tem2.SiteName);  
         request.addParameter(County, TYPES.NVarChar , tem2.County);
        // request.addParameter(TestTime, TYPES.DateTime,);  
-        request.addParameter(SO2, TYPES.Decimal , tem2.SO2); 
-        request.addParameter(CO, TYPES.Decimal,tem2.CO);  
-        request.addParameter(O3, TYPES.Decimal , tem2.O3); 
-        request.addParameter(PM10, TYPES.Decimalr,tem2.PM10);  
-        request.addParameter(PM25, TYPES.Decimal , tem2["PM2.5"]); 
-        request.addParameter(NO2, TYPES.Decimal,tem2.NO2);  
-        request.addParameter(SO2Ans, TYPES.Int , null); 
-        request.addParameter(COAns, TYPES.Int,null);  
-        request.addParameter(O3Ans, TYPES.Int , null); 
-        request.addParameter(PM10Ans, TYPES.Int,tem2.PM10_AVG);  
-        request.addParameter(PM25Ans, TYPES.Int , tem2["PM2.5_AVG"]); 
-        request.addParameter(NO2Ans, TYPES.Int,null);   
+        request.addParameter(SO2, TYPES.Decimal , (tem2.SO2!=null?parseFloat(tem2.SO2):null)); 
+        request.addParameter(CO, TYPES.Decimal,(tem2.CO!=null?parseFloat(tem2.CO):null));  
+        request.addParameter(O3, TYPES.Decimal , (tem2.O3!=null?parseFloat(tem2.O3):null)); 
+        request.addParameter(PM10, TYPES.Decimal,(tem2.PM10!=null?parseFloat(tem2.PM10):null));  
+        request.addParameter(PM25, TYPES.Decimal , (tem2["PM2.5"]!=null?parseFloat(tem2["PM2.5"]):null)); 
+        request.addParameter(NO2, TYPES.Decimal,(tem2.NO2!=null?parseFloat(tem2.NO2):null));    
         } 
         request.on('row', function(columns) {  
             columns.forEach(function(column) {  
