@@ -1,7 +1,7 @@
 
-var timer=setInterval(getdata, 60000);
+//var timer=setInterval(getdata, 60000);
 
-
+getdata();
 function getdata (){
 
 var jsdom = require('jsdom');
@@ -65,7 +65,7 @@ var cont=0;
 function insertsql(){ var Connection = require('tedious').Connection;     
  var config = {  
         userName: 'SA',  
-        password: '1qaz@WSX',  
+        password: 'qM1agSB0FD1v',  
         server: '127.0.0.1',  
         // If you are on Azure SQL Database, you need these next options.  
        // options: {encrypt: true, database: 'AdventureWorks'}  
@@ -90,20 +90,37 @@ function insertsql(){ var Connection = require('tedious').Connection;
            // console.log(cont);
           // console.log(tem2.SiteName);
             // console.log(tem2.Status); 
-            var sqlquery="use TestDB; INSERT into weather values";           
+            var sqlquery="use weatherDB; INSERT into weather values";           
           for(var i=1;i<=tem.length;i++){
 if(i>1){sqlquery+=',';}
-sqlquery+="(@a"+i+",@b"+i+")"}
+sqlquery+="(@a"+i+",@b"+i+",getdate()"+",@d"+i+",@e"+i+",@f"+i+",@g"+i+",@h"+i+",@i"+i+",null"+",null"+",null"+",null"+",null"+",null"+")"}
             sqlquery+=';';
 	 request = new Request(sqlquery, function(err) {  
          if (err) {  
             console.log(err);}  
         });  
             var temlen=tem.length;
-         for(var i=1;i<=temlen;i++){var tem2=tem.pop();
-                  var site="a"+i; var status="b"+i;
-        request.addParameter(site, TYPES.NVarChar,tem2.SiteName);  
-        request.addParameter(status, TYPES.NVarChar , tem2.Status); } 
+         for(var i=1;i<=temlen;i++){
+                  var tem2=tem.pop();
+                  var SiteName="a"+i; 
+                  var County="b"+i;
+                  //var TestTime="c"+i; 
+                  var SO2="d"+i;
+                  var CO="e"+i; 
+                  var O3="f"+i;
+                  var PM10="g"+i; 
+                  var PM25="h"+i;
+                  var NO2="i"+i; 
+        request.addParameter(SiteName, TYPES.NVarChar,tem2.SiteName);  
+        request.addParameter(County, TYPES.NVarChar , tem2.County);
+       // request.addParameter(TestTime, TYPES.DateTime,);  
+        request.addParameter(SO2, TYPES.Decimal , (tem2.SO2!=null?parseFloat(tem2.SO2):null)); 
+        request.addParameter(CO, TYPES.Decimal,(tem2.CO!=null?parseFloat(tem2.CO):null));  
+        request.addParameter(O3, TYPES.Decimal , (tem2.O3!=null?parseFloat(tem2.O3):null)); 
+        request.addParameter(PM10, TYPES.Decimal,(tem2.PM10!=null?parseFloat(tem2.PM10):null));  
+        request.addParameter(PM25, TYPES.Decimal , (tem2["PM2.5"]!=null?parseFloat(tem2["PM2.5"]):null)); 
+        request.addParameter(NO2, TYPES.Decimal,(tem2.NO2!=null?parseFloat(tem2.NO2):null));    
+        } 
         request.on('row', function(columns) {  
             columns.forEach(function(column) {  
               if (column.value === null) {  
