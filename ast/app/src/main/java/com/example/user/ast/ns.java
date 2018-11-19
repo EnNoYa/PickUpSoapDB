@@ -54,6 +54,7 @@ public class ns extends AppCompatActivity {
         Switch ics = (Switch)findViewById(R.id.inss);
         final Switch icv = (Switch)findViewById(R.id.insv);
         final Switch icr = (Switch)findViewById(R.id.irts);
+        ins.setEnabled(false);
         icv.setEnabled(false);
         icr.setEnabled(false);
         ins.setEnabled(false);
@@ -62,10 +63,18 @@ public class ns extends AppCompatActivity {
                 if (isChecked) {
                     icv.setEnabled(true);
                     icr.setEnabled(true);
-                    ins.setEnabled(true);
                 } else {
                     icv.setEnabled(false);
                     icr.setEnabled(false);
+                    ins.setEnabled(false);
+                }
+            }
+        });
+        icr.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    ins.setEnabled(true);
+                } else {
                     ins.setEnabled(false);
                 }
             }
@@ -75,6 +84,7 @@ public class ns extends AppCompatActivity {
         final Switch rcv = (Switch)findViewById(R.id.rnsv);
         final Switch rcr = (Switch)findViewById(R.id.rrts);
         final Spinner rsp = (Spinner)findViewById(R.id.rnssp);
+        rns.setEnabled(false);
         rcv.setEnabled(false);
         rcr.setEnabled(false);
         rns.setEnabled(false);
@@ -84,13 +94,21 @@ public class ns extends AppCompatActivity {
                 if (isChecked) {
                     rcv.setEnabled(true);
                     rcr.setEnabled(true);
-                    rns.setEnabled(true);
                     rsp.setEnabled(true);
                 } else{
                     rcv.setEnabled(false);
                     rcr.setEnabled(false);
                     rns.setEnabled(false);
                     rsp.setEnabled(false);
+                }
+            }
+        });
+        rcr.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    rns.setEnabled(true);
+                } else {
+                    rns.setEnabled(false);
                 }
             }
         });

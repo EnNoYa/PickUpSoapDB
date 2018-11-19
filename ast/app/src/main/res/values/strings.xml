@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ast</string>
+    <string name="app_name">多C一點O氣</string>
     <string name="stringm">地圖</string>
     <string name="stringas">設定</string>
     <string name="title_activity_settings">Settings</string>
@@ -105,4 +105,5 @@
         <item>12小時</item>
         <item>24小時</item>
     </string-array>
+    <string name="title_activity_am">Map</string>
 </resources>
