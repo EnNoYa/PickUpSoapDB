@@ -28,7 +28,6 @@
         <activity android:name=".insa" />
         <activity android:name=".rnsa" />
         <activity android:name=".mrsa" />
-        <activity android:name=".MapA" />
         <activity android:name=".ais" />
         <activity android:name=".ai" />
         <!--

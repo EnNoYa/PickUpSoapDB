@@ -31,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final Bundle bdgm = new Bundle();
-        Button bmm = (Button)findViewById(R.id.bm);
+        Button bmm = (Button)findViewById(R.id.map);
         bmm.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                intent.setClass(MainActivity.this,MapA.class);
-                bdgm.putInt("btnid", R.id.bm);
+                intent.setClass(MainActivity.this,am.class);
+                bdgm.putInt("btnid", R.id.map);
                 intent.putExtras(bdgm);
                 startActivity(intent);
             }

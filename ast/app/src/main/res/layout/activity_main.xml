@@ -19,7 +19,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/bm"
+        android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="@string/stringm"
