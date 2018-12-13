@@ -1,0 +1,138 @@
+<resources>
+    <string name="app_name">多C一點O氣</string>
+    <string name="stringm">地圖</string>
+    <string name="stringas">設定</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="stringtbts">tbs</string>
+    <string name="stringns">通知設定</string>
+    <string name="tbtoff">一般</string>
+    <string name="tbton">暗色</string>
+    <string name="tth">外觀主題</string>
+    <string name="ins">吸入量</string>
+    <string name="rns">定時通知</string>
+    <string name="stringmrs">病歷設定</string>
+    <string name="nson">開啟通知</string>
+    <string name="nsoff">關閉通知</string>
+    <string name="nsv">震動</string>
+    <string name="on">開</string>
+    <string name="off">關</string>
+    <string name="rt">鈴聲</string>
+    <string name="srt">選擇鈴聲</string>
+    <string name="spt">間隔時長</string>
+    <string-array name="sra">
+        <item>1小時</item>
+        <item>1.5小時</item>
+        <item>2小時</item>
+        <item>3小時</item>
+        <item>4小時</item>
+        <item>5小時</item>
+        <item>6小時</item>
+        <item>12小時</item>
+        <item>24小時</item>
+    </string-array>
+    <string name="title_activity_am">Map</string>
+    <string name="airaqi">AQI</string>
+    <string name="airindex">指標</string>
+    <string name="airlevel">等級</string>
+    <string name="airnum">數值</string>
+    <string name="airp1">SO2</string>
+    <string name="airp2">CO</string>
+    <string name="airp3">O3</string>
+    <string name="airp4">PM10</string>
+    <string name="airp5">PM2.5</string>
+    <string name="airp6">NO2</string>
+    <string name="airlkaqiv">0</string>
+    <string name="airlcaqiv">0</string>
+    <string name="airaqiv">0</string>
+    <string name="ailevelv1">良好</string>
+    <string name="con">汙染物</string>
+    <string name="so2i" >0</string>
+    <string name="coi">0</string>
+    <string name="o3i">0</string>
+    <string name="pm10i">0</string>
+    <string name="pm2_5i">0</string>
+    <string name="no2i">0</string>
+    <string name="aircontaminant">小時濃度</string>
+    <string name="so2v">0</string>
+    <string name="co2v">0</string>
+    <string name="o3v">0</string>
+    <string name="pm10v">0</string>
+    <string name="no2v">0</string>
+    <string name="pm2_5v">0</string>
+    <string name="ailevelv2">普通</string>
+    <string name="aiin">吸入量</string>
+    <string name="aidan">危險值</string>
+    <string name="aidist">距危險值</string>
+</resources>
