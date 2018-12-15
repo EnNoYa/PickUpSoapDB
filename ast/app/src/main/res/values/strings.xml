@@ -106,6 +106,59 @@
         <item>24小時</item>
     </string-array>
     <string name="title_activity_am">地圖</string>
-
+    <string name="airaqi">AQI</string>
+    <string name="airindex">指標</string>
+    <string name="airlevel">等級</string>
+    <string name="airnum">數值</string>
+    <string name="airp1">SO2</string>
+    <string name="airp2">CO</string>
+    <string name="airp3">O3</string>
+    <string name="airp4">PM10</string>
+    <string name="airp5">PM2.5</string>
+    <string name="airp6">NO2</string>
+    <string name="airlkaqiv">0</string>
+    <string name="airlcaqiv">0</string>
+    <string name="airaqiv">0</string>
+    <string name="ailevelv1">良好</string>
+    <string name="ailevelv2">普通</string>
+    <string name="ailevelv3">敏感X</string>
+    <string name="ailevelv4">所有X</string>
+    <string name="ailevelv5">非常差</string>
+    <string name="ailevelv6">危害</string>
+    <string name="con">汙染物</string>
+    <string name="so2i" >0</string>
+    <string name="coi">0</string>
+    <string name="o3i">0</string>
+    <string name="pm10i">0</string>
+    <string name="pm2_5i">0</string>
+    <string name="no2i">0</string>
+    <string name="aircontaminant">小時濃度</string>
+    <string name="so2v">0</string>
+    <string name="co2v">0</string>
+    <string name="o3v">0</string>
+    <string name="pm10v">0</string>
+    <string name="no2v">0</string>
+    <string name="pm2_5v">0</string>
+    <string name="aiin">吸入量</string>
+    <string name="aidan">危險值</string>
+    <string name="aidist">距危險值</string>
+    <string name="idso2">0</string>
+    <string name="idco">0</string>
+    <string name="ido3">0</string>
+    <string name="idpm10">0</string>
+    <string name="idpm2_5">0</string>
+    <string name="idno2">0</string>
+    <string name="inso2">0</string>
+    <string name="inco">0</string>
+    <string name="ino3">0</string>
+    <string name="inpm10">0</string>
+    <string name="inpm2_5">0</string>
+    <string name="inno2">0</string>
+    <string name="itso2">0</string>
+    <string name="itco">0</string>
+    <string name="ito3">0</string>
+    <string name="itpm10">0</string>
+    <string name="itpm2_5">0</string>
+    <string name="itno2">0</string>
 
 </resources>
