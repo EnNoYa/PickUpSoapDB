@@ -2,6 +2,8 @@ package com.example.user.ast;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -31,12 +33,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.CircleOptions;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
-public class am extends AppCompatActivity implements OnMapReadyCallback, LocationListener{
+public class am extends AppCompatActivity implements OnMapReadyCallback, LocationListener, GoogleMap.OnMarkerClickListener{
     private GoogleMap mMap;
     static final int MIN_TIME = 5000; //位置更新條件：5000 毫秒
     static final float MIN_DIST = 10;   //位置更新條件：10 公尺
@@ -45,8 +44,8 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
     boolean isGPSEnabled;      //GPS定位是否可用
     boolean isNetworkEnabled;  //網路定位是否可用
     private int M = 79;//最大值
+    public int nowid = 0;
     private Marker Marr[] = new Marker[M];
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -63,27 +62,23 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//設置返回
         // 取得系統服務的LocationManager物件
         mgr = (LocationManager) getSystemService(LOCATION_SERVICE);
-        /*工具欄位*/
-        /*Toolbar tb = findViewById(R.id.toolbar);
-        setSupportActionBar(tb);
-        tb.setSubtitle("Your Location");*/
         /*地圖預設*/
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);//設定地圖類別
         for(int i=0; i<M; ++i)
-            mMap.addMarker(new MarkerOptions().position(LLplace[i]).title(place_name[i]));
+            Marr[i]=mMap.addMarker(new MarkerOptions().position(LLplace[i]).title(place_name[i]));
         mMap.setOnMyLocationButtonClickListener(onMyLocationButtonClickListener);//開啟按鈕事件
         mMap.setOnMyLocationClickListener(onMyLocationClickListener);//開啟點點事件
         checkPermission();//檢查權限
         mMap.getUiSettings().setZoomControlsEnabled(true);//控制放大縮小
         mMap.setMinZoomPreference(8);
         mMap.setMaxZoomPreference(15);
+        mMap.setOnMarkerClickListener(this);//標記點擊事件
     }
 
     @Override
@@ -101,7 +96,8 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
         currPoint = new LatLng(location.getLatitude(), location.getLongitude());
         Toast.makeText(this, "目前位置", Toast.LENGTH_LONG).show();
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currPoint));
-        //mMap.addMarker(new MarkerOptions().position(currPoint).title("目前位置"));
+        nowid = shortest_place(currPoint);
+        save_data(nowid);
     }
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) { }
@@ -170,6 +166,7 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
             new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick() {
+                    open_activity();
                     return false;
                 }
             };
@@ -191,7 +188,7 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
                 }
             };
     /*觀測站位置資訊*/
-    private LatLng LLplace[] = {
+    public LatLng LLplace[] = {
                 new LatLng(25.29743611,121.537975),
                 new LatLng(25.18272222,121.5295833),
                 new LatLng(25.17966667,121.6898806),
@@ -272,13 +269,13 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
                 new LatLng(23.75754722,	120.3487417),
                 new LatLng(22.35222222,	120.3772222),
         };
-        private String place_name[] = {
+        public String place_name[] = {
                 "富貴角", "陽明", "萬里", "淡水", "基隆", "士林", "林口", "三重", "菜寮", "汐止", "大同", "中山", "大園", "松山",
                 "萬華", "新莊", "觀音", "古亭", "永和", "板橋", "桃園", "土城", "新店", "平鎮", "中壢", "龍潭", "湖口", "新竹",
                 "頭份", "苗栗", "三義", "豐原", "沙鹿", "西屯", "忠明", "線西", "大里", "彰化", "埔里", "二林", "南投", "竹山",
-                "麥寮", "台西", "斗六", "新港", "圤子", "嘉義", "新營", "善化", "安南", "台南", "美濃", "橋頭", "楠梓", "仁武",
+                "麥寮", "臺西", "斗六", "新港", "圤子", "嘉義", "新營", "善化", "安南", "臺南", "美濃", "橋頭", "楠梓", "仁武",
                 "左營", "屏東", "前金", "鳳山", "復興", "前鎮", "小港", "大寮", "潮州", "林園", "恆春", "宜蘭", "冬山", "花蓮",
-                "關山", "台東", "馬祖", "金門", "馬公", "台南(玉井)", "彰化(大城)", "崙背", "屏東(琉球)"
+                "關山", "臺東", "馬祖", "金門", "馬公", "臺南", "彰化", "崙背", "屏東"
         };
         public int shortest_place(LatLng curL){
             double dis = 1000.0;
@@ -293,4 +290,27 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
             return id;
         }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {//點擊標記事件
+        LatLng tmp = marker.getPosition();
+        int indx = shortest_place(tmp);
+        save_data(indx);
+        open_activity();
+        return false;
+    }
+
+    private void save_data(int id){
+        SharedPreferences saveid = getApplication().getSharedPreferences("ssssid", Context.MODE_PRIVATE);
+        saveid.edit().putString("idsave", place_name[id]).apply();
+    }
+
+    private void open_activity(){
+        Intent intent;
+        intent = new Intent();
+        final Bundle bdlc = new Bundle();
+        intent.setClass(am.this,ai.class);
+        bdlc.putInt("btnid", R.id.locatedcv);
+        intent.putExtras(bdlc);
+        startActivity(intent);
+    }
 }
