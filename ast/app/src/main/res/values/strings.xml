@@ -160,5 +160,6 @@
     <string name="itpm10">0</string>
     <string name="itpm2_5">0</string>
     <string name="itno2">0</string>
-    <string name="aiseditm">編輯</string>
+    <string name="obs">觀測站名字(自己寫)</string>
+    <string name="getobs">當前觀測站資訊</string>
 </resources>

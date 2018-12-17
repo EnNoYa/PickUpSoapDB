@@ -22,6 +22,7 @@ import org.json.JSONObject;
 public class ai extends AppCompatActivity {
     private RequestQueue mRQ;
     private TextView Tgas[] = new TextView[6];// SO2 CO O3 PM10 PM2.5 NO2
+    private TextView observe_t; //觀測站名稱
     private String sarr[] = new String[79]; //紀錄觀測站順序
     private String idname;//當前觀測站名稱
     private int id = 0;//index 觀測站
@@ -35,6 +36,7 @@ public class ai extends AppCompatActivity {
     Tgas[3] = (TextView)findViewById(R.id.aiipm10);
     Tgas[4] = (TextView)findViewById(R.id.aiipm2_5);
     Tgas[5] = (TextView)findViewById(R.id.aiino2);
+    observe_t= (TextView)findViewById(R.id.textView2);//觀測站ID
     mRQ = Volley.newRequestQueue(this);
 
     /*存 資料*/
@@ -57,6 +59,7 @@ public class ai extends AppCompatActivity {
                         for(int i=0; i<sarr.length; ++i){
                             if(sarr[i].equals(idname)){
                                 id=i;
+                                observe_t.setText("觀測站-"+idname);
                                 break;
                             }
                         }
@@ -66,42 +69,42 @@ public class ai extends AppCompatActivity {
                             Tgas[0].setText(SO2);
                         }
                         else
-                            Tgas[0].setText("不知道");
+                            Tgas[0].setText("維修");
 
                         if(!tmp.isNull("COAns")){
                             String CO  = tmp.getString("COAns");;
                             Tgas[1].setText(CO);
                         }
                         else
-                            Tgas[1].setText("不知道");
+                            Tgas[1].setText("維修");
 
                         if(!tmp.isNull("PM10Ans")){
                             String PM10  = tmp.getString("PM10Ans");
                             Tgas[3].setText(PM10);
                         }
                         else
-                            Tgas[3].setText("不知道");
+                            Tgas[3].setText("維修");
 
                         if(!tmp.isNull("PM25Ans")){
                             String PM25  = tmp.getString("PM25Ans");;
                             Tgas[4].setText(PM25);
                         }
                         else
-                            Tgas[4].setText("不知道");
+                            Tgas[4].setText("維修");
 
                         if(!tmp.isNull("NO2Ans")){
                             String NO2  = tmp.getString("NO2Ans");;
                             Tgas[5].setText(NO2);
                         }
                         else
-                            Tgas[5].setText("不知道");
+                            Tgas[5].setText("維修");
 
                         if(!tmp.isNull("O3ans")){
                         String O3  = tmp.getString("O3Ans");;
                             Tgas[2].setText(O3);
                         }
                         else
-                            Tgas[2].setText("不知道");
+                            Tgas[2].setText("維修");
 
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.graphics.Color;
 
 import android.location.LocationListener;
@@ -22,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -44,8 +43,29 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
     boolean isGPSEnabled;      //GPS定位是否可用
     boolean isNetworkEnabled;  //網路定位是否可用
     private int M = 79;//最大值
-    public int nowid = 0;
-    private Marker Marr[] = new Marker[M];
+    public int nowid = 0;//當前觀測站編號
+    private Marker Marr[] = new Marker[M];//標記
+    private int bag[] = new int[M];//收納鎖定
+    private Button bgetdata; //抓當前觀測站資訊
+    private Button select_id; //選擇你要查看的觀測站
+    private Button recover_id; //解除鎖定
+    private Boolean onoff = false; //收納鎖定按鈕是否有按下去
+    /*stack運作*/
+    private int arr[]=new int[80];
+    private int stacki = 0;
+    public boolean isEmpty(){
+        return stacki==0;
+    }
+    public void push(int x){
+        arr[stacki++]=x;
+    }
+    public void pop(){
+        stacki--;
+    }
+    public int top(){
+        return arr[stacki-1];
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -65,13 +85,47 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
         /*地圖預設*/
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        bgetdata = (Button) findViewById(R.id.getdata);
+        bgetdata.setOnClickListener(new View.OnClickListener(){//按鈕事件
+            @Override
+            public void onClick(View v) {
+                open_activity(); //開啟觀測站
+            }
+        });
+        select_id = findViewById(R.id.obs_delete);
+        select_id.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onoff=!onoff;
+                showOnoff();
+            }
+        });
+        recover_id = findViewById(R.id.obs_recover);
+        recover_id.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                for(int i=0; i<M; ++i)
+                    Marr[i].setVisible(true);
+                reset_save();
+            }
+        });
+        /*讀檔案*/
+        SharedPreferences saveid = getApplication().getSharedPreferences("baglist", Context.MODE_PRIVATE);
+        for(int i=0; i <M; ++i){
+            String tmp= String.valueOf(i);
+            bag[i]=saveid.getInt("baglist"+tmp,0);
+        }
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);//設定地圖類別
-        for(int i=0; i<M; ++i)
+        for(int i=0; i<M; ++i){
             Marr[i]=mMap.addMarker(new MarkerOptions().position(LLplace[i]).title(place_name[i]));
+            if(bag[i]==1)
+                Marr[i].setVisible(false);
+        }
         mMap.setOnMyLocationButtonClickListener(onMyLocationButtonClickListener);//開啟按鈕事件
         mMap.setOnMyLocationClickListener(onMyLocationClickListener);//開啟點點事件
         checkPermission();//檢查權限
@@ -84,6 +138,7 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
     @Override
     protected void onResume() {
         super.onResume();
+
         enableLocationUpdates(true);
     }
     @Override
@@ -166,7 +221,6 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
             new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick() {
-                    open_activity();
                     return false;
                 }
             };
@@ -294,13 +348,30 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
     public boolean onMarkerClick(Marker marker) {//點擊標記事件
         LatLng tmp = marker.getPosition();
         int indx = shortest_place(tmp);
-        save_data(indx);
-        open_activity();
+        if(onoff){
+            marker.setVisible(false);//設定為不可看見
+            save_select_obs(get_NowMarker(marker));//存檔
+        }
+        else {
+            if (isEmpty()) {//空的就存資料
+                push(indx);
+            } else {
+                if (top() == indx) {//如果連續點兩次標記
+                    save_data(indx);//存檔
+                    open_activity();//開觀測站資料
+                } else {
+                    pop();
+                    push(indx);
+                }
+            }
+        }
+
         return false;
     }
 
     private void save_data(int id){
         SharedPreferences saveid = getApplication().getSharedPreferences("ssssid", Context.MODE_PRIVATE);
+        saveid.edit().clear().commit();
         saveid.edit().putString("idsave", place_name[id]).apply();
     }
 
@@ -312,5 +383,33 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
         bdlc.putInt("btnid", R.id.locatedcv);
         intent.putExtras(bdlc);
         startActivity(intent);
+    }
+    private void save_select_obs(int id){//存收納袋
+        bag[id]=1;
+        SharedPreferences saveid = getApplication().getSharedPreferences("baglist", Context.MODE_PRIVATE);
+        String tmp= String.valueOf(id);
+        saveid.edit().putInt("baglist"+tmp,bag[id]).commit();
+    }
+    private int get_NowMarker(Marker marker){//哪個標記
+        for(int i=0; i<M; ++i){
+            if(marker.equals(Marr[i]))
+                return i;
+        }
+        return -1;
+    }
+    private void showOnoff(){
+        if(onoff)
+            Toast.makeText(this, "收納鎖定開啟中", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "收納鎖定已關閉", Toast.LENGTH_SHORT).show();
+    }
+    private void reset_save(){//重設定讀檔
+        SharedPreferences saveid = getApplication().getSharedPreferences("baglist", Context.MODE_PRIVATE);
+        saveid.edit().clear().commit();
+        for(int i=0; i<M; ++i){
+            bag[i]=0;
+            String tmp= String.valueOf(i);
+            saveid.edit().putInt("baglist"+tmp,bag[i]).commit();
+        }
     }
 }
