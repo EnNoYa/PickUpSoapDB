@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sky"
+    tools:context=".SettingsA">
+
+    <Button
+        android:id="@+id/bmrs"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/button"
+        android:text="@string/stringmrs"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bns" />
+
+    <Button
+        android:id="@+id/bns"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="178dp"
+        android:background="@drawable/button"
+        android:text="@string/stringns"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/choose_sodi_area"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/button"
+        android:text="選擇指定地區"
+        app:layout_constraintTop_toBottomOf="@id/bmrs" />
+
+</android.support.constraint.ConstraintLayout>

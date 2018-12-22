@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".am">
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:context=".am"
+        tools:layout="@layout/activity_am"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/getdata"
+        android:text="@string/getobs"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/map"
+        app:layout_constraintTop_toTopOf="@id/map"
+    />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/obs_delete"
+        android:text="收納鎖定"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/map"
+        app:layout_constraintTop_toBottomOf="@id/getdata"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/obs_recover"
+        android:text="重設"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="@id/map"
+        app:layout_constraintTop_toBottomOf="@id/obs_delete"
+        />
+
+</android.support.constraint.ConstraintLayout>
