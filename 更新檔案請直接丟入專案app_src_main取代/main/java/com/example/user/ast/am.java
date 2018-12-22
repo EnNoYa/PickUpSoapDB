@@ -143,7 +143,6 @@ public class am extends AppCompatActivity implements OnMapReadyCallback, Locatio
     @Override
     protected void onResume() {
         super.onResume();
-
         enableLocationUpdates(true);
     }
     @Override

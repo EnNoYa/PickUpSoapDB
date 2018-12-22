@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         local_area.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                intent.setClass(MainActivity.this,ai.class);
+                intent.setClass(MainActivity.this,ais.class);
                 blocal_area.putInt("btnid", R.id.button_local_area);
                 intent.putExtras(blocal_area);
                 startActivity(intent);

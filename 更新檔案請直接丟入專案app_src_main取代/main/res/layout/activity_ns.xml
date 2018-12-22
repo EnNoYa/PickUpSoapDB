@@ -7,45 +7,55 @@
     android:background="@drawable/sky"
     tools:context=".ns">
 
+    <TextView
+        android:id="@+id/in_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lb"
+        android:gravity="center"
+        android:text="@string/insn"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rn_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lb"
+        android:gravity="center"
+        android:text="@string/rnsn"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/irts" />
+
     <Switch
         android:id="@+id/inss"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/ins"
-        android:textOff="@string/nsoff"
-        android:textOn="@string/nson"
-        android:textSize="18sp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Switch
-        android:id="@+id/rnss"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/rns"
         android:textOff="@string/nsoff"
         android:textOn="@string/nson"
         android:textSize="18sp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/irts" />
+        app:layout_constraintTop_toBottomOf="@+id/in_setting" />
 
     <Switch
         android:id="@+id/insv"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/nsv"
         android:textOff="@string/off"
         android:textOn="@string/on"
@@ -59,10 +69,10 @@
         android:id="@+id/irts"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/rt"
         android:textOff="@string/off"
         android:textOn="@string/on"
@@ -74,40 +84,71 @@
 
     <Button
         android:id="@+id/irt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/button_2"
         android:text="@string/srt"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/rnss"
+        app:layout_constraintBottom_toTopOf="@+id/rn_setting"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/insv" />
 
-    <Spinner
-        android:id="@+id/rnssp"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:entries="@array/sra"
-        android:spinnerMode="dialog"
+    <Switch
+        android:id="@+id/rnss"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/rns"
+        android:textOff="@string/nsoff"
+        android:textOn="@string/nson"
+        android:textSize="18sp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rn_setting" />
+
+    <Spinner
+        android:id="@+id/hsp"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:dropDownWidth="40dp"
+        android:entries="@array/srha"
+        android:gravity="center"
+        android:popupBackground="@color/lb"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintEnd_toStartOf="@+id/h"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+    <Spinner
+        android:id="@+id/msp"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:dropDownWidth="40dp"
+        android:entries="@array/srma"
+        android:gravity="center"
+        android:popupBackground="@color/lb"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintEnd_toStartOf="@+id/m"
         app:layout_constraintTop_toBottomOf="@+id/rnss" />
 
     <Switch
         android:id="@+id/rnsv"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/nsv"
         android:textOff="@string/off"
         android:textOn="@string/on"
@@ -115,16 +156,16 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rnssp" />
+        app:layout_constraintTop_toBottomOf="@+id/msp" />
 
     <Switch
         android:id="@+id/rrts"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:text="@string/rt"
         android:textOff="@string/off"
         android:textOn="@string/on"
@@ -136,26 +177,52 @@
 
     <Button
         android:id="@+id/rrt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/button_2"
         android:text="@string/srt"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/rrts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rnsv" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/sptv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:text="@string/spt"
         android:textSize="18sp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/rnsv"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+    <TextView
+        android:id="@+id/h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/hour"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintEnd_toStartOf="@+id/msp"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+    <TextView
+        android:id="@+id/m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/minute"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rnss" />
 
 </android.support.constraint.ConstraintLayout>

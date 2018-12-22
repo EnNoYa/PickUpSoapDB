@@ -49,19 +49,16 @@ public class ns extends AppCompatActivity {
       }
     });
 
-    Spinner sp = (Spinner)findViewById(R.id.rnssp);
-    ArrayAdapter<CharSequence> sprna = ArrayAdapter.createFromResource(
-            ns.this, R.array.sra,
-            android.R.layout.simple_spinner_dropdown_item);
-    sp.setAdapter(sprna);
+    final Spinner chsp = (Spinner)findViewById(R.id.hsp);
+    final Spinner cmsp = (Spinner)findViewById(R.id.msp);
 
     final Switch ics = (Switch)findViewById(R.id.inss);
     final Switch icv = (Switch)findViewById(R.id.insv);
     final Switch icr = (Switch)findViewById(R.id.irts);
-    Switch rcs = (Switch)findViewById(R.id.rnss);
+    final Switch rcs = (Switch)findViewById(R.id.rnss);
     final Switch rcv = (Switch)findViewById(R.id.rnsv);
     final Switch rcr = (Switch)findViewById(R.id.rrts);
-    final Spinner rsp = (Spinner)findViewById(R.id.rnssp);
+
     ins.setEnabled(false);
     icv.setEnabled(false);
     icr.setEnabled(false);
@@ -70,7 +67,8 @@ public class ns extends AppCompatActivity {
     rcv.setEnabled(false);
     rcr.setEnabled(false);
     rns.setEnabled(false);
-    rsp.setEnabled(false);
+    chsp.setEnabled(false);
+    cmsp.setEnabled(false);
 
     if(SettingsSave.getBoolean("icschecked",true)==true){
       ics.setChecked(true);
@@ -105,14 +103,16 @@ public class ns extends AppCompatActivity {
       rcs.setChecked(true);
       rcv.setEnabled(true);
       rcr.setEnabled(true);
-      rsp.setEnabled(true);
+      chsp.setEnabled(true);
+      cmsp.setEnabled(true);
     }
     else{
       rcs.setChecked(false);
       rcv.setEnabled(false);
       rcr.setEnabled(false);
       rns.setEnabled(false);
-      rsp.setEnabled(false);
+      chsp.setEnabled(false);
+      cmsp.setEnabled(false);
     }
 
     if(SettingsSave.getBoolean("rcvchecked",true)==true){
@@ -186,7 +186,8 @@ public class ns extends AppCompatActivity {
           editorsettings.apply();
           rcv.setEnabled(true);
           rcr.setEnabled(true);
-          rsp.setEnabled(true);
+          chsp.setEnabled(true);
+          cmsp.setEnabled(true);
           if(rcr.isChecked())
             rns.setEnabled(true);
         } else{
@@ -195,7 +196,8 @@ public class ns extends AppCompatActivity {
           rcv.setEnabled(false);
           rcr.setEnabled(false);
           rns.setEnabled(false);
-          rsp.setEnabled(false);
+          chsp.setEnabled(false);
+          cmsp.setEnabled(false);
         }
       }
     });

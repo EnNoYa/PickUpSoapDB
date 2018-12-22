@@ -90,20 +90,94 @@
     <string name="off">關</string>
     <string name="rt">鈴聲</string>
     <string name="srt">選擇鈴聲</string>
-    <string name="spt">間隔時長</string>
-    <string-array name="sra">
-        <item>15分鐘</item>
-        <item>30分鐘</item>
-        <item>45分鐘</item>
-        <item>1小時</item>
-        <item>1.5小時</item>
-        <item>2小時</item>
-        <item>3小時</item>
-        <item>4小時</item>
-        <item>5小時</item>
-        <item>6小時</item>
-        <item>12小時</item>
-        <item>24小時</item>
+    <string-array name="srha">
+        <item>00</item>
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+    </string-array>
+    <string-array name="srma">
+        <item>00</item>
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
     </string-array>
     <string name="title_activity_am">地圖</string>
     <string name="airaqi">AQI</string>
@@ -173,4 +247,115 @@
     <string name="strgas_verybad">很糟</string>
     <string name="strgas_god">極度危險</string>
     <string name="strobs_get">詳細資料</string>
+    <string name="str_choose_area">選擇鎖定地區</string>
+    <string name="insn">吸入量通知設定▼</string>
+    <string name="rnsn">定時通知設定▼</string>
+    <string name="hour">時</string>
+    <string name="minute">分</string>
+    <string name="spt">提醒時間設定</string>
+    <string-array name="arr_city">
+        <item>臺北市</item>
+        <item>新北市</item>
+        <item>桃園市</item>
+        <item>臺中市</item>
+        <item>臺南市</item>
+        <item>高雄市</item>
+        <item>基隆市</item>
+        <item>新竹市</item>
+        <item>嘉義市</item>
+        <item>新竹縣</item>
+        <item>苗栗縣</item>
+        <item>彰化縣</item>
+        <item>南投縣</item>
+        <item>雲林縣</item>
+        <item>嘉義縣</item>
+        <item>屏東縣</item>
+        <item>宜蘭縣</item>
+        <item>花蓮縣</item>
+        <item>臺東縣</item>
+        <item>澎湖縣</item>
+    </string-array>
+    <string-array name="arr_Taipei">
+        <item>中正區</item>
+        <item>大同區</item>
+        <item>中山區</item>
+        <item>松山區</item>
+        <item>大安區</item>
+        <item>萬華區</item>
+        <item>信義區</item>
+        <item>士林區</item>
+        <item>北投區</item>
+        <item>內湖區</item>
+        <item>南港區</item>
+        <item>文山區</item>
+    </string-array>
+    <string-array name="arr_NewTaipei">
+        <item>板橋區</item>
+        <item>新莊區</item>
+        <item>中和區</item>
+        <item>永和區</item>
+        <item>土城區</item>
+        <item>樹林區</item>
+        <item>三峽區</item>
+        <item>鶯歌區</item>
+        <item>三重區</item>
+        <item>蘆洲區</item>
+        <item>五股區</item>
+        <item>泰山區</item>
+        <item>林口區</item>
+        <item>八里區</item>
+        <item>淡水區</item>
+        <item>三芝區</item>
+        <item>石門區</item>
+        <item>金山區</item>
+        <item>萬里區</item>
+        <item>汐止區</item>
+        <item>瑞芳區</item>
+        <item>貢寮區</item>
+        <item>平溪區</item>
+        <item>雙溪區</item>
+        <item>新店區</item>
+        <item>深坑區</item>
+        <item>石碇區</item>
+        <item>坪林區</item>
+        <item>烏來區</item>
+    </string-array>
+    <string-array name="arr_Taoyuan">
+
+    </string-array>
+    <string-array name="arr_Taichung">
+    </string-array>
+    <string-array name="arr_Tainan">
+    </string-array>
+    <string-array name="arr_Kaohsiung">
+    </string-array>
+    <string-array name="arr_Keelung">
+    </string-array>
+    <string-array name="arr_Hsinchu">
+    </string-array>
+    <string-array name="arr_Chiayi">
+    </string-array>
+    <string-array name="arr_HsinchuLine">
+    </string-array>
+    <string-array name="arr_Miaoli">
+    </string-array>
+    <string-array name="arr_Changhua">
+    </string-array>
+    <string-array name="arr_Nantou">
+    </string-array>
+    <string-array name="arr_Yunlin">
+    </string-array>
+    <string-array name="arr_ChiayiLine">
+    </string-array>
+    <string-array name="arr_Pingtung">
+    </string-array>
+    <string-array name="arr_Yilan">
+    </string-array>
+    <string-array name="arr_Hualien">
+    </string-array>
+    <string-array name="arr_Taitung">
+    </string-array>
+    <string-array name="arr_Wuhu">
+    </string-array>
+
 </resources>
