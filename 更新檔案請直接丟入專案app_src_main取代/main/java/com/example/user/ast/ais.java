@@ -26,9 +26,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
-public class ais extends AppCompatActivity implements OnMapReadyCallback, LocationListener{
+public class ais extends AppCompatActivity implements LocationListener{
 
-    private GoogleMap mMap;
     static final int MIN_TIME = 5000; //位置更新條件：5000 毫秒
     static final float MIN_DIST = 10;   //位置更新條件：10 公尺
     LocationManager mgr;    // 定位管理員
@@ -61,11 +60,8 @@ public class ais extends AppCompatActivity implements OnMapReadyCallback, Locati
                 open_activity();
             }
         });
-    }
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
         checkPermission();//檢查權限
+        name = findViewById(R.id.area);
     }
     //檢查若尚未授權, 則向使用者要求定位權限
     private void checkPermission() {
@@ -104,6 +100,7 @@ public class ais extends AppCompatActivity implements OnMapReadyCallback, Locati
         currPoint = new LatLng(location.getLatitude(), location.getLongitude());
         nowid = shortest_place(currPoint);
         save_data(nowid);
+        name.setText("觀測站-"+place_name[nowid]);
     }
     //開啟或關閉定位更新功能
     private void enableLocationUpdates(boolean isTurnOn) {
