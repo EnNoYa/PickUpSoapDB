@@ -1,6 +1,7 @@
 package com.example.user.ast;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
@@ -10,12 +11,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 public class SettingsA extends AppCompatActivity{
 
     Intent intent;
+    Resources res; //資源檔
     private Spinner area, smallarea; //下拉選單 地區 小地區
+    String name; //全名
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,7 @@ public class SettingsA extends AppCompatActivity{
         /*下拉式選單*/
         area = findViewById(R.id.sp_area);
         smallarea = findViewById(R.id.sp_smallarea);
+        res = getResources();//拿資源
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(SettingsA.this,
                 R.array.arr_city, android.R.layout.simple_spinner_dropdown_item);
@@ -57,7 +62,6 @@ public class SettingsA extends AppCompatActivity{
         area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {//選擇事件
-                Resources res = getResources();//拿資源
                 ArrayAdapter<String> list;
                 switch (pos){
                     case 0:
@@ -169,5 +173,21 @@ public class SettingsA extends AppCompatActivity{
 
             }
         });
+        /*小地區設定*/
+        smallarea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                name = area.getSelectedItem().toString()+smallarea.getSelectedItem().toString();//存入
+                /*存檔*/
+                save_area(name);//存入名稱
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+    }
+    private void save_area(String str){//存入當前選擇地區
+        SharedPreferences savearea = getApplication().getSharedPreferences("area_data", Context.MODE_PRIVATE);
+        savearea.edit().clear().commit();
+        savearea.edit().putString("area_save", str).apply();
     }
 }

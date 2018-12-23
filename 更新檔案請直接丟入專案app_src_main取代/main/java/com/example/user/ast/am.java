@@ -28,6 +28,7 @@ public class am extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_am);
+        /*詳細資料按鈕*/
         caredata = findViewById(R.id.obs_get2);
         caredata.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +37,9 @@ public class am extends AppCompatActivity {
             }
         });
         name = findViewById(R.id.area2);
+        /*讀檔案*/
+        SharedPreferences tmp = getApplication().getSharedPreferences("area_data",Context.MODE_PRIVATE);
+        name.setText(tmp.getString("area_save", "臺北市中正區"));
     }
     private void open_activity(){//開啟觀測站資訊頁面
         Intent intent;
