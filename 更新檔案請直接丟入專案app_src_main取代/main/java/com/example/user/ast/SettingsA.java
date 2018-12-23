@@ -20,6 +20,7 @@ public class SettingsA extends AppCompatActivity{
     Resources res; //資源檔
     private Spinner area, smallarea; //下拉選單 地區 小地區
     String name; //全名
+    ArrayAdapter<CharSequence> adapter;// 連接資料器
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +56,12 @@ public class SettingsA extends AppCompatActivity{
         smallarea = findViewById(R.id.sp_smallarea);
         res = getResources();//拿資源
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(SettingsA.this,
+        adapter = ArrayAdapter.createFromResource(SettingsA.this,
                 R.array.arr_city, android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         area.setAdapter(adapter);
+        /*讀本地資料*/
+        load_local_area1();
         area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {//選擇事件
@@ -167,6 +170,8 @@ public class SettingsA extends AppCompatActivity{
                     default:
                         break;
                 }
+                /*讀小地區*/
+                load_local_area2();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -180,6 +185,7 @@ public class SettingsA extends AppCompatActivity{
                 name = area.getSelectedItem().toString()+smallarea.getSelectedItem().toString();//存入
                 /*存檔*/
                 save_area(name);//存入名稱
+                save_local_area();//存本地
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
@@ -189,5 +195,28 @@ public class SettingsA extends AppCompatActivity{
         SharedPreferences savearea = getApplication().getSharedPreferences("area_data", Context.MODE_PRIVATE);
         savearea.edit().clear().commit();
         savearea.edit().putString("area_save", str).apply();
+    }
+    private void save_local_area(){//存入本地當前選擇地區
+        int areaid = area.getSelectedItemPosition();
+        int smallid = smallarea.getSelectedItemPosition();
+        SharedPreferences savearea = getApplication().getSharedPreferences("local_area_data", Context.MODE_PRIVATE);
+        savearea.edit().clear().commit();
+        savearea.edit().putInt("local_area_data1",areaid).commit();
+        savearea.edit().putInt("local_area_data2",smallid).commit();
+    }
+    private void load_local_area1(){//讀本地當前選擇地區
+        SharedPreferences savearea = getApplication().getSharedPreferences("local_area_data", Context.MODE_PRIVATE);
+        int areaid, smallid;
+        areaid = savearea.getInt("local_area_data1",0);
+        smallid = savearea.getInt("local_area_data2",0);
+        adapter.notifyDataSetChanged();       //通知spinner刷新數據
+        area.setSelection(areaid);
+    }
+    private void load_local_area2(){//讀本地當前選擇小地區
+        SharedPreferences savearea = getApplication().getSharedPreferences("local_area_data", Context.MODE_PRIVATE);
+        int smallid;
+        smallid = savearea.getInt("local_area_data2",0);
+        adapter.notifyDataSetChanged();       //通知spinner刷新數據
+        smallarea.setSelection(smallid);
     }
 }

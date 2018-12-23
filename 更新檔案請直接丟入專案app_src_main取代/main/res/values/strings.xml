@@ -247,7 +247,7 @@
     <string name="strgas_verybad">很糟</string>
     <string name="strgas_god">極度危險</string>
     <string name="strobs_get">詳細資料</string>
-    <string name="str_choose_area">選擇鎖定地區</string>
+    <string name="str_choose_area">選擇指定地區</string>
     <string name="insn">吸入量通知設定▼</string>
     <string name="rnsn">定時通知設定▼</string>
     <string name="hour">時</string>
