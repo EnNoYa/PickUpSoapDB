@@ -32,18 +32,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Bundle bdgm = new Bundle();
-        Button bmm = (Button)findViewById(R.id.map);
-        bmm.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                intent.setClass(MainActivity.this,am.class);
-                bdgm.putInt("btnid", R.id.map);
-                intent.putExtras(bdgm);
-                startActivity(intent);
-            }
-        });
-
         final Bundle blocal_area = new Bundle();
         Button local_area = (Button)findViewById(R.id.button_local_area);
         local_area.setOnClickListener(new View.OnClickListener(){
@@ -61,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         sodi_area.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                intent.setClass(MainActivity.this,ais.class);
+                intent.setClass(MainActivity.this,am.class);
                 bsodi_area.putInt("btnid", R.id.button_sodi_area);
                 intent.putExtras(bsodi_area);
                 startActivity(intent);

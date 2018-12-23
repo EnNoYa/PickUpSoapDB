@@ -11,12 +11,11 @@
         android:id="@+id/bmrs"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="52dp"
-        android:background="@drawable/button"
+        android:background="@drawable/button_3"
         android:text="@string/stringmrs"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/sp_area"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bns" />
 
@@ -24,12 +23,12 @@
         android:id="@+id/bns"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="108dp"
-        android:background="@drawable/button"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_3"
         android:text="@string/stringns"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/bmrs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,40 +36,44 @@
         android:id="@+id/choose_area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="312dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
         android:text="@string/str_choose_area"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/sp_area"
+        app:layout_constraintEnd_toStartOf="@+id/sp_area"
+        app:layout_constraintTop_toTopOf="@+id/sp_area"
         tools:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
     <Spinner
         android:id="@+id/sp_area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginRight="150dp"
+        android:layout_marginBottom="180dp"
         android:entries="@array/arr_city"
         android:spinnerMode="dialog"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/choose_area"
-        app:layout_constraintRight_toLeftOf="@+id/sp_smallarea"
-        app:layout_constraintStart_toEndOf="@+id/choose_area" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
         android:id="@+id/sp_smallarea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         android:entries="@array/arr_Taipei"
         android:spinnerMode="dialog"
         android:visibility="visible"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sp_area"
         app:layout_constraintStart_toEndOf="@+id/sp_area"
-        app:layout_constraintBottom_toBottomOf="@+id/choose_area"
-        />
+        app:layout_constraintTop_toTopOf="@+id/sp_area" />
 
 
 </android.support.constraint.ConstraintLayout>

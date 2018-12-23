@@ -6,42 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".am">
 
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:context=".am"
-        tools:layout="@layout/activity_am"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/getdata"
-        android:text="@string/getobs"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="@id/map"
-        app:layout_constraintTop_toTopOf="@id/map"
-    />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/obs_delete"
-        android:text="收納鎖定"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="@id/map"
-        app:layout_constraintTop_toBottomOf="@id/getdata"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/obs_recover"
-        android:text="重設"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="@id/map"
-        app:layout_constraintTop_toBottomOf="@id/obs_delete"
-        />
 
+    <TextView
+        android:id="@+id/area2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/obs"
+        android:textAllCaps="true"
+        android:textColor="@color/br"
+        android:textColorLink="@color/b"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/currState2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/obs_get2"
+        android:layout_width="125dp"
+        android:layout_height="127dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/button"
+        android:gravity="center"
+        android:text="@string/strobs_get"
+
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/currState2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/strgas_good"
+        android:gravity="center"
+        android:text="@string/strgas_good"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/area2" />
 </android.support.constraint.ConstraintLayout>

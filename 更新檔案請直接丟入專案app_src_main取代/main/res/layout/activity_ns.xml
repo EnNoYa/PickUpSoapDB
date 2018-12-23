@@ -48,6 +48,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/in_setting" />
 
+    <View
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/inss" />
+
     <Switch
         android:id="@+id/insv"
         android:layout_width="match_parent"
@@ -64,6 +71,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inss" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/insv" />
 
     <Switch
         android:id="@+id/irts"
@@ -112,6 +126,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rn_setting" />
 
+    <View
+        android:id="@+id/line3"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
     <Spinner
         android:id="@+id/hsp"
         android:layout_width="0dp"
@@ -141,6 +162,13 @@
         app:layout_constraintEnd_toStartOf="@+id/m"
         app:layout_constraintTop_toBottomOf="@+id/rnss" />
 
+    <View
+        android:id="@+id/line4"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/msp" />
+
     <Switch
         android:id="@+id/rnsv"
         android:layout_width="match_parent"
@@ -157,6 +185,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/msp" />
+
+    <View
+        android:id="@+id/line5"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/rnsv" />
 
     <Switch
         android:id="@+id/rrts"
@@ -187,6 +222,13 @@
         app:layout_constraintBottom_toBottomOf="@+id/rrts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rnsv" />
+
+    <View
+        android:id="@+id/line6"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#000000"
+        app:layout_constraintTop_toBottomOf="@+id/rrts" />
 
     <TextView
         android:id="@+id/sptv"
