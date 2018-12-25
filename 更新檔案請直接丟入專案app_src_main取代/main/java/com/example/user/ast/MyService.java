@@ -6,13 +6,15 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.IBinder;
 import android.widget.Toast;
-import android.widget.Switch;
-import  android.media.MediaPlayer;
+import java.util.*;
 
 public class MyService extends Service implements MediaPlayer.OnPreparedListener,MediaPlayer.OnErrorListener,MediaPlayer.OnCompletionListener{
     private MediaPlayer mMediaPlayer = null;
     private boolean mbIsInitialised = true;
-
+    Calendar mycal = new GregorianCalendar();
+    int hour = mycal.get(Calendar.HOUR);
+    int minute = mycal.get(Calendar.MINUTE);
+    boolean MessageCheck = false;
     public MyService() {
         super();
     }
@@ -39,17 +41,19 @@ public class MyService extends Service implements MediaPlayer.OnPreparedListener
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if(mMediaPlayer.isPlaying()){
-            mMediaPlayer.pause();
+        if(hour==18&&minute==30)
+            MessageCheck = true;
+        if(MessageCheck) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+            } else {
+                if (mbIsInitialised) {
+                    mMediaPlayer.prepareAsync();
+                    mbIsInitialised = false;
+                } else
+                    mMediaPlayer.start();
+            }
         }
-        else{
-            if(mbIsInitialised){
-                mMediaPlayer.prepareAsync();
-                mbIsInitialised=false;
-            }else
-                mMediaPlayer.start();
-        }
-
         return super.onStartCommand(intent, flags, startId);
     }
 
