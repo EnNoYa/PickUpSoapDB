@@ -12,25 +12,33 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/fa"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsA" />
-        <activity android:name=".ns" />
-        <activity android:name=".insa" />
-        <activity android:name=".rnsa" />
-        <activity android:name=".mrsa" />
-        <activity android:name=".ai" />
-        <activity android:name=".ais" />
+        <activity android:name=".SettingsA"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ns"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".insa"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".rnsa"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".mrsa"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ai"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ais"
+            android:screenOrientation="portrait"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -45,7 +53,7 @@
 
         <activity
             android:name=".am"
-            android:label="@string/title_activity_am" />
+            android:screenOrientation="portrait" />
         <service android:name=".MyService"
                 android:enabled="true"
                 android:exported="true"></service>
