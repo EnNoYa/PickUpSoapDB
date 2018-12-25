@@ -9,7 +9,15 @@
     <ScrollView
         android:id="@+id/mrmainsv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -19,7 +27,7 @@
                 android:id="@+id/mrr"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="請選擇您的\n\t\t\t病例"
                 android:textColor="#ff0000ff"
                 android:textSize="20dp"

@@ -188,6 +188,9 @@ public class ns extends AppCompatActivity {
           rcr.setEnabled(true);
           chsp.setEnabled(true);
           cmsp.setEnabled(true);
+          Intent intent; intent = new Intent(ns.this,MyService.class);
+          startService(intent);
+
           if(rcr.isChecked())
             rns.setEnabled(true);
         } else{
@@ -198,6 +201,7 @@ public class ns extends AppCompatActivity {
           rns.setEnabled(false);
           chsp.setEnabled(false);
           cmsp.setEnabled(false);
+          stopService(new Intent(getBaseContext(),MyService.class));
         }
       }
     });

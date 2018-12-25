@@ -21,6 +21,7 @@ public class SettingsA extends AppCompatActivity{
     private Spinner area, smallarea; //下拉選單 地區 小地區
     String name; //全名
     ArrayAdapter<CharSequence> adapter;// 連接資料器
+    boolean ok = false;//檢查兩次選擇是否一樣
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,9 +176,9 @@ public class SettingsA extends AppCompatActivity{
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
+
         /*小地區設定*/
         smallarea.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
@@ -206,9 +207,8 @@ public class SettingsA extends AppCompatActivity{
     }
     private void load_local_area1(){//讀本地當前選擇地區
         SharedPreferences savearea = getApplication().getSharedPreferences("local_area_data", Context.MODE_PRIVATE);
-        int areaid, smallid;
+        int areaid;
         areaid = savearea.getInt("local_area_data1",0);
-        smallid = savearea.getInt("local_area_data2",0);
         adapter.notifyDataSetChanged();       //通知spinner刷新數據
         area.setSelection(areaid);
     }
@@ -216,7 +216,13 @@ public class SettingsA extends AppCompatActivity{
         SharedPreferences savearea = getApplication().getSharedPreferences("local_area_data", Context.MODE_PRIVATE);
         int smallid;
         smallid = savearea.getInt("local_area_data2",0);
-        adapter.notifyDataSetChanged();       //通知spinner刷新數據
-        smallarea.setSelection(smallid);
+        if(area.getSelectedItemPosition()==savearea.getInt("local_area_data1",0))
+            ok=true;
+        else
+            ok=false;
+        if(ok){
+            adapter.notifyDataSetChanged();       //通知spinner刷新數據
+            smallarea.setSelection(smallid);
+        }
     }
 }

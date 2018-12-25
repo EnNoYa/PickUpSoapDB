@@ -41,7 +41,7 @@
         android:id="@+id/currState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="35dp"
         android:contentDescription="@string/strgas_good"
         android:gravity="center"
         android:text="@string/strgas_good"
