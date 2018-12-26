@@ -13,6 +13,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import android.widget.TextView;
+import java.text.DecimalFormat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,29 +23,42 @@ import org.json.JSONObject;
 public class ai extends AppCompatActivity {
     private RequestQueue mRQ;
     private TextView Tgas[] = new TextView[6];// SO2 CO O3 PM10 PM2.5 NO2
+    private TextView hourgas[] = new TextView[6];// SO2 CO O3 PM10 PM2.5 NO2
     private TextView observe_t; //觀測站名稱
-    private String sarr[] = new String[79]; //紀錄觀測站順序
+    private String sarr[] = new String[79]; //紀錄觀測站順序(暫存)
     private String idname;//當前觀測站名稱
-    private int id = 0;//index 觀測站
+    private int id = -1;//index 觀測站
+    private int id2 = -1; //index 小時濃度
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ai);
-        Tgas[0] = (TextView)findViewById(R.id.aiiso2);
-        Tgas[1] = (TextView)findViewById(R.id.aiico);
-        Tgas[2] = (TextView)findViewById(R.id.aiio3);
-        Tgas[3] = (TextView)findViewById(R.id.aiipm10);
-        Tgas[4] = (TextView)findViewById(R.id.aiipm2_5);
-        Tgas[5] = (TextView)findViewById(R.id.aiino2);
-        observe_t= (TextView)findViewById(R.id.obs);//觀測站ID
+        Tgas[0] = findViewById(R.id.aiiso2);
+        Tgas[1] = findViewById(R.id.aiico);
+        Tgas[2] = findViewById(R.id.aiio3);
+        Tgas[3] = findViewById(R.id.aiipm10);
+        Tgas[4] = findViewById(R.id.aiipm2_5);
+        Tgas[5] = findViewById(R.id.aiino2);
+        observe_t= findViewById(R.id.obs);//觀測站ID
+        hourgas[0] = findViewById(R.id.aivso2);
+        hourgas[1] = findViewById(R.id.aivco);
+        hourgas[2] = findViewById(R.id.aivo3);
+        hourgas[3] = findViewById(R.id.aivpm10);
+        hourgas[4] = findViewById(R.id.aivpm2_5);
+        hourgas[5] = findViewById(R.id.aivno2);
         mRQ = Volley.newRequestQueue(this);
 
         /*拿資料*/
         SharedPreferences saveid = getApplication().getSharedPreferences("ssssid",Context.MODE_PRIVATE);
         idname = saveid.getString("idsave","");
 
+        /*AQI指標*/
         jsonParse();
+
+        /*小時濃度*/
+        jsonParse2();
     }
+
     private void jsonParse(){
         String url = "http://140.136.149.239:9487/recentAQI";
         JsonArrayRequest request  = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -58,53 +72,131 @@ public class ai extends AppCompatActivity {
                             }
                             for(int i=0; i<sarr.length; ++i){
                                 if(sarr[i].equals(idname)){
-                                    id=i;
+                                    id =i;
                                     observe_t.setText("觀測站-"+idname);
                                     break;
                                 }
                             }
-                            JSONObject tmp = response.getJSONObject(id); //json物件
-                            if(!tmp.isNull("SO2Ans")){
-                                String SO2  = tmp.getString("SO2Ans");;
-                                Tgas[0].setText(SO2);
+                            if(id==-1){//沒有這個觀測站
+                                for(int i=0; i<6; ++i)
+                                    Tgas[i].setText("維修");
                             }
-                            else
-                                Tgas[0].setText("維修");
+                            else {
+                                JSONObject tmp = response.getJSONObject(id); //json物件
+                                if (!tmp.isNull("SO2Ans")) {
+                                    String SO2 = tmp.getString("SO2Ans");
+                                    Tgas[0].setText(SO2);
+                                } else
+                                    Tgas[0].setText("維修");
 
-                            if(!tmp.isNull("COAns")){
-                                String CO  = tmp.getString("COAns");;
-                                Tgas[1].setText(CO);
-                            }
-                            else
-                                Tgas[1].setText("維修");
+                                if (!tmp.isNull("COAns")) {
+                                    String CO = tmp.getString("COAns");
+                                    Tgas[1].setText(CO);
+                                } else
+                                    Tgas[1].setText("維修");
 
-                            if(!tmp.isNull("PM10Ans")){
-                                String PM10  = tmp.getString("PM10Ans");
-                                Tgas[3].setText(PM10);
-                            }
-                            else
-                                Tgas[3].setText("維修");
+                                if (!tmp.isNull("PM10Ans")) {
+                                    String PM10 = tmp.getString("PM10Ans");
+                                    Tgas[3].setText(PM10);
+                                } else
+                                    Tgas[3].setText("維修");
 
-                            if(!tmp.isNull("PM25Ans")){
-                                String PM25  = tmp.getString("PM25Ans");;
-                                Tgas[4].setText(PM25);
-                            }
-                            else
-                                Tgas[4].setText("維修");
+                                if (!tmp.isNull("PM25Ans")) {
+                                    String PM25 = tmp.getString("PM25Ans");
+                                    Tgas[4].setText(PM25);
+                                } else
+                                    Tgas[4].setText("維修");
 
-                            if(!tmp.isNull("NO2Ans")){
-                                String NO2  = tmp.getString("NO2Ans");;
-                                Tgas[5].setText(NO2);
-                            }
-                            else
-                                Tgas[5].setText("維修");
+                                if (!tmp.isNull("NO2Ans")) {
+                                    String NO2 = tmp.getString("NO2Ans");
+                                    Tgas[5].setText(NO2);
+                                } else
+                                    Tgas[5].setText("維修");
 
-                            if(!tmp.isNull("O3ans")){
-                                String O3  = tmp.getString("O3Ans");;
-                                Tgas[2].setText(O3);
+                                if (!tmp.isNull("O3ans")) {
+                                    String O3 = tmp.getString("O3Ans");
+                                    Tgas[2].setText(O3);
+                                } else
+                                    Tgas[2].setText("維修");
                             }
-                            else
-                                Tgas[2].setText("維修");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        mRQ.add(request);
+    }
+
+    private void jsonParse2(){//小時濃度
+
+        String url = "http://140.136.149.239:9487/recentAIR";
+        JsonArrayRequest request  = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for(int i=0; i<response.length(); ++i) {
+                                JSONObject tmp = response.getJSONObject(i); //json物件
+                                sarr[i] = tmp.getString("SiteName");//觀測站名稱
+                            }
+                            for(int i=0; i<sarr.length; ++i){
+                                if(sarr[i].equals(idname)){
+                                    id2 =i;
+                                    break;
+                                }
+                            }
+                            if(id2 == -1){//沒有小時濃度資料
+                                for(int i=0; i<6; ++i)
+                                    hourgas[i].setText("維修");
+                            }
+                            else {
+                                JSONObject tmp = response.getJSONObject(id2); //json物件
+                                DecimalFormat df = new DecimalFormat("##.00");
+                                /*設定值*/
+                                if (!tmp.isNull("SO2")) {
+                                    Double dtmp = Double.parseDouble(df.format(tmp.getDouble("SO2")));
+                                    hourgas[0].setText(String.valueOf(dtmp));
+                                } else
+                                    hourgas[0].setText("維修");
+
+                                if (!tmp.isNull("CO")) {
+                                    Double dtmp = Double.parseDouble(df.format(tmp.getDouble("CO")));
+                                    hourgas[1].setText(String.valueOf(dtmp));
+                                } else
+                                    hourgas[1].setText("維修");
+
+                                if (!tmp.isNull("PM10")) {
+                                    Double dtmp = Double.parseDouble(df.format(tmp.getDouble("PM10")));
+                                    hourgas[3].setText(String.valueOf(tmp.getDouble("PM10")));
+                                } else
+                                    hourgas[3].setText("維修");
+
+                                if (!tmp.isNull("PM25")) {
+                                    Double dtmp = Double.parseDouble(df.format(tmp.getDouble("PM25")));
+                                    hourgas[4].setText(String.valueOf(dtmp));
+                                } else
+                                    hourgas[4].setText("維修");
+
+                                if (!tmp.isNull("NO2")) {
+                                    Double dtmp = Double.parseDouble(df.format(tmp.getDouble("NO2")));
+                                    hourgas[5].setText(String.valueOf(dtmp));
+                                } else
+                                    hourgas[5].setText("維修");
+
+                                if (!tmp.isNull("O3")) {
+                                    Double dtmp = Double.parseDouble(df.format(tmp.getDouble("O3")));
+                                    hourgas[2].setText(String.valueOf(dtmp));
+                                } else
+                                    hourgas[2].setText("維修");
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
