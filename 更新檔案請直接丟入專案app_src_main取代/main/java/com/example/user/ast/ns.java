@@ -43,7 +43,7 @@ public class ns extends AppCompatActivity {
     rns.setOnClickListener(new View.OnClickListener(){
       @Override
       public void onClick(View v){
-        intent.setClass(ns.this, rnsa.class);
+        intent.setClass(ns.this, insa.class);
         bdr.putInt("btnid", R.id.rrt);
         intent.putExtras(bdr);
         startActivity(intent);

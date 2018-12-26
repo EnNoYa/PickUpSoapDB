@@ -38,7 +38,6 @@ public class MyService extends Service implements MediaPlayer.OnPreparedListener
         mMediaPlayer.setOnCompletionListener(this);
     }
 
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(hour==18&&minute==30)
