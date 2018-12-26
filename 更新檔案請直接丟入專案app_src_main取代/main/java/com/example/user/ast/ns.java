@@ -3,6 +3,7 @@ package com.example.user.ast;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -52,12 +53,12 @@ public class ns extends AppCompatActivity {
     final Spinner chsp = (Spinner)findViewById(R.id.hsp);
     final Spinner cmsp = (Spinner)findViewById(R.id.msp);
 
-    final Switch ics = (Switch)findViewById(R.id.inss);
-    final Switch icv = (Switch)findViewById(R.id.insv);
-    final Switch icr = (Switch)findViewById(R.id.irts);
-    final Switch rcs = (Switch)findViewById(R.id.rnss);
-    final Switch rcv = (Switch)findViewById(R.id.rnsv);
-    final Switch rcr = (Switch)findViewById(R.id.rrts);
+    final SwitchCompat ics = findViewById(R.id.inss);
+    final SwitchCompat icv = findViewById(R.id.insv);
+    final SwitchCompat icr = findViewById(R.id.irts);
+    final SwitchCompat rcs = findViewById(R.id.rnss);
+    final SwitchCompat rcv = findViewById(R.id.rnsv);
+    final SwitchCompat rcr = findViewById(R.id.rrts);
 
     ins.setEnabled(false);
     icv.setEnabled(false);

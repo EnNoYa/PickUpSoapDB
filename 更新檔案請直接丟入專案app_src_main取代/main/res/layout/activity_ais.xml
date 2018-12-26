@@ -8,14 +8,26 @@
     tools:context=".ais">
 
 
+    <View
+        android:id="@+id/areaView"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:background="@color/gray"
+        android:alpha="0.3"
+        app:layout_constraintBottom_toTopOf="@+id/currState"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/area"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:background="@drawable/view"
         android:gravity="center"
         android:text="@string/obs"
         android:textAllCaps="true"
-        android:textColor="@color/br"
+        android:textColor="@color/cardview_dark_background"
         android:textColorLink="@color/b"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/currState"
@@ -38,11 +50,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <View
+        android:id="@+id/currstate_view"
+        android:layout_width="240dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="35dp"
+        android:background="@color/gray"
+        android:alpha="0.3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/area" />
+
     <TextView
         android:id="@+id/currState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="55dp"
         android:layout_marginBottom="35dp"
+        android:background="@drawable/view"
         android:contentDescription="@string/strgas_good"
         android:gravity="center"
         android:text="@string/strgas_good"
