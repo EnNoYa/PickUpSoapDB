@@ -45,7 +45,7 @@ public class insa extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insa);
         searchView = findViewById(R.id.music_search);
-        sp = getApplication().getSharedPreferences("music_rw",Context.MODE_PRIVATE);//讀檔案用
+        sp = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE);//讀檔案用
         if(ContextCompat.checkSelfPermission(insa.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(insa.this, Manifest.permission.READ_EXTERNAL_STORAGE)){
                 ActivityCompat.requestPermissions(insa.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
@@ -154,7 +154,7 @@ public class insa extends AppCompatActivity {
         if(mediaPlayer.isPlaying() || tmppos != -1){
             mediaPlayer.release();
             sp.edit().remove("music_rw").commit();
-            sp.edit().putString("music_rw", currentLocation.get(tmppos));
+            sp.edit().putString("music_rw", currentLocation.get(tmppos)).commit();
             Toast.makeText(insa.this, "選擇成功:" + "\n" + "你選的是:"+currentTitle.get(tmppos),Toast.LENGTH_SHORT).show();
         }
         else{
