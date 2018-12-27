@@ -15,8 +15,6 @@ public class mrsa extends AppCompatActivity {
   private Button patientBntOK;
   private TextView patientView;
 
-
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -27,9 +25,7 @@ public class mrsa extends AppCompatActivity {
     checkBoxRespiratoryDisease = (CheckBox)findViewById(R.id.RespiratoryDisease);
     checkBoxConjunctivitis = (CheckBox)findViewById(R.id.Conjunctivitis);
     checkBoxAllergicRhinitis = (CheckBox)findViewById(R.id.AllergicRhinitis);
-    patientBntOK = (Button)findViewById(R.id.patientViewOK);
     patientView = (TextView)findViewById(R.id.patientCheck);
-    patientBntOK.setOnClickListener(patientBntOnClick);
     final SharedPreferences.Editor editor = HealthRecord.edit();
     if(HealthRecord.getBoolean("checkedHeartDisease",true) == true) {
       checkBoxHeartDisease.setChecked(true);
@@ -63,9 +59,11 @@ public class mrsa extends AppCompatActivity {
         if(checkBoxHeartDisease.isChecked()) {
           editor.putBoolean("checkedHeartDisease", true);
           editor.apply();
+          sets();
         }else{
           editor.putBoolean("checkedHeartDisease", false);
           editor.apply();
+          sets();
         }
       }
     });
@@ -75,9 +73,11 @@ public class mrsa extends AppCompatActivity {
         if(checkBoxDVC.isChecked()) {
           editor.putBoolean("checkedDVC", true);
           editor.apply();
+          sets();
         }else{
           editor.putBoolean("checkedDVC", false);
           editor.apply();
+          sets();
         }
       }
     });
@@ -87,9 +87,11 @@ public class mrsa extends AppCompatActivity {
         if(checkBoxRespiratoryDisease.isChecked()) {
           editor.putBoolean("checkedRespiratoryDisease", true);
           editor.apply();
+          sets();
         }else{
           editor.putBoolean("checkedRespiratoryDisease", false);
           editor.apply();
+          sets();
         }
       }
     });
@@ -99,9 +101,11 @@ public class mrsa extends AppCompatActivity {
         if(checkBoxConjunctivitis.isChecked()) {
           editor.putBoolean("checkedConjunctivitis", true);
           editor.apply();
+          sets();
         }else{
           editor.putBoolean("checkedConjunctivitis", false);
           editor.apply();
+          sets();
         }
       }
     });
@@ -111,33 +115,47 @@ public class mrsa extends AppCompatActivity {
         if(checkBoxAllergicRhinitis.isChecked()) {
           editor.putBoolean("checkedAllergicRhinitis", true);
           editor.apply();
+          sets();
         }else{
           editor.putBoolean("checkedAllergicRhinitis", false);
           editor.apply();
+          sets();
         }
       }
     });
+
+    String ms = "您選擇的病例是：";
+    if(checkBoxHeartDisease.isChecked())
+      ms += "\n心臟疾病";
+    if(checkBoxRespiratoryDisease.isChecked())
+      ms += "\n呼吸道疾病";
+    if (checkBoxConjunctivitis.isChecked())
+      ms += "\n結膜炎";
+    if(checkBoxDVC.isChecked())
+      ms += "\n心血管疾病";
+    if (checkBoxAllergicRhinitis.isChecked())
+      ms += "\n過敏性鼻炎";
+    if(ms.equals("您選擇的病例是："))
+      ms += "\n無";
+    patientView.setText(ms);
+
   }
 
-
-  private View.OnClickListener patientBntOnClick = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-
-      String s = "您選擇的病例是:";
-      if(checkBoxHeartDisease.isChecked())
-        s+="\n心臟疾病";
-      if(checkBoxDVC.isChecked())
-        s+="\n心血管疾病";
-      if(checkBoxRespiratoryDisease.isChecked())
-        s+="\n呼吸道疾病";
-      if (checkBoxConjunctivitis.isChecked())
-        s+="\n結膜炎";
-      if (checkBoxAllergicRhinitis.isChecked())
-        s+="\n過敏性鼻炎";
-      patientView.setText(s);
-    }
-  };
-
+  protected void sets(){
+    String s = "您選擇的病例是：";
+    if(checkBoxHeartDisease.isChecked())
+      s += "\n心臟疾病";
+    if(checkBoxRespiratoryDisease.isChecked())
+      s += "\n呼吸道疾病";
+    if (checkBoxConjunctivitis.isChecked())
+      s += "\n結膜炎";
+    if(checkBoxDVC.isChecked())
+      s += "\n心血管疾病";
+    if (checkBoxAllergicRhinitis.isChecked())
+      s += "\n過敏性鼻炎";
+    if(s.equals("您選擇的病例是："))
+      s += "\n無";
+    patientView.setText(s);
+  }
 
 }

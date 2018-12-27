@@ -40,8 +40,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/ins"
-        android:textOff="@string/nsoff"
-        android:textOn="@string/nson"
         android:textSize="18sp"
         android:theme="@style/sw"
         android:visibility="visible"
@@ -53,7 +51,7 @@
         android:id="@+id/line1"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#000000"
+        android:background="@color/dg"
         app:layout_constraintTop_toBottomOf="@+id/inss" />
 
     <android.support.v7.widget.SwitchCompat
@@ -65,8 +63,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/nsv"
-        android:textOff="@string/off"
-        android:textOn="@string/on"
         android:textSize="18sp"
         android:theme="@style/sw"
         android:visibility="visible"
@@ -78,7 +74,7 @@
         android:id="@+id/line2"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#000000"
+        android:background="@color/dg"
         app:layout_constraintTop_toBottomOf="@+id/insv" />
 
     <android.support.v7.widget.SwitchCompat
@@ -90,8 +86,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/rt"
-        android:textOff="@string/off"
-        android:textOn="@string/on"
         android:textSize="18sp"
         android:theme="@style/sw"
         android:visibility="visible"
@@ -121,8 +115,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/rns"
-        android:textOff="@string/nsoff"
-        android:textOn="@string/nson"
         android:textSize="18sp"
         android:theme="@style/sw"
         android:visibility="visible"
@@ -134,7 +126,7 @@
         android:id="@+id/line3"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#000000"
+        android:background="@color/dg"
         app:layout_constraintTop_toBottomOf="@+id/rnss" />
 
     <Spinner
@@ -170,7 +162,7 @@
         android:id="@+id/line4"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#000000"
+        android:background="@color/dg"
         app:layout_constraintTop_toBottomOf="@+id/msp" />
 
     <android.support.v7.widget.SwitchCompat
@@ -182,8 +174,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/nsv"
-        android:textOff="@string/off"
-        android:textOn="@string/on"
         android:textSize="18sp"
         android:theme="@style/sw"
         android:visibility="visible"
@@ -195,7 +185,7 @@
         android:id="@+id/line5"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#000000"
+        android:background="@color/dg"
         app:layout_constraintTop_toBottomOf="@+id/rnsv" />
 
     <android.support.v7.widget.SwitchCompat
@@ -207,8 +197,6 @@
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/rt"
-        android:textOff="@string/off"
-        android:textOn="@string/on"
         android:textSize="18sp"
         android:theme="@style/sw"
         android:visibility="visible"
@@ -233,7 +221,7 @@
         android:id="@+id/line6"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="#000000"
+        android:background="@color/dg"
         app:layout_constraintTop_toBottomOf="@+id/rrts" />
 
     <TextView

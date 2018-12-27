@@ -86,8 +86,6 @@
     <string name="nson">開啟通知</string>
     <string name="nsoff">關閉通知</string>
     <string name="nsv">震動</string>
-    <string name="on">開</string>
-    <string name="off">關</string>
     <string name="rt">鈴聲</string>
     <string name="srt">選擇鈴聲</string>
     <string-array name="srha">
@@ -253,6 +251,13 @@
     <string name="hour">時</string>
     <string name="minute">分</string>
     <string name="spt">提醒時間設定</string>
+    <string name="please_choose">請選擇您的\n病例</string>
+    <string name="heart_d">心臟疾病</string>
+    <string name="respiratory_d">呼吸道疾病</string>
+    <string name="conj_d">結膜炎</string>
+    <string name="dvc_d">心血管疾病</string>
+    <string name="allergicrh_d">過敏性鼻炎</string>
+    <string name="your_chosen_d">您選擇的病例是：</string>
     <string-array name="arr_city">
         <item>臺北市</item>
         <item>新北市</item>
