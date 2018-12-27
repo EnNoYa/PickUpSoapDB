@@ -1,5 +1,6 @@
 package com.example.user.ast;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 public class ns extends AppCompatActivity {
 
@@ -18,13 +20,14 @@ public class ns extends AppCompatActivity {
     Button ins; //吸入量選擇鈴聲按鍵
     SharedPreferences SettingsSave; //設定存檔
     SharedPreferences.Editor editorsettings; //設定存檔編輯
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ns);
         intent = new Intent();
 
-        SettingsSave = getApplication().getSharedPreferences("settingsave",MODE_PRIVATE);
+        SettingsSave = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE);
         editorsettings = SettingsSave.edit();
 
         ins = (Button)findViewById(R.id.irt);
@@ -38,13 +41,7 @@ public class ns extends AppCompatActivity {
             startActivity(intent);
           }
         });
-        /*設顏色*/
-        if(SettingsSave.getString("music_rw", "").equals("")){
-            ins.setTextColor(getResources().getColor(R.color.r));
-        }
-        else{
-            ins.setTextColor(getResources().getColor(R.color.g));
-        }
+
 
         final Bundle bdr = new Bundle();
         final Button rns = (Button) findViewById(R.id.rrt);
@@ -55,6 +52,7 @@ public class ns extends AppCompatActivity {
             bdr.putInt("btnid", R.id.rrt);
             intent.putExtras(bdr);
             startActivity(intent);
+
           }
         });
 
@@ -241,4 +239,9 @@ public class ns extends AppCompatActivity {
           }
         });
   }
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+    }
 }

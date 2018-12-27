@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.net.Uri;
@@ -150,7 +151,6 @@ public class insa extends AppCompatActivity {
     }
     @Override
     protected void onDestroy(){
-        super.onDestroy();
         if(mediaPlayer.isPlaying() || tmppos != -1){
             mediaPlayer.release();
             sp.edit().remove("music_rw").commit();
@@ -161,6 +161,7 @@ public class insa extends AppCompatActivity {
             sp.edit().remove("music_rw").commit();
             Toast.makeText(insa.this, "沒選擇鈴聲~",Toast.LENGTH_SHORT).show();
         }
+        super.onDestroy();
     }
     /*list比較*/
     public int com(String key){
