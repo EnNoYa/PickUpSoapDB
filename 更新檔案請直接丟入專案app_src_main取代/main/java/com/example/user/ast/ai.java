@@ -113,7 +113,7 @@ public class ai extends AppCompatActivity {
                                 } else
                                     Tgas[5].setText("維修");
 
-                                if (!tmp.isNull("O3ans")) {
+                                if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     Tgas[2].setText(O3);
                                 } else

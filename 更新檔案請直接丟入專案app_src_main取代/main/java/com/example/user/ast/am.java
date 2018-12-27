@@ -51,18 +51,12 @@ public class am extends AppCompatActivity {
                 int i,j;
                 /*讀檔案*/
                 SharedPreferences sp = getApplication().getSharedPreferences("local_area_data",MODE_PRIVATE);
-                i =  sp.getInt("local_area_data1",-1);
-                j =  sp.getInt("local_area_data2",-1);
-                if(i==-1||j==-1){
-                    Toast.makeText(am.this,"讀檔案失敗",Toast.LENGTH_LONG).show();
-                }
-                else{
-
-                    curP = new AreaData().getLatLngData(i,j);
-                    nowid = shortest_place(curP);
-                    save_data(nowid);
-                    open_activity();
-                }
+                i =  sp.getInt("local_area_data1",0);
+                j =  sp.getInt("local_area_data2",0);
+                curP = new AreaData().getLatLngData(i,j);
+                nowid = shortest_place(curP);
+                save_data(nowid);
+                open_activity();
             }
         });
     }

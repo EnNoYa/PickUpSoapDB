@@ -3,6 +3,7 @@ package com.example.user.ast;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.MediaStore;
@@ -14,8 +15,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.net.Uri;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.media.MediaPlayer;
 
@@ -26,16 +30,22 @@ public class insa extends AppCompatActivity {
 
     private static final int MY_PERMISSION_REQUEST = 1;
 
-    ArrayList<String> list;
+    ArrayList<String> list;//表單陣列
     ListView listView;//頁面
+    SearchView searchView;//搜尋用
     ArrayAdapter<String> arrayAdapter;//連接資料器
-    MediaPlayer mediaPlayer = new MediaPlayer();
+    MediaPlayer mediaPlayer = new MediaPlayer();//媒體播放器
     ArrayList<String> currentLocation = new ArrayList<String>();//當前音樂位置
+    ArrayList<String> currentTitle = new ArrayList<String>();//音樂名稱陣列
+    SharedPreferences sp;// 存檔用
+    int tmppos = -1; //暫存音樂位置
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insa);
+        searchView = findViewById(R.id.music_search);
+        sp = getApplication().getSharedPreferences("music_rw",Context.MODE_PRIVATE);//讀檔案用
         if(ContextCompat.checkSelfPermission(insa.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(insa.this, Manifest.permission.READ_EXTERNAL_STORAGE)){
                 ActivityCompat.requestPermissions(insa.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
@@ -46,13 +56,32 @@ public class insa extends AppCompatActivity {
         }
         else{
             dostuff();
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    //提交結果
+                    return false;
+                }
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    /*過濾Adapter的內容*/
+                    Filter filter = arrayAdapter.getFilter();
+                    filter.filter(newText);
+                    return false;
+                }
+            });
+            searchView.setIconifiedByDefault(false); //是否要點選搜尋圖示後再打開輸入框
+            searchView.setFocusable(false);
+            searchView.requestFocusFromTouch();      //要點選後才會開啟鍵盤輸入
+            searchView.setSubmitButtonEnabled(false);//輸入框後是否要加上送出的按鈕
+            searchView.setQueryHint("請輸入音樂名稱"); //輸入框沒有值時要顯示的提示文字
         }
     }
     public void dostuff(){
         listView = findViewById(R.id.insa_music_list);
         list = new ArrayList<>();
         getMusic();
-        arrayAdapter =new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        arrayAdapter =new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);//連接器設值
         listView.setAdapter(arrayAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,14 +91,16 @@ public class insa extends AppCompatActivity {
                 try {
                     if(mediaPlayer.isPlaying()){
                         mediaPlayer.reset();
-                        mediaPlayer.setDataSource(currentLocation.get(position));
+                        com(((TextView)view).getText().toString());
+                        mediaPlayer.setDataSource(currentLocation.get(tmppos));
                         mediaPlayer.prepare();
                         mediaPlayer.start();
                     }
                     else {
-                    mediaPlayer.setDataSource(currentLocation.get(position));
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
+                        com(((TextView)view).getText().toString());
+                        mediaPlayer.setDataSource(currentLocation.get(tmppos));
+                        mediaPlayer.prepare();
+                        mediaPlayer.start();
                     }
                 } catch (IOException e) {
                     Toast.makeText(insa.this, "失敗", Toast.LENGTH_SHORT).show();
@@ -79,6 +110,7 @@ public class insa extends AppCompatActivity {
         });
     }
     public void getMusic(){
+        /*拿手機資源*/
         ContentResolver contentResolver = getContentResolver();
         Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor songCursor = contentResolver.query(songUri, null, null, null, null);
@@ -89,10 +121,10 @@ public class insa extends AppCompatActivity {
             int songLocation = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             int id = 0;
             do {
-                String currentTitle = songCursor.getString(songTitle);
+                currentTitle.add(songCursor.getString(songTitle)) ;
                 String currentArtist = songCursor.getString(songArtist);
                 currentLocation.add(songCursor.getString(songLocation));
-                list.add("名稱:    " + currentTitle + "\n" +
+                list.add("名稱:    " + currentTitle.get(id) + "\n" +
                         "作者:    " + currentArtist + "\n" +
                 "位置:  " + currentLocation.get(id++));
             }while (songCursor.moveToNext());
@@ -115,5 +147,29 @@ public class insa extends AppCompatActivity {
                     }
                     break;
             }
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if(mediaPlayer.isPlaying() || tmppos != -1){
+            mediaPlayer.release();
+            sp.edit().remove("music_rw").commit();
+            sp.edit().putString("music_rw", currentLocation.get(tmppos));
+            Toast.makeText(insa.this, "選擇成功:" + "\n" + "你選的是:"+currentTitle.get(tmppos),Toast.LENGTH_SHORT).show();
+        }
+        else{
+            sp.edit().remove("music_rw").commit();
+            Toast.makeText(insa.this, "沒選擇鈴聲~",Toast.LENGTH_SHORT).show();
+        }
+    }
+    /*list比較*/
+    public int com(String key){
+        for(int i=0; i<list.size(); ++i){
+            if(key.equals(list.get(i))){
+                tmppos = i;// 得到正確位置
+                return i;
+            }
+        }
+        return -1;
     }
 }
