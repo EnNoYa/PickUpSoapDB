@@ -20,6 +20,7 @@ public class ns extends AppCompatActivity {
     SharedPreferences SettingsSave; //設定存檔
     SharedPreferences.Editor editorsettings; //設定存檔編輯
     Button ins ; //吸入量按鍵
+    Button rns; //通知設定按鍵
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +46,11 @@ public class ns extends AppCompatActivity {
 
 
         final Bundle bdr = new Bundle();
-        final Button rns = findViewById(R.id.rrt);
+        rns = findViewById(R.id.rrt);
         rns.setOnClickListener(new View.OnClickListener(){
           @Override
           public void onClick(View v){
-            intent.setClass(ns.this, insa.class);
+            intent.setClass(ns.this, rnsa.class);
             bdr.putInt("btnid", R.id.rrt);
             intent.putExtras(bdr);
             startActivity(intent);
@@ -243,6 +244,12 @@ public class ns extends AppCompatActivity {
         }
         else{
             ins.setTextColor(getResources().getColor(R.color.g));
+        }
+        if(SettingsSave.getString("music_rw2","").equals("")){
+            rns.setTextColor(getResources().getColor(R.color.r));
+        }
+        else{
+            rns.setTextColor(getResources().getColor(R.color.g));
         }
     }
 }
