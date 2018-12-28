@@ -13,6 +13,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.text.DecimalFormat;
 
 import org.json.JSONArray;
@@ -30,6 +32,11 @@ public class ai extends AppCompatActivity {
     private String idname;//當前觀測站名稱
     private int id = -1;//index 觀測站
     private int id2 = -1; //index 小時濃度
+    SharedPreferences HealthRecord;//
+    SharedPreferences.Editor editor;
+    String strgzil2 = new String("");
+    String strgzil1= new String("");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +65,9 @@ public class ai extends AppCompatActivity {
         /*拿資料*/
         SharedPreferences saveid = getApplication().getSharedPreferences("ssssid",Context.MODE_PRIVATE);
         idname = saveid.getString("idsave","");
+
+        HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE);
+        editor = HealthRecord.edit();
 
         /*AQI指標*/
         jsonParse();
@@ -96,6 +106,7 @@ public class ai extends AppCompatActivity {
                                     String SO2 = tmp.getString("SO2Ans");
                                     Tgas[0].setText(SO2);
                                     colorSet(Integer.valueOf(SO2), state[0]);//設等級
+                                    aboutyourbreath(Integer.valueOf(SO2),2);
                                 } else{
                                     Tgas[0].setText("維修");
                                     colorSet(0, state[0]);//設等級
@@ -114,6 +125,7 @@ public class ai extends AppCompatActivity {
                                     String PM10 = tmp.getString("PM10Ans");
                                     Tgas[3].setText(PM10);
                                     colorSet(Integer.valueOf(PM10), state[3]);//設等級
+                                    aboutyourbreath(Integer.valueOf(PM10),4);
                                 } else{
                                     Tgas[3].setText("維修");
                                     colorSet(0, state[3]);//設等級
@@ -123,6 +135,7 @@ public class ai extends AppCompatActivity {
                                     String PM25 = tmp.getString("PM25Ans");
                                     Tgas[4].setText(PM25);
                                     colorSet(Integer.valueOf(PM25), state[4]);//設等級
+                                    aboutyourbreath(Integer.valueOf(PM25),1);
                                 } else {
                                     Tgas[4].setText("維修");
                                     colorSet(0, state[4]);//設等級
@@ -132,6 +145,7 @@ public class ai extends AppCompatActivity {
                                     String NO2 = tmp.getString("NO2Ans");
                                     Tgas[5].setText(NO2);
                                     colorSet(Integer.valueOf(NO2), state[5]);//設等級
+                                    aboutyourbreath(Integer.valueOf(NO2),3);
                                 } else{
                                     Tgas[5].setText("維修");
                                     colorSet(0, state[5]);//設等級
@@ -141,6 +155,7 @@ public class ai extends AppCompatActivity {
                                     String O3 = tmp.getString("O3Ans");
                                     Tgas[2].setText(O3);
                                     colorSet(Integer.valueOf(O3), state[2]);//設等級
+                                    aboutyourbreath(Integer.valueOf(O3),5);
                                 } else{
                                     Tgas[2].setText("維修");
                                     colorSet(0, state[2]);//設等級
@@ -277,4 +292,247 @@ public class ai extends AppCompatActivity {
         }
     }
 
+    public void aboutyourbreath(int num,int who) {//引發疾病
+
+
+        switch (who) {
+            case 1://pm2.5
+                if(HealthRecord.getBoolean("checkedHeartDisease",true)==false&&HealthRecord.getBoolean("checkedDVC",true)==false&&HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false&&HealthRecord.getBoolean("checkedConjunctivitis",true)==false&&HealthRecord.getBoolean("checkedAllergicRhinitis",true)==false){
+                    if (num ==1) {
+                        strgzil1="非常新鮮的空氣，多到戶外走走吧!";
+                    } else if (num ==2) {
+                        strgzil1="新鮮的空氣，放心到戶外走走吧!";
+                    } else if (num ==3) {
+                        strgzil1+="正常不正常邊緣的空氣，盡量別待在戶外太久!";
+                    } else if(num==4) {
+                        strgzil1 = "戴一下口罩吧!這空氣有點髒!";
+                    }else if(num==5){
+                        strgzil1="別出門了，要不然戴個防毒面具好不?";
+                    }else if(num==6){
+                        strgzil1="求你了，別出門，防毒面具也救不了你";
+                    }else if(num==7){
+                        strgzil1="求你了，別出門，防毒面具也救不了你";
+                    }
+                }
+                else{
+                    if (num ==1) {
+                        strgzil1="非常新鮮的空氣，多到戶外走走吧!";
+                    } else if (num ==2) {
+                        strgzil1="新鮮的空氣，放心到戶外走走吧!";
+                    } else if (num ==3) {
+                        strgzil1="正常不正常邊緣的空氣，記得要戴口罩喔!";
+                    } else if(num==4) {
+                        strgzil1 = "這空氣有點髒!還是別出門了吧!";
+                    }else if(num==5){
+                        strgzil1="沒防毒面具救別出門了!";
+                    }else if(num==6){
+                        strgzil1="求你了，別出門，防毒面具也救不了你";
+                    }else if(num==7){
+                        strgzil1="求你了，別出門，防毒面具也救不了你";
+                    }
+                }
+
+                break;
+
+            case 2://so2
+                if(HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false) {
+                    if (num ==1) {
+                        strgzil1="多C一點O氣";
+                    } else if (num ==2) {
+                        strgzil1=" 可以正常出門";
+                    } else if (num ==3) {
+                        strgzil1="要出門要戴口罩!";
+                    } else if(num==4) {
+                        strgzil1 = "不建議出門";
+                    }else if(num==5){
+                        strgzil1="不能出門，出門會造成身體危害";
+                    }else if(num==6){
+                        strgzil1="絕對不能出門，出門會直接傷害到您的生命";
+                    }else if(num==7){
+                        strgzil1="絕對不能出門，出門會直接傷害到您的生命";
+                    }
+                }
+                else{
+                    if (num ==1) {
+                        strgzil1="多C一點O氣";
+                    } else if (num ==2) {
+                        strgzil1="準備個口罩";
+                    } else if (num ==3) {
+                        strgzil1="不建議久留外面";
+                    } else if(num==4) {
+                        strgzil1 = "別出門了吧!";
+                    }else if(num==5){
+                        strgzil1="外面的世界是很危險的!";
+                    }else if(num==6){
+                        strgzil1="絕對不能出門，出門會直接傷害到您的生命";
+                    }else if(num==7){
+                        strgzil1="絕對不能出門，出門會直接傷害到您的生命";
+                    }
+                }
+                break;
+
+            case 3://no2
+                if(HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false) {
+                    if (num ==1) {
+                        strgzil1="完美";
+                    } else if (num ==2) {
+                        strgzil1="還好";
+                    } else if (num ==3) {
+                        strgzil1="記得要戴口罩喔!";
+                    } else if(num==4) {
+                        strgzil1 = "北京";
+                    }else if(num==5){
+                        strgzil1="北京";
+                    }else if(num==6){
+                        strgzil1="北京";
+                    }else if(num==7){
+                        strgzil1="北京";
+                    }
+                }
+                else{
+                    if (num ==1) {
+                        strgzil1="完美";
+                    } else if (num ==2) {
+                        strgzil1="還好";
+                    } else if (num ==3) {
+                        strgzil1="記得要戴口罩喔!";
+                    } else if(num==4) {
+                        strgzil1 = "北京";
+                    }else if(num==5){
+                        strgzil1="北京";
+                    }else if(num==6){
+                        strgzil1="北京";
+                    }else if(num==7){
+                        strgzil1="北京";
+                    }
+                }
+                break;
+
+            case 4://rm10
+                if(HealthRecord.getBoolean("checkedHeartDisease",true)==false&&HealthRecord.getBoolean("checkedDVC",true)==false&&HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false&&HealthRecord.getBoolean("checkedConjunctivitis",true)==false&&HealthRecord.getBoolean("checkedAllergicRhinitis",true)==false) {
+                    if (num ==1) {
+                        strgzil1="非常新鮮的空氣，多到戶外走走吧!";
+                    } else if (num ==2) {
+                        strgzil1+="新鮮的空氣，放心到戶外走走吧!";
+                    } else if (num ==3) {
+                        strgzil1="正常不正常邊緣的空氣，盡量別待在戶外太久!";
+                    } else if(num==4) {
+                        strgzil1 = "戴一下口罩吧!這空氣有點髒!";
+                    }else if(num==5){
+                        strgzil1="別出門了，要不然戴個防毒面具好不?";
+                    }else if(num==6){
+                        strgzil1="求你了，別出門，防毒面具也救不了你";
+                    }else if(num==7){
+                        strgzil1="求你了，別出門，防毒面具也救不了你";
+                    }
+                }
+                else{
+                    if (num ==1) {
+                        strgzil1="非常新鮮的空氣，多到戶外走走吧!";
+                    } else if (num ==2) {
+                        strgzil1="新鮮的空氣，放心到戶外走走吧!";
+                    } else if (num ==3) {
+                        strgzil1="正常不正常邊緣的空氣，記得要戴口罩喔!";
+                    } else if(num==4) {
+                        strgzil1 = "這空氣有點髒!還是別出門了吧!";
+                    }else if(num==5){
+                        strgzil1="沒防毒面具救別出門了!";
+                    }else if(num==6){
+                        strgzil1="求你了，別出門，防毒面具也救不了你";
+                    }else if(num==7){
+                        strgzil1="求你了，別出門，防毒面具也救不了你";
+                    }
+                }
+                break;
+
+            case 5://o3
+                if(HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false) {
+                    if (num ==1) {
+                        strgzil1="完美";
+                    } else if (num ==2) {
+                        strgzil1="還好";
+                    } else if (num ==3) {
+                        strgzil1="記得要戴口罩喔!";
+                    } else if(num==4) {
+                        strgzil1 = "北京";
+                    }else if(num==5){
+                        strgzil1="北京";
+                    }else if(num==6){
+                        strgzil1="北京";
+                    }else if(num==7){
+                        strgzil1="北京";
+                    }
+                }
+                else{
+                    if (num ==1) {
+                        strgzil1="完美";
+                    } else if (num ==2) {
+                        strgzil1="還好";
+                    } else if (num ==3) {
+                        strgzil1="記得要戴口罩喔!";
+                    } else if(num==4) {
+                        strgzil1 = "北京";
+                    }else if(num==5){
+                        strgzil1="北京";
+                    }else if(num==6){
+                        strgzil1="北京";
+                    }else if(num==7){
+                        strgzil1="北京";
+                    }
+                }
+                break;
+        }
+
+        boolean checkmul=false;
+
+        if (who == 1 && num > 2 || who == 2 && num > 2 || who == 3 && num > 2 || who == 4 && num > 2 || who == 5 && num > 2)
+        {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="肺功能下降";
+        }
+        if (who == 1 && num > 2 || who == 2 && num > 2 || who == 3 && num > 2  || who == 5 && num > 2) {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="咳嗽";
+        }
+        if (who == 1 && num > 2|| who == 5 && num > 2) {
+            if(checkmul)strgzil2+="、";
+            checkmul=true;
+            strgzil2+="肺癌、血癌、自律神經失調";
+        }
+        if ( who == 2 && num > 2) {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="呼吸困難、呼吸道阻塞";
+        }
+        if ( who == 5 && num > 2) {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="加速老化、皮膚疾病";
+        }
+        if (who == 3 && num > 2|| who == 4 && num > 2 ) {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="頭痛";
+        }
+        if (who == 4 && num > 2 ) {
+            if(checkmul) strgzil2+="、";
+            strgzil2+="噁心、虛弱";
+        }
+
+    }
+    @Override
+    public void onBackPressed() {//上一頁的功能
+        super.onBackPressed();
+
+        if(!HealthRecord.getString("gzil1","").equals(""))//不是空的就刪除
+            editor.remove("gzil1").commit();
+        editor.putString("gzil1", strgzil1).commit();
+
+        if(!HealthRecord.getString("gzil2","").equals(""))
+            editor.remove("gzil2").commit();
+        editor.putString("gzil2",strgzil2).commit();
+
+    }
 }

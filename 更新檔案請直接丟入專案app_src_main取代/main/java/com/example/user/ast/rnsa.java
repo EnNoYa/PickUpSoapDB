@@ -160,12 +160,14 @@ public class rnsa extends AppCompatActivity {
   public void onBackPressed() {//上一頁的功能
     if(mediaPlayer.isPlaying() || tmppos != -1){
       mediaPlayer.release();
-      sp.edit().remove("music_rw2").commit();
+      if(!sp.getString("music_rw2","").equals("")) //不是空的
+        sp.edit().remove("music_rw2").commit();
       sp.edit().putString("music_rw2", currentLocation.get(tmppos)).commit();
       Toast.makeText(rnsa.this, "選擇成功:" + "\n" + "你選的是:"+currentTitle.get(tmppos),Toast.LENGTH_SHORT).show();
     }
     else{
-      sp.edit().remove("music_rw2").commit();
+      if(!sp.getString("music_rw","").equals("")) //不是空的
+        sp.edit().remove("music_rw2").commit();
       Toast.makeText(rnsa.this, "沒選擇鈴聲~",Toast.LENGTH_SHORT).show();
     }
     super.onBackPressed();

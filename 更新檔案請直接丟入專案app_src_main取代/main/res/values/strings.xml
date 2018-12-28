@@ -178,7 +178,7 @@
         <item>59</item>
     </string-array>
     <string name="title_activity_am">地圖</string>
-    <string name="airaqi">AQI</string>
+    <string name="airaqi">ACP</string>
     <string name="airindex">指標</string>
     <string name="airlevel">等級</string>
     <string name="airnum">數值</string>

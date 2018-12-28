@@ -160,12 +160,14 @@ public class insa extends AppCompatActivity {
     public void onBackPressed() {//上一頁的功能
         if(mediaPlayer.isPlaying() || tmppos != -1){
             mediaPlayer.release();
-            sp.edit().remove("music_rw").commit();
+            if(!sp.getString("music_rw","").equals("")) //不是空的
+                sp.edit().remove("music_rw").commit();
             sp.edit().putString("music_rw", currentLocation.get(tmppos)).commit();
             Toast.makeText(insa.this, "選擇成功:" + "\n" + "你選的是:"+currentTitle.get(tmppos),Toast.LENGTH_SHORT).show();
         }
         else{
-            sp.edit().remove("music_rw").commit();
+            if(!sp.getString("music_rw","").equals(""))
+                sp.edit().remove("music_rw").commit();
             Toast.makeText(insa.this, "沒選擇鈴聲~",Toast.LENGTH_SHORT).show();
         }
         super.onBackPressed();
