@@ -17,21 +17,22 @@ import android.widget.Toast;
 public class ns extends AppCompatActivity {
 
     Intent intent;
-    Button ins; //吸入量選擇鈴聲按鍵
     SharedPreferences SettingsSave; //設定存檔
     SharedPreferences.Editor editorsettings; //設定存檔編輯
+    Button ins ; //吸入量按鍵
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ns);
+
         intent = new Intent();
 
         SettingsSave = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE);
         editorsettings = SettingsSave.edit();
 
-        ins = (Button)findViewById(R.id.irt);
         final Bundle bdi = new Bundle();
+        ins = findViewById(R.id.irt);
         ins.setOnClickListener(new View.OnClickListener(){
           @Override
           public void onClick(View v){
@@ -44,7 +45,7 @@ public class ns extends AppCompatActivity {
 
 
         final Bundle bdr = new Bundle();
-        final Button rns = (Button) findViewById(R.id.rrt);
+        final Button rns = findViewById(R.id.rrt);
         rns.setOnClickListener(new View.OnClickListener(){
           @Override
           public void onClick(View v){
@@ -52,12 +53,11 @@ public class ns extends AppCompatActivity {
             bdr.putInt("btnid", R.id.rrt);
             intent.putExtras(bdr);
             startActivity(intent);
-
           }
         });
 
-        final Spinner chsp = (Spinner)findViewById(R.id.hsp);
-        final Spinner cmsp = (Spinner)findViewById(R.id.msp);
+        final Spinner chsp = findViewById(R.id.hsp);
+        final Spinner cmsp = findViewById(R.id.msp);
 
         final SwitchCompat ics = findViewById(R.id.inss);
         final SwitchCompat icv = findViewById(R.id.insv);
@@ -69,15 +69,13 @@ public class ns extends AppCompatActivity {
         ins.setEnabled(false);
         icv.setEnabled(false);
         icr.setEnabled(false);
-        ins.setEnabled(false);
         rns.setEnabled(false);
         rcv.setEnabled(false);
         rcr.setEnabled(false);
-        rns.setEnabled(false);
         chsp.setEnabled(false);
         cmsp.setEnabled(false);
 
-        if(SettingsSave.getBoolean("icschecked",true)==true){
+        if(SettingsSave.getBoolean("icschecked",true)){
           ics.setChecked(true);
           icv.setEnabled(true);
           icr.setEnabled(true);
@@ -89,14 +87,14 @@ public class ns extends AppCompatActivity {
           ins.setEnabled(false);
         }
 
-        if(SettingsSave.getBoolean("icvchecked",true)==true){
+        if(SettingsSave.getBoolean("icvchecked",true)){
           icv.setChecked(true);
         }
         else{
           icv.setChecked(false);
         }
 
-        if(SettingsSave.getBoolean("icrchecked",true)==true){
+        if(SettingsSave.getBoolean("icrchecked",true)){
           icr.setChecked(true);
           if(ics.isChecked())
             ins.setEnabled(true);
@@ -106,7 +104,7 @@ public class ns extends AppCompatActivity {
           ins.setEnabled(false);
         }
 
-        if(SettingsSave.getBoolean("rcschecked",true)==true){
+        if(SettingsSave.getBoolean("rcschecked",true)){
           rcs.setChecked(true);
           rcv.setEnabled(true);
           rcr.setEnabled(true);
@@ -122,14 +120,14 @@ public class ns extends AppCompatActivity {
           cmsp.setEnabled(false);
         }
 
-        if(SettingsSave.getBoolean("rcvchecked",true)==true){
+        if(SettingsSave.getBoolean("rcvchecked",true)){
           rcv.setChecked(true);
         }
         else{
           rcv.setChecked(false);
         }
 
-        if(SettingsSave.getBoolean("rcrchecked",true)==true){
+        if(SettingsSave.getBoolean("rcrchecked",true)){
           rcr.setChecked(true);
           if(rcs.isChecked())
             rns.setEnabled(true);
@@ -195,9 +193,6 @@ public class ns extends AppCompatActivity {
               rcr.setEnabled(true);
               chsp.setEnabled(true);
               cmsp.setEnabled(true);
-              Intent intent; intent = new Intent(ns.this,MyService.class);
-              startService(intent);
-
               if(rcr.isChecked())
                 rns.setEnabled(true);
             } else{
@@ -208,7 +203,6 @@ public class ns extends AppCompatActivity {
               rns.setEnabled(false);
               chsp.setEnabled(false);
               cmsp.setEnabled(false);
-              stopService(new Intent(getBaseContext(),MyService.class));
             }
           }
         });
@@ -241,7 +235,14 @@ public class ns extends AppCompatActivity {
   }
 
     @Override
-    protected void onRestart(){
-        super.onRestart();
+    protected void onResume(){
+        super.onResume();
+        /*設定按鍵顏色*/
+        if(SettingsSave.getString("music_rw","").equals("")){
+            ins.setTextColor(getResources().getColor(R.color.r));
+        }
+        else{
+            ins.setTextColor(getResources().getColor(R.color.g));
+        }
     }
 }

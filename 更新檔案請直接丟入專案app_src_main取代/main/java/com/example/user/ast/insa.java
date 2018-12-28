@@ -3,6 +3,7 @@ package com.example.user.ast;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -26,6 +27,8 @@ import android.media.MediaPlayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.xml.transform.Result;
 
 public class insa extends AppCompatActivity {
 
@@ -151,6 +154,10 @@ public class insa extends AppCompatActivity {
     }
     @Override
     protected void onDestroy(){
+        super.onDestroy();
+    }
+    @Override
+    public void onBackPressed() {//上一頁的功能
         if(mediaPlayer.isPlaying() || tmppos != -1){
             mediaPlayer.release();
             sp.edit().remove("music_rw").commit();
@@ -161,7 +168,7 @@ public class insa extends AppCompatActivity {
             sp.edit().remove("music_rw").commit();
             Toast.makeText(insa.this, "沒選擇鈴聲~",Toast.LENGTH_SHORT).show();
         }
-        super.onDestroy();
+        super.onBackPressed();
     }
     /*list比較*/
     public int com(String key){

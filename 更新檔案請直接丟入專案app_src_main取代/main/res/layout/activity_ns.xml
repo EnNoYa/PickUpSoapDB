@@ -109,7 +109,7 @@
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/rnss"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="56dp"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginEnd="10dp"
