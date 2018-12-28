@@ -24,6 +24,7 @@ public class ai extends AppCompatActivity {
     private RequestQueue mRQ;
     private TextView Tgas[] = new TextView[6];// SO2 CO O3 PM10 PM2.5 NO2
     private TextView hourgas[] = new TextView[6];// SO2 CO O3 PM10 PM2.5 NO2
+    private TextView state[] = new TextView[6];// SO2 CO O3 PM10 PM2.5 NO2
     private TextView observe_t; //觀測站名稱
     private String sarr[] = new String[79]; //紀錄觀測站順序(暫存)
     private String idname;//當前觀測站名稱
@@ -46,6 +47,12 @@ public class ai extends AppCompatActivity {
         hourgas[3] = findViewById(R.id.aivpm10);
         hourgas[4] = findViewById(R.id.aivpm2_5);
         hourgas[5] = findViewById(R.id.aivno2);
+        state[0] = findViewById(R.id.ailso2);
+        state[1] = findViewById(R.id.ailco);
+        state[2] = findViewById(R.id.ailo3);
+        state[3] = findViewById(R.id.ailpm10);
+        state[4] = findViewById(R.id.ailpm2_5);
+        state[5] = findViewById(R.id.textView33);
         mRQ = Volley.newRequestQueue(this);
 
         /*拿資料*/
@@ -78,46 +85,66 @@ public class ai extends AppCompatActivity {
                                 }
                             }
                             if(id==-1){//沒有這個觀測站
-                                for(int i=0; i<6; ++i)
+                                for(int i=0; i<6; ++i){
                                     Tgas[i].setText("維修");
+                                    colorSet(0, state[i]);//設等級
+                                }
                             }
                             else {
                                 JSONObject tmp = response.getJSONObject(id); //json物件
                                 if (!tmp.isNull("SO2Ans")) {
                                     String SO2 = tmp.getString("SO2Ans");
                                     Tgas[0].setText(SO2);
-                                } else
+                                    colorSet(Integer.valueOf(SO2), state[0]);//設等級
+                                } else{
                                     Tgas[0].setText("維修");
+                                    colorSet(0, state[0]);//設等級
+                                }
 
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     Tgas[1].setText(CO);
-                                } else
+                                    colorSet(Integer.valueOf(CO), state[1]);//設等級
+                                } else{
                                     Tgas[1].setText("維修");
+                                    colorSet(0, state[1]);//設等級
+                                }
 
                                 if (!tmp.isNull("PM10Ans")) {
                                     String PM10 = tmp.getString("PM10Ans");
                                     Tgas[3].setText(PM10);
-                                } else
+                                    colorSet(Integer.valueOf(PM10), state[3]);//設等級
+                                } else{
                                     Tgas[3].setText("維修");
+                                    colorSet(0, state[3]);//設等級
+                                }
 
                                 if (!tmp.isNull("PM25Ans")) {
                                     String PM25 = tmp.getString("PM25Ans");
                                     Tgas[4].setText(PM25);
-                                } else
+                                    colorSet(Integer.valueOf(PM25), state[4]);//設等級
+                                } else {
                                     Tgas[4].setText("維修");
+                                    colorSet(0, state[4]);//設等級
+                                }
 
                                 if (!tmp.isNull("NO2Ans")) {
                                     String NO2 = tmp.getString("NO2Ans");
                                     Tgas[5].setText(NO2);
-                                } else
+                                    colorSet(Integer.valueOf(NO2), state[5]);//設等級
+                                } else{
                                     Tgas[5].setText("維修");
+                                    colorSet(0, state[5]);//設等級
+                                }
 
                                 if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     Tgas[2].setText(O3);
-                                } else
+                                    colorSet(Integer.valueOf(O3), state[2]);//設等級
+                                } else{
                                     Tgas[2].setText("維修");
+                                    colorSet(0, state[2]);//設等級
+                                }
                             }
 
                         } catch (JSONException e) {
@@ -212,4 +239,42 @@ public class ai extends AppCompatActivity {
         );
         mRQ.add(request);
     }
+    /*設定嚴重等級*/
+    public void colorSet(int cas, TextView mystate){
+        switch (cas){
+            case 0:
+                mystate.setText("維修");
+                mystate.setTextColor(getResources().getColor(R.color.gray));
+                break;
+            case 1:
+                mystate.setText(getResources().getString(R.string.strgas_good));
+                mystate.setTextColor(getResources().getColor(R.color.g));
+                break;
+            case 2:
+                mystate.setText(getResources().getString(R.string.strgas_normal));
+                mystate.setTextColor(getResources().getColor(R.color.y));
+                break;
+            case 3:
+                mystate.setText(getResources().getString(R.string.strgas_notgood));
+                mystate.setTextColor(getResources().getColor(R.color.o));
+                break;
+            case 4:
+                mystate.setText(getResources().getString(R.string.strgas_bad));
+                mystate.setTextColor(getResources().getColor(R.color.r));
+                break;
+            case 5:
+                mystate.setText(getResources().getString(R.string.strgas_verybad));
+                mystate.setTextColor(getResources().getColor(R.color.colorAccent));
+                break;
+            case 6:
+                mystate.setText(getResources().getString(R.string.strgas_god));
+                mystate.setTextColor(getResources().getColor(R.color.p));
+                break;
+            case 7:
+                mystate.setText(getResources().getString(R.string.strgas_god));
+                mystate.setTextColor(getResources().getColor(R.color.br));
+                break;
+        }
+    }
+
 }
