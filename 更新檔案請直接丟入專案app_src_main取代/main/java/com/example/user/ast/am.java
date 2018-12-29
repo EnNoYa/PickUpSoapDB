@@ -26,6 +26,8 @@ public class am extends AppCompatActivity {
     LatLng curP;
     private int M = 79; //最大值
     public int nowid = 0;   //當前觀測站編號
+    SharedPreferences HealthRecord;//read file
+    TextView curState ; //當前狀態
     private String place_name[] = {
             "富貴角", "陽明", "萬里", "淡水", "基隆", "士林", "林口", "三重", "菜寮", "汐止", "大同", "中山", "大園", "松山",
             "萬華", "新莊", "觀音", "古亭", "永和", "板橋", "桃園", "土城", "新店", "平鎮", "中壢", "龍潭", "湖口", "新竹",
@@ -59,6 +61,10 @@ public class am extends AppCompatActivity {
                 open_activity();
             }
         });
+
+        /*read */
+        HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE);
+        curState = findViewById(R.id.currState2);
     }
     private void open_activity(){//開啟觀測站資訊頁面
         Intent intent;
@@ -82,6 +88,48 @@ public class am extends AppCompatActivity {
             }
         }
         return id;
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        colorSet(HealthRecord.getInt("acp", 0), curState);
+    }
+    /*設定嚴重等級*/
+    public void colorSet(int cas, TextView mystate){
+        switch (cas){
+            case 0:
+                mystate.setText("維修");
+                mystate.setTextColor(getResources().getColor(R.color.gray));
+                break;
+            case 1:
+                mystate.setText(getResources().getString(R.string.strgas_good));
+                mystate.setTextColor(getResources().getColor(R.color.g));
+                break;
+            case 2:
+                mystate.setText(getResources().getString(R.string.strgas_normal));
+                mystate.setTextColor(getResources().getColor(R.color.y));
+                break;
+            case 3:
+                mystate.setText(getResources().getString(R.string.strgas_notgood));
+                mystate.setTextColor(getResources().getColor(R.color.o));
+                break;
+            case 4:
+                mystate.setText(getResources().getString(R.string.strgas_bad));
+                mystate.setTextColor(getResources().getColor(R.color.r));
+                break;
+            case 5:
+                mystate.setText(getResources().getString(R.string.strgas_verybad));
+                mystate.setTextColor(getResources().getColor(R.color.colorAccent));
+                break;
+            case 6:
+                mystate.setText(getResources().getString(R.string.strgas_god));
+                mystate.setTextColor(getResources().getColor(R.color.p));
+                break;
+            case 7:
+                mystate.setText(getResources().getString(R.string.strgas_god));
+                mystate.setTextColor(getResources().getColor(R.color.br));
+                break;
+        }
     }
     /*觀測站位置資訊*/
     public LatLng LLplace[] = {

@@ -27,6 +27,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.net.HttpURLConnection;
+
 public class ais extends AppCompatActivity implements LocationListener{
 
     static final int MIN_TIME = 5000; //位置更新條件：5000 毫秒
@@ -40,6 +42,7 @@ public class ais extends AppCompatActivity implements LocationListener{
     TextView name;  //當前測站名字
     Button caredata;    //詳細資料
     TextView str[] = new TextView[2]; //句子
+    TextView curState ; //當前狀態
     SharedPreferences HealthRecord;//read file
 
     private String place_name[] = {
@@ -71,6 +74,7 @@ public class ais extends AppCompatActivity implements LocationListener{
         name = findViewById(R.id.area);
         str[0] = findViewById(R.id.str1);
         str[1] = findViewById(R.id.str2);
+        curState = findViewById(R.id.currState);
     }
     //檢查若尚未授權, 則向使用者要求定位權限
     private void checkPermission() {
@@ -88,6 +92,7 @@ public class ais extends AppCompatActivity implements LocationListener{
         enableLocationUpdates(true);
         str[0].setText(HealthRecord.getString("gzil1",""));
         str[1].setText(HealthRecord.getString("gzil2",""));
+        colorSet(HealthRecord.getInt("acp", 0), curState);
     }
     @Override
     protected void onPause() {
@@ -173,6 +178,43 @@ public class ais extends AppCompatActivity implements LocationListener{
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+    /*設定嚴重等級*/
+    public void colorSet(int cas, TextView mystate){
+        switch (cas){
+            case 0:
+                mystate.setText("維修");
+                mystate.setTextColor(getResources().getColor(R.color.gray));
+                break;
+            case 1:
+                mystate.setText(getResources().getString(R.string.strgas_good));
+                mystate.setTextColor(getResources().getColor(R.color.g));
+                break;
+            case 2:
+                mystate.setText(getResources().getString(R.string.strgas_normal));
+                mystate.setTextColor(getResources().getColor(R.color.y));
+                break;
+            case 3:
+                mystate.setText(getResources().getString(R.string.strgas_notgood));
+                mystate.setTextColor(getResources().getColor(R.color.o));
+                break;
+            case 4:
+                mystate.setText(getResources().getString(R.string.strgas_bad));
+                mystate.setTextColor(getResources().getColor(R.color.r));
+                break;
+            case 5:
+                mystate.setText(getResources().getString(R.string.strgas_verybad));
+                mystate.setTextColor(getResources().getColor(R.color.colorAccent));
+                break;
+            case 6:
+                mystate.setText(getResources().getString(R.string.strgas_god));
+                mystate.setTextColor(getResources().getColor(R.color.p));
+                break;
+            case 7:
+                mystate.setText(getResources().getString(R.string.strgas_god));
+                mystate.setTextColor(getResources().getColor(R.color.br));
+                break;
+        }
     }
     public int shortest_place(LatLng curL){//查出是離哪個觀測站最近
         double dis = 1000.0;
