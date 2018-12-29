@@ -35,11 +35,11 @@ public class ai extends AppCompatActivity {
     private String idname;//當前觀測站名稱
     private int id = -1;//index 觀測站
     private int id2 = -1; //index 小時濃度
-    private int mon = 0, son = 0; //分子分母
-    SharedPreferences HealthRecord;//
+    private double mon = 0, son = 0; //分子分母
+    SharedPreferences HealthRecord;// 存檔用
     SharedPreferences.Editor editor;
-    String strgzil2 = new String("");
-    String strgzil1= new String("");
+    String strgzil2 = new String(""); //句子2
+    String strgzil1= new String(""); //句子1
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class ai extends AppCompatActivity {
 
     }
 
-    private void jsonParse(){
+    public void jsonParse(){
         String url = "http://140.136.149.239:9487/recentAQI";
         JsonArrayRequest request  = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -180,10 +180,10 @@ public class ai extends AppCompatActivity {
                                     Tgas[2].setText("維修");
                                     colorSet(0, state[2]);//設等級
                                 }
-                                acp_value.setText(String.valueOf(son/mon));
-                                colorSet(son/mon, acp_state);//設等級
-                            }
+                                acp_value.setText(String.valueOf((int)Math.ceil(son/mon)));
+                                colorSet((int)Math.ceil(son/mon), acp_state);//設等級
 
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -225,37 +225,37 @@ public class ai extends AppCompatActivity {
                                 JSONObject tmp = response.getJSONObject(id2); //json物件
                                 DecimalFormat df = new DecimalFormat("##.00");
                                 /*設定值*/
-                                if (!tmp.isNull("SO2")) {
+                                if (!tmp.isNull("SO2")&&tmp.getDouble("SO2")>=0) {
                                     Double dtmp = Double.parseDouble(df.format(tmp.getDouble("SO2")));
                                     hourgas[0].setText(String.valueOf(dtmp));
                                 } else
                                     hourgas[0].setText("維修");
 
-                                if (!tmp.isNull("CO")) {
+                                if (!tmp.isNull("CO")&&tmp.getDouble("CO")>=0) {
                                     Double dtmp = Double.parseDouble(df.format(tmp.getDouble("CO")));
                                     hourgas[1].setText(String.valueOf(dtmp));
                                 } else
                                     hourgas[1].setText("維修");
 
-                                if (!tmp.isNull("PM10")) {
+                                if (!tmp.isNull("PM10")&&tmp.getDouble("PM10")>=0) {
                                     Double dtmp = Double.parseDouble(df.format(tmp.getDouble("PM10")));
                                     hourgas[3].setText(String.valueOf(tmp.getDouble("PM10")));
                                 } else
                                     hourgas[3].setText("維修");
 
-                                if (!tmp.isNull("PM25")) {
+                                if (!tmp.isNull("PM25")&&tmp.getDouble("PM25")>=0) {
                                     Double dtmp = Double.parseDouble(df.format(tmp.getDouble("PM25")));
                                     hourgas[4].setText(String.valueOf(dtmp));
                                 } else
                                     hourgas[4].setText("維修");
 
-                                if (!tmp.isNull("NO2")) {
+                                if (!tmp.isNull("NO2")&&tmp.getDouble("NO2")>=0) {
                                     Double dtmp = Double.parseDouble(df.format(tmp.getDouble("NO2")));
                                     hourgas[5].setText(String.valueOf(dtmp));
                                 } else
                                     hourgas[5].setText("維修");
 
-                                if (!tmp.isNull("O3")) {
+                                if (!tmp.isNull("O3")&&tmp.getDouble("O3")>=0) {
                                     Double dtmp = Double.parseDouble(df.format(tmp.getDouble("O3")));
                                     hourgas[2].setText(String.valueOf(dtmp));
                                 } else

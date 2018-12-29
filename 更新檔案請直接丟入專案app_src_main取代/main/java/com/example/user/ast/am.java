@@ -1,14 +1,22 @@
 package com.example.user.ast;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +24,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
-
+import java.util.List;
 
 
 
@@ -36,10 +44,12 @@ public class am extends AppCompatActivity {
             "左營", "屏東", "前金", "鳳山", "復興", "前鎮", "小港", "大寮", "潮州", "林園", "恆春", "宜蘭", "冬山", "花蓮",
             "關山", "臺東", "馬祖", "金門", "馬公", "臺南", "彰化", "崙背", "屏東"
     };
+    myBCRC receiver; //廣播接收者
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_am);
+        
         /*詳細資料按鈕*/
         caredata = findViewById(R.id.obs_get2);
         name = findViewById(R.id.area2);
@@ -47,17 +57,12 @@ public class am extends AppCompatActivity {
         SharedPreferences tmp = getApplication().getSharedPreferences("area_data",Context.MODE_PRIVATE);
         name.setText(tmp.getString("area_save", "臺北市中正區"));
 
+        load_area_data();
+        save_data(nowid);
+
         caredata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int i,j;
-                /*讀檔案*/
-                SharedPreferences sp = getApplication().getSharedPreferences("local_area_data",MODE_PRIVATE);
-                i =  sp.getInt("local_area_data1",0);
-                j =  sp.getInt("local_area_data2",0);
-                curP = new AreaData().getLatLngData(i,j);
-                nowid = shortest_place(curP);
-                save_data(nowid);
                 open_activity();
             }
         });
@@ -65,6 +70,12 @@ public class am extends AppCompatActivity {
         /*read */
         HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE);
         curState = findViewById(R.id.currState2);
+
+        /*執行任務囉*/
+        startService(new Intent(am.this, MyService.class));
+
+        /*創建一個接收器*/
+        receiver = new myBCRC();
     }
     private void open_activity(){//開啟觀測站資訊頁面
         Intent intent;
@@ -92,7 +103,16 @@ public class am extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        colorSet(HealthRecord.getInt("acp", 0), curState);
+        colorSet(HealthRecord.getInt("acp", -1), curState);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.example.user.ast.task"); //新增過濾事件
+        registerReceiver(receiver, filter);
+
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        unregisterReceiver(receiver);
     }
     /*設定嚴重等級*/
     public void colorSet(int cas, TextView mystate){
@@ -161,5 +181,48 @@ public class am extends AppCompatActivity {
             new LatLng(23.12216944,	120.4697361), new LatLng(23.84315833,	120.2818139), new LatLng(23.75754722,	120.3487417),
             new LatLng(22.35222222,	120.3772222),
     };
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+    }
+    /*讀資料用 設定curP 跟 nowid*/
+    public void load_area_data(){
+        int i,j;
+        /*讀檔案*/
+        SharedPreferences sp = getApplication().getSharedPreferences("local_area_data",MODE_PRIVATE);
+        i =  sp.getInt("local_area_data1",0);
+        j =  sp.getInt("local_area_data2",0);
+        curP = new AreaData().getLatLngData(i,j);
+        nowid = shortest_place(curP);
+    }
+    /*服務是否正在跑*/
+    public boolean isRunning(Class Target){
+        boolean result = false;
 
+        //取得activity mgr 物件
+        ActivityManager amg = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
+        //取得正在運作
+        List<ActivityManager.RunningServiceInfo> rs = amg.getRunningServices(20);
+
+        //建立參數指定服務元件
+        ComponentName cn = new ComponentName(this,Target);
+
+        for(ActivityManager.RunningServiceInfo rsi: rs){
+            if(rsi.service.equals(cn)){
+                result = true;
+                return result;
+            }
+        }
+        return result;
+    }
+    /*自定義廣播接收物件*/
+    public class myBCRC extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("shit","設定顏色囉");
+            colorSet(HealthRecord.getInt("acp", -1), curState);
+        }
+    }
 }
+
