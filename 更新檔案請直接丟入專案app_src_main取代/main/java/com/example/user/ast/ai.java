@@ -17,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +38,7 @@ public class ai extends AppCompatActivity {
     private String idname;//當前觀測站名稱
     private int id = -1;//index 觀測站
     private int id2 = -1; //index 小時濃度
-    private double mon = 0, son = 0; //分子分母
+    List<Double> aqilist = new ArrayList<>(); //暫存aqi數值
     SharedPreferences HealthRecord;// 存檔用
     SharedPreferences.Editor editor;
     String strgzil2 = new String(""); //句子2
@@ -114,7 +117,7 @@ public class ai extends AppCompatActivity {
                                     String SO2 = tmp.getString("SO2Ans");
                                     int val = Integer.valueOf(SO2);
                                     Tgas[0].setText(SO2);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                     colorSet(val, state[0]);//設等級
                                     aboutyourbreath(val,2);
                                 } else{
@@ -125,8 +128,8 @@ public class ai extends AppCompatActivity {
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     int val = Integer.valueOf(CO);
+                                    aqilist.add(Double.valueOf(val));
                                     Tgas[1].setText(CO);
-                                    calaulate(val);//計算
                                     colorSet(val, state[1]);//設等級
                                 } else{
                                     Tgas[1].setText("維修");
@@ -137,7 +140,7 @@ public class ai extends AppCompatActivity {
                                     String PM10 = tmp.getString("PM10Ans");
                                     int val = Integer.valueOf(PM10);
                                     Tgas[3].setText(PM10);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                     colorSet(val, state[3]);//設等級
                                     aboutyourbreath(val,4);
                                 } else{
@@ -149,7 +152,7 @@ public class ai extends AppCompatActivity {
                                     String PM25 = tmp.getString("PM25Ans");
                                     int val = Integer.valueOf(PM25);
                                     Tgas[4].setText(PM25);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                     colorSet(val, state[4]);//設等級
                                     aboutyourbreath(val,1);
                                 } else {
@@ -161,8 +164,8 @@ public class ai extends AppCompatActivity {
                                     String NO2 = tmp.getString("NO2Ans");
                                     int val = Integer.valueOf(NO2);
                                     Tgas[5].setText(NO2);
+                                    aqilist.add(Double.valueOf(val));
                                     colorSet(val, state[5]);//設等級
-                                    calaulate(val);//計算
                                     aboutyourbreath(val,3);
                                 } else{
                                     Tgas[5].setText("維修");
@@ -172,19 +175,29 @@ public class ai extends AppCompatActivity {
                                 if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     int val = Integer.valueOf(O3);
-                                    calaulate(val);//計算
                                     Tgas[2].setText(O3);
+                                    aqilist.add(Double.valueOf(val));
                                     colorSet(val, state[2]);//設等級
                                     aboutyourbreath(val,5);
                                 } else{
                                     Tgas[2].setText("維修");
                                     colorSet(0, state[2]);//設等級
                                 }
-                                if(mon==0)
-                                    mon=1;
-                                acp_value.setText(String.valueOf((int)Math.ceil(son/mon)));
-                                colorSet((int)Math.ceil(son/mon), acp_state);//設等級
-
+                                Collections.sort(aqilist); //排序
+                                Collections.reverse(aqilist); //由大到小
+                                /*aqi設定值*/
+                                if(aqilist.size()>1){
+                                    acp_value.setText(String.valueOf((int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2)));
+                                    colorSet((int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2), acp_state);//設等級
+                                }
+                                else if(aqilist.size()==1){
+                                    acp_value.setText(String.valueOf(aqilist.get(0).intValue()));
+                                    colorSet(aqilist.get(0).intValue(), acp_state);//設等級
+                                }
+                                else{
+                                    acp_value.setText("維修");
+                                    colorSet(0, acp_state);//設等級
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -563,10 +576,10 @@ public class ai extends AppCompatActivity {
         /*acp等級*/
         if(HealthRecord.getInt("acp",-1) != -1)//不是空的就刪除
             editor.remove("acp").commit();
-        editor.putInt("acp", Integer.valueOf(acp_value.getText().toString())).commit();
-    }
-    public void calaulate(int val){
-        son += val;
-        mon++;
+        if(acp_value.getText().toString().equals("維修")) //維修狀態
+            editor.putInt("acp", 0).commit();
+        else{
+            editor.putInt("acp", Integer.valueOf(acp_value.getText().toString())).commit();
+        }
     }
 }

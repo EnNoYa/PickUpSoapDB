@@ -28,7 +28,6 @@ public class MyService extends Service {
     private String idname;//當前觀測站名稱
     private String sarr[] = new String[79]; //紀錄觀測站順序(暫存)
     private int id = -1;//index 觀測站
-    private double mon = 0, son = 0; //分子分母
     SharedPreferences HealthRecord;// 存檔用
     SharedPreferences.Editor editor;
 
@@ -63,10 +62,6 @@ public class MyService extends Service {
         Log.d("shit","結束");
     }
 
-    public void calaulate(int val){
-        son += val;
-        mon++;
-    }
 
     public void jsonParse(){
         String url = "http://140.136.149.239:9487/recentAQI";
@@ -88,49 +83,60 @@ public class MyService extends Service {
                             if(id==-1){//沒有這個觀測站
                             }
                             else {
+                                List<Double> aqilist = new ArrayList<>(); //暫存aqi數值
                                 JSONObject tmp = response.getJSONObject(id); //json物件
                                 if (!tmp.isNull("SO2Ans")) {
                                     String SO2 = tmp.getString("SO2Ans");
                                     int val = Integer.valueOf(SO2);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                 }
 
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     int val = Integer.valueOf(CO);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                 }
 
                                 if (!tmp.isNull("PM10Ans")) {
                                     String PM10 = tmp.getString("PM10Ans");
                                     int val = Integer.valueOf(PM10);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                 }
 
                                 if (!tmp.isNull("PM25Ans")) {
                                     String PM25 = tmp.getString("PM25Ans");
                                     int val = Integer.valueOf(PM25);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                 }
 
                                 if (!tmp.isNull("NO2Ans")) {
                                     String NO2 = tmp.getString("NO2Ans");
                                     int val = Integer.valueOf(NO2);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                 }
 
                                 if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     int val = Integer.valueOf(O3);
-                                    calaulate(val);//計算
+                                    aqilist.add(Double.valueOf(val));
                                 }
+                                Collections.sort(aqilist); //排序
+                                Collections.reverse(aqilist); //由大到小
                                 /*acp等級*/
                                 if(HealthRecord.getInt("acp",-1) != -1)//不是空的就刪除
                                     editor.remove("acp").commit();
-                                if(mon==0)
-                                    mon=1;
-                                editor.putInt("acp", (int)Math.ceil(son/mon)).commit();
-                                Log.d("shit","數值"+String.valueOf(Math.ceil(son/mon)));
+                                if(aqilist.size()>1){
+                                    editor.putInt("acp", (int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2)).commit();
+                                    Log.d("shit","數值"+String.valueOf(Math.ceil((aqilist.get(0)+aqilist.get(1))/2)));
+                                }
+                                else if(aqilist.size() == 1){
+                                    editor.putInt("acp", aqilist.get(0).intValue()).commit();
+                                    Log.d("shit","數值"+String.valueOf(aqilist.get(0).intValue()));
+                                }
+                                else{
+                                    editor.putInt("acp", 0).commit();
+                                    Log.d("shit","數值維修");
+                                }
                             }
                             sendBroadcast(new Intent("com.example.user.ast.task"));
                             Log.d("shit","完成+廣播");
