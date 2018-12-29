@@ -2,11 +2,13 @@ package com.example.user.ast;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.content.BroadcastReceiver;
 
 import android.location.LocationListener;
 import android.location.Location;
@@ -44,6 +47,7 @@ public class ais extends AppCompatActivity implements LocationListener{
     TextView str[] = new TextView[2]; //句子
     TextView curState ; //當前狀態
     SharedPreferences HealthRecord;//read file
+    GPSbrrc receiver; //廣播接收者
 
     private String place_name[] = {
             "富貴角", "陽明", "萬里", "淡水", "基隆", "士林", "林口", "三重", "菜寮", "汐止", "大同", "中山", "大園", "松山",
@@ -63,18 +67,20 @@ public class ais extends AppCompatActivity implements LocationListener{
         caredata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save_data(nowid);
                 open_activity();
             }
         });
         checkPermission();//檢查權限
         /*read */
         HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE);
-
         name = findViewById(R.id.area);
         str[0] = findViewById(R.id.str1);
         str[1] = findViewById(R.id.str2);
         curState = findViewById(R.id.currState);
+
+        /*廣播接收器*/
+        receiver = new GPSbrrc();
+
     }
     //檢查若尚未授權, 則向使用者要求定位權限
     private void checkPermission() {
@@ -89,15 +95,20 @@ public class ais extends AppCompatActivity implements LocationListener{
     @Override
     protected void onResume() {
         super.onResume();
-        enableLocationUpdates(true);
+        enableLocationUpdates(true);//更新
+        save_data(nowid);//存檔
+        /*開始任務*/
+        startService(new Intent(ais.this, MyService.class));
         str[0].setText(HealthRecord.getString("gzil1",""));
         str[1].setText(HealthRecord.getString("gzil2",""));
-        colorSet(HealthRecord.getInt("acp", 0), curState);
+        IntentFilter filter = new IntentFilter("com.example.user.ast.task");//新增過濾事件
+        registerReceiver(receiver, filter);
     }
     @Override
     protected void onPause() {
         super.onPause();
         enableLocationUpdates(false);    //關閉定位更新功能
+        unregisterReceiver(receiver);
     }
     private void open_activity(){//開啟觀測站資訊頁面
         Intent intent;
@@ -258,4 +269,12 @@ public class ais extends AppCompatActivity implements LocationListener{
             new LatLng(23.12216944,	120.4697361), new LatLng(23.84315833,	120.2818139), new LatLng(23.75754722,	120.3487417),
             new LatLng(22.35222222,	120.3772222),
     };
+    /*自定義廣播接收物件*/
+    public class GPSbrrc extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("shit","設定顏色囉");
+            colorSet(HealthRecord.getInt("acp", -1), curState);
+        }
+    }
 }

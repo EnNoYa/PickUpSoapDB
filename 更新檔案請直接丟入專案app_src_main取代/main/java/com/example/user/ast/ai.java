@@ -180,6 +180,8 @@ public class ai extends AppCompatActivity {
                                     Tgas[2].setText("維修");
                                     colorSet(0, state[2]);//設等級
                                 }
+                                if(mon==0)
+                                    mon=1;
                                 acp_value.setText(String.valueOf((int)Math.ceil(son/mon)));
                                 colorSet((int)Math.ceil(son/mon), acp_state);//設等級
 

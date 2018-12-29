@@ -69,7 +69,6 @@ public class MyService extends Service {
     }
 
     public void jsonParse(){
-        Log.d("shit","測試");
         String url = "http://140.136.149.239:9487/recentAQI";
         JsonArrayRequest request  = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -128,6 +127,8 @@ public class MyService extends Service {
                                 /*acp等級*/
                                 if(HealthRecord.getInt("acp",-1) != -1)//不是空的就刪除
                                     editor.remove("acp").commit();
+                                if(mon==0)
+                                    mon=1;
                                 editor.putInt("acp", (int)Math.ceil(son/mon)).commit();
                                 Log.d("shit","數值"+String.valueOf(Math.ceil(son/mon)));
                             }
