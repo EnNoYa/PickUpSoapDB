@@ -1,5 +1,8 @@
 package com.example.user.ast;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -48,6 +51,8 @@ public class ais extends AppCompatActivity implements LocationListener{
     TextView curState ; //當前狀態
     SharedPreferences HealthRecord;//read file
     GPSbrrc receiver; //廣播接收者
+    JobScheduler myScheduler; //管理員
+    JobInfo Jinfo; //工作須知
 
     private String place_name[] = {
             "富貴角", "陽明", "萬里", "淡水", "基隆", "士林", "林口", "三重", "菜寮", "汐止", "大同", "中山", "大園", "松山",
@@ -81,6 +86,20 @@ public class ais extends AppCompatActivity implements LocationListener{
         /*廣播接收器*/
         receiver = new GPSbrrc();
 
+        /*job工作排程*/
+        myScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        Jinfo = new JobInfo.Builder(1, new ComponentName(this, alarm_backGroundjob.class))
+                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)// WIFI網路都執行
+                        .setPersisted(true)
+                        .setPeriodic( 15 * 60 * 1000)
+                        .build();
+        int result = myScheduler.schedule(Jinfo);
+        if(result == JobScheduler.RESULT_SUCCESS){
+            Log.d("mjob","背景執行規劃");
+        }
+        else{
+            Log.d("mjob","背景執行規劃失敗");
+        }
     }
     //檢查若尚未授權, 則向使用者要求定位權限
     private void checkPermission() {
@@ -99,8 +118,10 @@ public class ais extends AppCompatActivity implements LocationListener{
         save_data(nowid);//存檔
         /*開始任務*/
         startService(new Intent(ais.this, MyService.class));
+
         str[0].setText(HealthRecord.getString("gzil1",""));
         str[1].setText(HealthRecord.getString("gzil2",""));
+
         IntentFilter filter = new IntentFilter("com.example.user.ast.task");//新增過濾事件
         registerReceiver(receiver, filter);
     }
@@ -273,7 +294,7 @@ public class ais extends AppCompatActivity implements LocationListener{
     public class GPSbrrc extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("shit","設定顏色囉");
+            Log.d("shit","廣播訊息:設定顏色囉");
             colorSet(HealthRecord.getInt("acp", -1), curState);
         }
     }

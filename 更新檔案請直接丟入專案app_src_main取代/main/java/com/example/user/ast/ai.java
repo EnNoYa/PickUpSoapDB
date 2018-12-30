@@ -34,7 +34,6 @@ public class ai extends AppCompatActivity {
     private TextView observe_t; //觀測站名稱
     private TextView acp_value; // 值
     private TextView acp_state; // 狀態
-    private String sarr[] = new String[79]; //紀錄觀測站順序(暫存)
     private String idname;//當前觀測站名稱
     private int id = -1;//index 觀測站
     private int id2 = -1; //index 小時濃度
@@ -96,20 +95,19 @@ public class ai extends AppCompatActivity {
                         try {
                             for(int i=0; i<response.length(); ++i) {
                                 JSONObject tmp = response.getJSONObject(i); //json物件
-                                sarr[i] = tmp.getString("SiteName");//觀測站名稱
-                            }
-                            for(int i=0; i<sarr.length; ++i){
-                                if(sarr[i].equals(idname)){
-                                    id =i;
-                                    observe_t.setText("觀測站-"+idname);
+                                if(tmp.getString("SiteName").equals(idname)){//觀測站名稱
+                                    id = i;
                                     break;
                                 }
                             }
+                            observe_t.setText("觀測站-"+idname);
                             if(id==-1){//沒有這個觀測站
                                 for(int i=0; i<6; ++i){
                                     Tgas[i].setText("維修");
                                     colorSet(0, state[i]);//設等級
                                 }
+                                acp_value.setText("維修");
+                                colorSet(0, acp_state);//設等級
                             }
                             else {
                                 JSONObject tmp = response.getJSONObject(id); //json物件
@@ -224,11 +222,8 @@ public class ai extends AppCompatActivity {
                         try {
                             for(int i=0; i<response.length(); ++i) {
                                 JSONObject tmp = response.getJSONObject(i); //json物件
-                                sarr[i] = tmp.getString("SiteName");//觀測站名稱
-                            }
-                            for(int i=0; i<sarr.length; ++i){
-                                if(sarr[i].equals(idname)){
-                                    id2 =i;
+                                if(tmp.getString("SiteName").equals(idname)) {//觀測站名稱
+                                    id2 = i;
                                     break;
                                 }
                             }

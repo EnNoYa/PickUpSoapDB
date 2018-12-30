@@ -26,7 +26,6 @@ public class MyService extends Service {
 
     private RequestQueue mRQ;
     private String idname;//當前觀測站名稱
-    private String sarr[] = new String[79]; //紀錄觀測站順序(暫存)
     private int id = -1;//index 觀測站
     SharedPreferences HealthRecord;// 存檔用
     SharedPreferences.Editor editor;
@@ -72,15 +71,14 @@ public class MyService extends Service {
                         try {
                             for(int i=0; i<response.length(); ++i) {
                                 JSONObject tmp = response.getJSONObject(i); //json物件
-                                sarr[i] = tmp.getString("SiteName");//觀測站名稱
-                            }
-                            for(int i=0; i<sarr.length; ++i){
-                                if(sarr[i].equals(idname)){
+                                if(tmp.getString("SiteName").equals(idname)){//觀測站名稱
                                     id =i;
                                     break;
                                 }
                             }
                             if(id==-1){//沒有這個觀測站
+                                editor.putInt("acp", 0).commit();
+                                Log.d("shit","數值維修");
                             }
                             else {
                                 List<Double> aqilist = new ArrayList<>(); //暫存aqi數值

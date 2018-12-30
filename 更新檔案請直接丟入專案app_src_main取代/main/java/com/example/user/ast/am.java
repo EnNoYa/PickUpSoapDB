@@ -70,7 +70,6 @@ public class am extends AppCompatActivity {
         /*read */
         HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE);
         curState = findViewById(R.id.currState2);
-
         /*執行任務囉*/
         startService(new Intent(am.this, MyService.class));
 
@@ -85,7 +84,8 @@ public class am extends AppCompatActivity {
     }
     private void save_data(int id){//存入當前地區
         SharedPreferences saveid = getApplication().getSharedPreferences("ssssid", Context.MODE_PRIVATE);
-        saveid.edit().clear().commit();
+        if(!saveid.getString("idsave","").equals(""))
+            saveid.edit().remove("idsave").commit();
         saveid.edit().putString("idsave", place_name[id]).apply();
     }
     public int shortest_place(LatLng curL){//查出是離哪個觀測站最近
@@ -103,6 +103,7 @@ public class am extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+
         colorSet(HealthRecord.getInt("acp", -1), curState);
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.example.user.ast.task"); //新增過濾事件
