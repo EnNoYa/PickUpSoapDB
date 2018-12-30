@@ -1,12 +1,15 @@
 package com.example.user.ast;
 
 import android.app.job.JobInfo;
+import android.app.job.JobParameters;
 import android.app.job.JobScheduler;
+import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -89,9 +92,9 @@ public class ais extends AppCompatActivity implements LocationListener{
         /*job工作排程*/
         myScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         Jinfo = new JobInfo.Builder(1, new ComponentName(this, alarm_backGroundjob.class))
-                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)// WIFI網路都執行
+                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)// WIFI網路就執行
                         .setPersisted(true)
-                        .setPeriodic( 15 * 60 * 1000)
+                        .setPeriodic( 15 * 60 * 1000) // 週期15分鐘
                         .build();
         int result = myScheduler.schedule(Jinfo);
         if(result == JobScheduler.RESULT_SUCCESS){
@@ -105,10 +108,12 @@ public class ais extends AppCompatActivity implements LocationListener{
     private void checkPermission() {
         if (ActivityCompat.checkSelfPermission(ais.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED  && ActivityCompat.checkSelfPermission(ais.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(ais.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 200);
         }
     }
     @Override
@@ -124,6 +129,7 @@ public class ais extends AppCompatActivity implements LocationListener{
 
         IntentFilter filter = new IntentFilter("com.example.user.ast.task");//新增過濾事件
         registerReceiver(receiver, filter);
+
     }
     @Override
     protected void onPause() {
@@ -139,7 +145,8 @@ public class ais extends AppCompatActivity implements LocationListener{
     }
     private void save_data(int id){//存入當前地區
         SharedPreferences saveid = getApplication().getSharedPreferences("ssssid", Context.MODE_PRIVATE);
-        saveid.edit().clear().commit();
+        if(!saveid.getString("idsave","").equals(""))
+            saveid.edit().remove("idsave").apply();
         saveid.edit().putString("idsave", place_name[id]).apply();
     }
 
@@ -151,9 +158,11 @@ public class ais extends AppCompatActivity implements LocationListener{
         name.setText("觀測站-"+place_name[nowid]);
     }
     //開啟或關閉定位更新功能
-    private void enableLocationUpdates(boolean isTurnOn) {
+    public void enableLocationUpdates(boolean isTurnOn) {
         if (ActivityCompat.checkSelfPermission(ais.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ais.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED)
         {  // 使用者已經允許定位權限
             if (isTurnOn) {
@@ -166,12 +175,14 @@ public class ais extends AppCompatActivity implements LocationListener{
                 }
                 else {
                     Toast.makeText(this, "取得定位資訊中...", Toast.LENGTH_LONG).show();
-                    if (isGPSEnabled)
+                    if (isGPSEnabled){
                         mgr.requestLocationUpdates(   //向 GPS 定位提供者註冊位置事件監聽器
                                 LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, ais.this);
-                    if (isNetworkEnabled)
+                    }
+                    if (isNetworkEnabled){
                         mgr.requestLocationUpdates(   //向網路定位提供者註冊位置事件監聽器
                                 LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST,  ais.this);
+                    }
                 }
             }
             else {
@@ -183,8 +194,9 @@ public class ais extends AppCompatActivity implements LocationListener{
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 200){
             if (grantResults.length >= 1 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {  // 使用者允許權限
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED &&  grantResults[1] == PackageManager.PERMISSION_GRANTED) {  // 使用者允許權限
                 if(ContextCompat.checkSelfPermission(ais.this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(ais.this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED){
                     Toast.makeText(ais.this, "定位授權成功", Toast.LENGTH_SHORT).show();
                 }

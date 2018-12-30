@@ -85,7 +85,7 @@ public class am extends AppCompatActivity {
     private void save_data(int id){//存入當前地區
         SharedPreferences saveid = getApplication().getSharedPreferences("ssssid", Context.MODE_PRIVATE);
         if(!saveid.getString("idsave","").equals(""))
-            saveid.edit().remove("idsave").commit();
+            saveid.edit().remove("idsave").apply();
         saveid.edit().putString("idsave", place_name[id]).apply();
     }
     public int shortest_place(LatLng curL){//查出是離哪個觀測站最近
