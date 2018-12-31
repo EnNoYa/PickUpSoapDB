@@ -1,19 +1,22 @@
 package com.example.user.ast;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.Toast;
+
 
 public class ns extends AppCompatActivity {
 
@@ -24,6 +27,9 @@ public class ns extends AppCompatActivity {
     SharedPreferences.Editor Timedit;
     Button ins ; //吸入量按鍵
     Button rns; //通知設定按鍵
+    JobScheduler MyMessage;
+    Spinner SetHour ;
+    Spinner SetMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,8 +254,8 @@ public class ns extends AppCompatActivity {
         });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ns.this,R.array.srha,android.R.layout.simple_spinner_dropdown_item);
-        Spinner SetHour = findViewById(R.id.hsp);
-        Spinner SetMin = findViewById(R.id.msp);
+        SetHour = findViewById(R.id.hsp);
+         SetMin = findViewById(R.id.msp);
         SetHour.setAdapter(adapter);
         adapter = ArrayAdapter.createFromResource(ns.this,R.array.srma,android.R.layout.simple_spinner_dropdown_item);
         SetMin.setAdapter(adapter);
@@ -302,6 +308,30 @@ public class ns extends AppCompatActivity {
         }
         else{
             rns.setTextColor(getResources().getColor(R.color.g));
+        }
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
+
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(SettingsSave.getBoolean("rcschecked",true)==true){
+
+            //run time
+            MyMessage = (JobScheduler)getSystemService(Context.JOB_SCHEDULER_SERVICE);
+            JobInfo messagejob= new JobInfo.Builder(878,new ComponentName(getPackageName(),MessageInBackground.class.getName()))
+                    .setPeriodic(15*60*1000)
+                    .setPersisted(true)
+                    .build();
+            if(MyMessage.schedule(messagejob)== JobScheduler.RESULT_SUCCESS){
+                Log.d("ExampleService","success");
+            }
+            else{
+                Log.d("ExampleService","fail");
+            }
         }
     }
 }

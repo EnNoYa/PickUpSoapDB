@@ -60,28 +60,29 @@ public class rnsa extends AppCompatActivity {
     }
     else{
       dostuff();
-      searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-          //提交結果
-          return false;
-        }
-        @Override
-        public boolean onQueryTextChange(String newText) {
-          /*過濾Adapter的內容*/
-          Filter filter = arrayAdapter.getFilter();
-          filter.filter(newText);
-          return false;
-        }
-      });
-      searchView.setIconifiedByDefault(false); //是否要點選搜尋圖示後再打開輸入框
-      searchView.setFocusable(false);
-      searchView.requestFocusFromTouch();      //要點選後才會開啟鍵盤輸入
-      searchView.setSubmitButtonEnabled(false);//輸入框後是否要加上送出的按鈕
-      searchView.setQueryHint("請輸入音樂名稱"); //輸入框沒有值時要顯示的提示文字
+
     }
   }
   public void dostuff(){
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        //提交結果
+        return false;
+      }
+      @Override
+      public boolean onQueryTextChange(String newText) {
+        /*過濾Adapter的內容*/
+        Filter filter = arrayAdapter.getFilter();
+        filter.filter(newText);
+        return false;
+      }
+    });
+    searchView.setIconifiedByDefault(false); //是否要點選搜尋圖示後再打開輸入框
+    searchView.setFocusable(false);
+    searchView.requestFocusFromTouch();      //要點選後才會開啟鍵盤輸入
+    searchView.setSubmitButtonEnabled(false);//輸入框後是否要加上送出的按鈕
+    searchView.setQueryHint("請輸入音樂名稱"); //輸入框沒有值時要顯示的提示文字
     listView = findViewById(R.id.insa_music_list);
     list = new ArrayList<>();
     getMusic();

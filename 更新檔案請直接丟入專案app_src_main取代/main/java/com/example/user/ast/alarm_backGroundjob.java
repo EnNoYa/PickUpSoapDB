@@ -16,6 +16,9 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -34,14 +37,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Collections;
 
 public class alarm_backGroundjob extends JobService {
 
-    private JobParameters myjobp; //變數
     private RequestQueue mRQ;
-    static final int MIN_TIME = 5000; //位置更新條件：1秒
-    static final float MIN_DIST = 10;   //位置更新條件：10 公尺
+    static final int MIN_TIME = 5 * 60 *1000; //位置更新條件：5分鐘
+    static final float MIN_DIST = 100;   //位置更新條件：100 公尺
     LocationManager mgr;    // 定位管理員
     LocationListener lis;    // 定位聆聽
     LatLng currPoint;   //現在的點
@@ -50,76 +51,78 @@ public class alarm_backGroundjob extends JobService {
     boolean isNetworkEnabled;  //網路定位是否可用
     String sitename; //觀測站名稱
     int AQI[] = new int[6]; // SO2 CO O3 PM10 PM2.5 NO2
+    int cas; //狀況 處理
 
     @SuppressLint("MissingPermission")
     @Override
-    public boolean onStartJob(JobParameters params) {
+    public boolean onStartJob(final JobParameters params) {
         Log.d("mjob","背景執行開始");
-        myjobp = params;
         mRQ = Volley.newRequestQueue(this);
         mgr = (LocationManager)getSystemService(LOCATION_SERVICE);
-        lis = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                Log.d("mjob","定位更新");
-                currPoint = new LatLng(location.getLatitude(), location.getLongitude());
-                save_data(shortest_place(currPoint)); //存現在位置觀測站編號
-                sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
-                /*發警告通知檢查*/
-                jsonParse();
+        new Thread(){
+            public void run(){
+                Log.d("mjob","進入thread");
+
+                lis =new LocationListener() {
+                    @Override
+                    public void onLocationChanged (Location location){
+                        Log.d("mjob", "定位更新");
+                        currPoint = new LatLng(location.getLatitude(), location.getLongitude());
+                        save_data(shortest_place(currPoint)); //存現在位置觀測站編號
+                        sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
+                        /*發警告通知檢查*/
+                        jsonParse();
+                    }
+                    @Override
+                    public void onStatusChanged (String provider,int status, Bundle extras){
+                    }
+                    @Override
+                    public void onProviderEnabled (String provider){
+                    }
+                    @Override
+                    public void onProviderDisabled (String provider){
+
+                    }
+                };
+                Looper.prepare();
+                //檢查 GPS 與網路定位是否可用
+                isGPSEnabled =mgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                isNetworkEnabled =mgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                if(isGPSEnabled||isNetworkEnabled) {
+                    Log.d("mjob", "GPS");
+                    mgr.requestLocationUpdates(   //向 GPS 定位提供者註冊位置事件監聽器
+                            LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
+                    Log.d("mjob", "WIFI");
+                    mgr.requestLocationUpdates(   //向網路定位提供者註冊位置事件監聽器
+                            LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
+                }
+                else {
+                    Toast.makeText(alarm_backGroundjob.this, "請開啟定位，才行哦", Toast.LENGTH_LONG).show();
+                }
+                jobFinished(params, true); //OVER
+                Log.d("mjob","背景執行結束");
+                Looper.loop();  //格黨 無限
             }
+        }.start();
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-        //檢查 GPS 與網路定位是否可用
-        isGPSEnabled = mgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        isNetworkEnabled = mgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (isGPSEnabled||isNetworkEnabled) {
-            Log.d("mjob","GPS");
-            mgr.requestLocationUpdates(   //向 GPS 定位提供者註冊位置事件監聽器
-                    LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, lis);
-            Log.d("mjob","WIFI");
-            mgr.requestLocationUpdates(   //向網路定位提供者註冊位置事件監聽器
-                    LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, lis);
-        }
-        else{
-            Toast.makeText(this,"請開啟定位，才行哦",Toast.LENGTH_LONG).show();
-        }
-
-
-
-        jobFinished(myjobp, true);
-        Log.d("mjob","背景執行結束");
         return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        Log.d("mjob","背景執行結束");
+        Log.d("mjob","背景執行END");
         return false;
     }
 
     public void jsonParse(){
 
+        final int state; // 使用者狀態
         final SharedPreferences sp = getApplication().getSharedPreferences("user_aqi",Context.MODE_PRIVATE);//api load
         /*讀取使用值*/
         for(int i=0; i<6; ++i){
-            AQI[i] = sp.getInt("aqi" + String.valueOf(i), -1);
-            Log.d("mjob","AOI"+String.valueOf(i)+" "+String.valueOf(AQI[i]));
+            AQI[i] = sp.getInt("aqi" + String.valueOf(i), 0);
         }
+        state = sp.getInt("st", 0); //取值
 
         String url = "http://140.136.149.239:9487/recentAQI";
         JsonArrayRequest request  = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -128,6 +131,10 @@ public class alarm_backGroundjob extends JobService {
                     public void onResponse(JSONArray response) {
                         try {
                             int id = -1; // 觀測站代碼
+                            cas = state; // default
+                            boolean noti = false, good = false;
+                            String str = "";
+
                             for(int i=0; i<response.length(); ++i) {
                                 JSONObject tmp = response.getJSONObject(i); //json物件
                                 if(tmp.getString("SiteName").equals(sitename)){//觀測站名稱
@@ -139,76 +146,113 @@ public class alarm_backGroundjob extends JobService {
                                 //e04
                             }
                             else {
-                                sp.edit().clear().apply(); //清空檔案避免過大
+                                for(int i=0; i<6; i++){
+                                    if(sp.contains("AQI"+String.valueOf(i))){
+                                        sp.edit().clear().apply(); //清空檔案避免過大
+                                        break;
+                                    }
+                                }
 
                                 JSONObject tmp = response.getJSONObject(id); //json物件
                                 if (!tmp.isNull("SO2Ans")) {
                                     String SO2 = tmp.getString("SO2Ans");
                                     int val = Integer.valueOf(SO2);
                                     if(val > AQI[0]){ // SO2嚴重了
-                                        AQI[0] = val;
-                                        Notice("SO2", 1); // 通知
+                                        cas = 2;
+                                        noti = true;
+                                        str += "SO2、";
                                     }
+                                    else{
+                                        good = machine(state);
+                                    }
+                                    AQI[0] = val;
                                 }
 
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     int val = Integer.valueOf(CO);
                                     if(val > AQI[1]){ // CO嚴重了
-                                        AQI[1] = val;
-                                        Notice("CO", 1); // 通知
+                                        cas = 2;
+                                        noti = true;
+                                        str += "CO、";
                                     }
+                                    else{
+                                        if(!noti)
+                                            good = machine(state);
+                                    }
+                                    AQI[1] = val;
                                 }
 
                                 if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     int val = Integer.valueOf(O3);
                                     if(val > AQI[2]){ // O3嚴重了
-                                        AQI[2] = val;
-                                        Notice("O3", 1); // 通知
+                                        cas = 2;
+                                        noti = true;
+                                        str += "O3、";
                                     }
+                                    else{
+                                        if(!noti)
+                                            good = machine(state);
+                                    }
+                                    AQI[2] = val;
                                 }
 
                                 if (!tmp.isNull("PM10Ans")) {
                                     String PM10 = tmp.getString("PM10Ans");
                                     int val = Integer.valueOf(PM10);
                                     if(val > AQI[3]){ // PM10嚴重了
-                                        AQI[3] = val;
-                                        Notice("PM10", 1); // 通知
+                                        cas = 2;
+                                        noti = true;
+                                        str += "PM10、";
                                     }
-
+                                    else{
+                                        if(!noti)
+                                            good = machine(state);
+                                    }
+                                    AQI[3] = val;
                                 }
 
                                 if (!tmp.isNull("PM25Ans")) {
                                     String PM25 = tmp.getString("PM25Ans");
                                     int val = Integer.valueOf(PM25);
                                     if(val > AQI[4]){ // PM25嚴重了
-                                        AQI[4] = val;
-                                        Notice("PM25", 1); // 通知
+                                        cas = 2;
+                                        noti = true;
+                                        str += "PM25、";
                                     }
+                                    else{
+                                        if(!noti)
+                                            good = machine(state);
+                                    }
+                                    AQI[4] = val;
                                 }
 
                                 if (!tmp.isNull("NO2Ans")) {
                                     String NO2 = tmp.getString("NO2Ans");
                                     int val = Integer.valueOf(NO2);
                                     if(val > AQI[5]){ // NO2嚴重了
-                                        AQI[5] = val;
-                                        Notice("NO2", 1); // 通知
+                                        cas = 2;
+                                        noti = true;
+                                        str += "NO2、";
                                     }
-                                }
-                                boolean safe = true;
-                                for(int i=0; i<6; ++i){
-                                    if(AQI[i] != 1){
-                                        if(AQI[i] !=0){
-                                            safe = false;
-                                            break;
-                                        }
+                                    else {
+                                        if(!noti)
+                                            good = machine(state);
                                     }
+                                    AQI[5] = val;
                                 }
-                                if(safe)
-                                    Notice("",0);
+
                                 for(int i=0; i<6; ++i){ //記得存檔回去
                                     sp.edit().putInt("aqi"+String.valueOf(i), AQI[i]).apply();
+                                }
+                                sp.edit().putInt("st",cas).apply(); //狀態
+
+                                if(noti){
+                                    Notice(str.substring(0, str.length()-1), 1);
+                                }
+                                else if(good){
+                                    Notice("",0);
                                 }
 
                             }
@@ -225,6 +269,20 @@ public class alarm_backGroundjob extends JobService {
                 }
         );
         mRQ.add(request);
+    }
+    private boolean machine(int state){
+        switch (state){
+            case 2:
+                cas = 1;
+                break;
+            case 1:
+                cas = 0;
+                return true;
+            case 0:
+                cas = 0;
+                break;
+        }
+        return false;
     }
 
     private void Notice(String message, int chid){ // 警告通知
