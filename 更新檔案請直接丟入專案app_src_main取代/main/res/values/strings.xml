@@ -231,7 +231,7 @@
     <string name="itpm10">0</string>
     <string name="itpm2_5">0</string>
     <string name="itno2">0</string>
-    <string name="obs" translatable="false">觀測站名字(自己寫)</string>
+    <string name="obs" translatable="false">觀測站loading</string>
     <string name="getobs">當前觀測站資訊</string>
     <string name="lc">所在地區</string>
     <string name="lk">指定地區</string>

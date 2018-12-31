@@ -2,27 +2,45 @@ package com.example.user.ast;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.TileOverlay;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Collections;
 
 public class alarm_backGroundjob extends JobService {
 
     private JobParameters myjobp; //變數
-    static final int MIN_TIME = 15 * 60 *1000; //位置更新條件：15 分鐘
+    private RequestQueue mRQ;
+    static final int MIN_TIME = 5000; //位置更新條件：1秒
     static final float MIN_DIST = 10;   //位置更新條件：10 公尺
     LocationManager mgr;    // 定位管理員
     LocationListener lis;    // 定位聆聽
@@ -30,19 +48,25 @@ public class alarm_backGroundjob extends JobService {
     private int M = 79; //最大值
     boolean isGPSEnabled;      //GPS定位是否可用
     boolean isNetworkEnabled;  //網路定位是否可用
+    String sitename; //觀測站名稱
+    int AQI[] = new int[6]; // SO2 CO O3 PM10 PM2.5 NO2
 
     @SuppressLint("MissingPermission")
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d("mjob","背景執行開始");
         myjobp = params;
+        mRQ = Volley.newRequestQueue(this);
         mgr = (LocationManager)getSystemService(LOCATION_SERVICE);
         lis = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                Log.d("mjob","定位更新");
                 currPoint = new LatLng(location.getLatitude(), location.getLongitude());
                 save_data(shortest_place(currPoint)); //存現在位置觀測站編號
-                /*發警告通知*/
+                sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
+                /*發警告通知檢查*/
+                jsonParse();
             }
 
             @Override
@@ -63,16 +87,18 @@ public class alarm_backGroundjob extends JobService {
         //檢查 GPS 與網路定位是否可用
         isGPSEnabled = mgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
         isNetworkEnabled = mgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (isGPSEnabled) {
+        if (isGPSEnabled||isNetworkEnabled) {
             Log.d("mjob","GPS");
             mgr.requestLocationUpdates(   //向 GPS 定位提供者註冊位置事件監聽器
                     LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, lis);
-        }
-        else if (isNetworkEnabled) {
             Log.d("mjob","WIFI");
             mgr.requestLocationUpdates(   //向網路定位提供者註冊位置事件監聽器
                     LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, lis);
         }
+        else{
+            Toast.makeText(this,"請開啟定位，才行哦",Toast.LENGTH_LONG).show();
+        }
+
 
 
         jobFinished(myjobp, true);
@@ -86,11 +112,153 @@ public class alarm_backGroundjob extends JobService {
         return false;
     }
 
+    public void jsonParse(){
+
+        final SharedPreferences sp = getApplication().getSharedPreferences("user_aqi",Context.MODE_PRIVATE);//api load
+        /*讀取使用值*/
+        for(int i=0; i<6; ++i){
+            AQI[i] = sp.getInt("aqi" + String.valueOf(i), -1);
+            Log.d("mjob","AOI"+String.valueOf(i)+" "+String.valueOf(AQI[i]));
+        }
+
+        String url = "http://140.136.149.239:9487/recentAQI";
+        JsonArrayRequest request  = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            int id = -1; // 觀測站代碼
+                            for(int i=0; i<response.length(); ++i) {
+                                JSONObject tmp = response.getJSONObject(i); //json物件
+                                if(tmp.getString("SiteName").equals(sitename)){//觀測站名稱
+                                    id = i;
+                                    break;
+                                }
+                            }
+                            if(id==-1){//沒有這個觀測站
+                                //e04
+                            }
+                            else {
+                                sp.edit().clear().apply(); //清空檔案避免過大
+
+                                JSONObject tmp = response.getJSONObject(id); //json物件
+                                if (!tmp.isNull("SO2Ans")) {
+                                    String SO2 = tmp.getString("SO2Ans");
+                                    int val = Integer.valueOf(SO2);
+                                    if(val > AQI[0]){ // SO2嚴重了
+                                        AQI[0] = val;
+                                        Notice("SO2", 1); // 通知
+                                    }
+                                }
+
+                                if (!tmp.isNull("COAns")) {
+                                    String CO = tmp.getString("COAns");
+                                    int val = Integer.valueOf(CO);
+                                    if(val > AQI[1]){ // CO嚴重了
+                                        AQI[1] = val;
+                                        Notice("CO", 1); // 通知
+                                    }
+                                }
+
+                                if (!tmp.isNull("O3Ans")) {
+                                    String O3 = tmp.getString("O3Ans");
+                                    int val = Integer.valueOf(O3);
+                                    if(val > AQI[2]){ // O3嚴重了
+                                        AQI[2] = val;
+                                        Notice("O3", 1); // 通知
+                                    }
+                                }
+
+                                if (!tmp.isNull("PM10Ans")) {
+                                    String PM10 = tmp.getString("PM10Ans");
+                                    int val = Integer.valueOf(PM10);
+                                    if(val > AQI[3]){ // PM10嚴重了
+                                        AQI[3] = val;
+                                        Notice("PM10", 1); // 通知
+                                    }
+
+                                }
+
+                                if (!tmp.isNull("PM25Ans")) {
+                                    String PM25 = tmp.getString("PM25Ans");
+                                    int val = Integer.valueOf(PM25);
+                                    if(val > AQI[4]){ // PM25嚴重了
+                                        AQI[4] = val;
+                                        Notice("PM25", 1); // 通知
+                                    }
+                                }
+
+                                if (!tmp.isNull("NO2Ans")) {
+                                    String NO2 = tmp.getString("NO2Ans");
+                                    int val = Integer.valueOf(NO2);
+                                    if(val > AQI[5]){ // NO2嚴重了
+                                        AQI[5] = val;
+                                        Notice("NO2", 1); // 通知
+                                    }
+                                }
+                                boolean safe = true;
+                                for(int i=0; i<6; ++i){
+                                    if(AQI[i] != 1){
+                                        if(AQI[i] !=0){
+                                            safe = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if(safe)
+                                    Notice("",0);
+                                for(int i=0; i<6; ++i){ //記得存檔回去
+                                    sp.edit().putInt("aqi"+String.valueOf(i), AQI[i]).apply();
+                                }
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+        mRQ.add(request);
+    }
+
+    private void Notice(String message, int chid){ // 警告通知
+        NotificationCompat.Builder notificationBuilder;
+        if(chid == 1){
+            String ch = "ch1"; //頻道
+            notificationBuilder = new NotificationCompat.Builder(this, ch)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setSmallIcon(R.drawable.fa)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
+                    .setContentTitle("提醒您!!!")
+                    .setContentText("此地區" + message + "濃度變高了");
+
+
+        }
+        else{
+            String ch = "ch2"; //頻道
+            notificationBuilder = new NotificationCompat.Builder(this, ch)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setSmallIcon(R.drawable.fa)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
+                    .setContentTitle("恭喜您!!!")
+                    .setContentText("此地區現在空氣非常優質");
+        }
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); //管理員取得服務
+        notificationManager.notify(9487, notificationBuilder.build());//通知開始
+    }
+
     private void save_data(int id){//存入當前地區
+        sitename = place_name[id];
         SharedPreferences saveid = getApplication().getSharedPreferences("ssssid", Context.MODE_PRIVATE);
         if(!saveid.getString("idsave","").equals(""))
             saveid.edit().remove("idsave").apply();
-        saveid.edit().putString("idsave", place_name[id]).apply();
+        saveid.edit().putString("idsave", sitename).apply();
     }
 
     public int shortest_place(LatLng curL){//查出是離哪個觀測站最近

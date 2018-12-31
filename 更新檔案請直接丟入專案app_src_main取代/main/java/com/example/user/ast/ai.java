@@ -566,6 +566,9 @@ public class ai extends AppCompatActivity {
         /*句子2*/
         if(!HealthRecord.getString("gzil2","").equals(""))
             editor.remove("gzil2").commit();
+        if(!strgzil2.isEmpty()){
+            strgzil2 = "可能引起:\n\t\t\t" + strgzil2;
+        }
         editor.putString("gzil2",strgzil2).commit();
 
         /*acp等級*/

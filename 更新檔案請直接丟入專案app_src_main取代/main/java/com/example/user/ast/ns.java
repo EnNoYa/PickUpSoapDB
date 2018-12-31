@@ -71,9 +71,11 @@ public class ns extends AppCompatActivity {
         final SwitchCompat rcr = findViewById(R.id.rrts);
 
         ins.setEnabled(false);
+        ins.setAlpha(0.4f);
         icv.setEnabled(false);
         icr.setEnabled(false);
         rns.setEnabled(false);
+        rns.setAlpha(0.4f);
         rcv.setEnabled(false);
         rcr.setEnabled(false);
         chsp.setEnabled(false);
@@ -89,6 +91,7 @@ public class ns extends AppCompatActivity {
             icv.setEnabled(false);
             icr.setEnabled(false);
             ins.setEnabled(false);
+            ins.setAlpha(0.4f);
         }
 
         if(SettingsSave.getBoolean("icvchecked",true)){
@@ -100,12 +103,15 @@ public class ns extends AppCompatActivity {
 
         if(SettingsSave.getBoolean("icrchecked",true)){
             icr.setChecked(true);
-            if(ics.isChecked())
+            if(ics.isChecked()) {
                 ins.setEnabled(true);
+                ins.setAlpha(1.0f);
+            }
         }
         else{
             icr.setChecked(false);
             ins.setEnabled(false);
+            ins.setAlpha(0.4f);
         }
 
         if(SettingsSave.getBoolean("rcschecked",true)){
@@ -120,6 +126,7 @@ public class ns extends AppCompatActivity {
             rcv.setEnabled(false);
             rcr.setEnabled(false);
             rns.setEnabled(false);
+            rns.setAlpha(0.4f);
             chsp.setEnabled(false);
             cmsp.setEnabled(false);
         }
@@ -133,31 +140,34 @@ public class ns extends AppCompatActivity {
 
         if(SettingsSave.getBoolean("rcrchecked",true)){
             rcr.setChecked(true);
-            if(rcs.isChecked())
+            if(rcs.isChecked()) {
                 rns.setEnabled(true);
+                rns.setAlpha(1.0f);
+            }
         }
         else{
             rcr.setChecked(false);
             rns.setEnabled(false);
+            rns.setAlpha(0.4f);
         }
-
 
 
         ics.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (ics.isChecked()) {
-                    editorsettings.putBoolean("icschecked",true);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("icschecked",true).apply();
                     icv.setEnabled(true);
                     icr.setEnabled(true);
-                    if(icr.isChecked())
+                    if(icr.isChecked()) {
                         ins.setEnabled(true);
+                        ins.setAlpha(1.0f);
+                    }
                 } else {
-                    editorsettings.putBoolean("icschecked",false);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("icschecked",false).apply();
                     icv.setEnabled(false);
                     icr.setEnabled(false);
                     ins.setEnabled(false);
+                    ins.setAlpha(0.4f);
                 }
             }
         });
@@ -165,11 +175,9 @@ public class ns extends AppCompatActivity {
         icv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (icv.isChecked()) {
-                    editorsettings.putBoolean("icvchecked",true);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("icvchecked",true).apply();
                 } else {
-                    editorsettings.putBoolean("icvchecked",false);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("icvchecked",false).apply();
                 }
             }
         });
@@ -180,10 +188,12 @@ public class ns extends AppCompatActivity {
                     editorsettings.putBoolean("icrchecked",true);
                     editorsettings.apply();
                     ins.setEnabled(true);
+                    ins.setAlpha(1.0f);
                 } else {
                     editorsettings.putBoolean("icrchecked",false);
                     editorsettings.apply();
                     ins.setEnabled(false);
+                    ins.setAlpha(0.4f);
                 }
             }
         });
@@ -191,20 +201,22 @@ public class ns extends AppCompatActivity {
         rcs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    editorsettings.putBoolean("rcschecked",true);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("rcschecked",true).apply();
+
                     rcv.setEnabled(true);
                     rcr.setEnabled(true);
                     chsp.setEnabled(true);
                     cmsp.setEnabled(true);
-                    if(rcr.isChecked())
+                    if(rcr.isChecked()) {
                         rns.setEnabled(true);
+                        rns.setAlpha(1.0f);
+                    }
                 } else{
-                    editorsettings.putBoolean("rcschecked",false);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("rcschecked",false).apply();
                     rcv.setEnabled(false);
                     rcr.setEnabled(false);
                     rns.setEnabled(false);
+                    rns.setAlpha(0.4f);
                     chsp.setEnabled(false);
                     cmsp.setEnabled(false);
                 }
@@ -214,11 +226,9 @@ public class ns extends AppCompatActivity {
         rcv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (rcv.isChecked()) {
-                    editorsettings.putBoolean("rcvchecked",true);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("rcvchecked",true).apply();
                 } else {
-                    editorsettings.putBoolean("rcvchecked",false);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("rcvchecked",false).apply();
                 }
             }
         });
@@ -226,13 +236,13 @@ public class ns extends AppCompatActivity {
         rcr.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    editorsettings.putBoolean("rcrchecked",true);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("rcrchecked",true).apply();
                     rns.setEnabled(true);
+                    rns.setAlpha(1.0f);
                 } else {
-                    editorsettings.putBoolean("rcrchecked",false);
-                    editorsettings.apply();
+                    editorsettings.putBoolean("rcrchecked",false).apply();
                     rns.setEnabled(false);
+                    rns.setAlpha(0.4f);
                 }
             }
         });
@@ -282,13 +292,13 @@ public class ns extends AppCompatActivity {
         super.onResume();
         /*設定按鍵顏色*/
         if(SettingsSave.getString("music_rw","").equals("")){
-            ins.setTextColor(getResources().getColor(R.color.r));
+            ins.setTextColor(getResources().getColor(R.color.dark_red));
         }
         else{
             ins.setTextColor(getResources().getColor(R.color.g));
         }
         if(SettingsSave.getString("music_rw2","").equals("")){
-            rns.setTextColor(getResources().getColor(R.color.r));
+            rns.setTextColor(getResources().getColor(R.color.dark_red));
         }
         else{
             rns.setTextColor(getResources().getColor(R.color.g));
