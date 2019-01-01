@@ -32,11 +32,11 @@ public class ais extends AppCompatActivity {
 
     TextView name;  //當前測站名字
     Button caredata;    //詳細資料
-    TextView str[] = new TextView[2]; //句子
+    TextView Tstr; // Textview句子
     TextView curState ; //當前狀態
     SharedPreferences HealthRecord;//read file
-    GPSbrrc receiver; //廣播接收者
     gift gpsrec; //GPS 廣播接收
+    myBCRC receiver; //顏色廣播接收者
     JobScheduler myScheduler; //管理員
     JobInfo Jinfo; //工作須知
 
@@ -46,34 +46,21 @@ public class ais extends AppCompatActivity {
         setContentView(R.layout.activity_ais);
         caredata = findViewById(R.id.obs_get);
 
-        checkPermission();//檢查權限
+
         /*read */
         HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE);
         name = findViewById(R.id.area);
-        str[0] = findViewById(R.id.str1);
-        str[1] = findViewById(R.id.str2);
+        Tstr= findViewById(R.id.str1);
         curState = findViewById(R.id.currState);
 
-        /*廣播接收器*/
-        receiver = new GPSbrrc();
         Toast.makeText(this,"地點抓取中請稍後...",Toast.LENGTH_LONG).show();
 
         gpsrec = new gift();
+        /*創建一個接收器*/
+        receiver = new myBCRC();
 
-        /*job工作排程*/
-        myScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        Jinfo = new JobInfo.Builder(1, new ComponentName(this, alarm_backGroundjob.class))
-                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)// WIFI網路就執行
-                        .setPersisted(true)
-                        .setPeriodic( 15 * 60 * 1000) // 週期15分鐘
-                        .build();
-        int result = myScheduler.schedule(Jinfo);
-        if(result == JobScheduler.RESULT_SUCCESS){
-            Log.d("mjob","背景執行規劃");
-        }
-        else{
-            Log.d("mjob","背景執行規劃失敗");
-        }
+        checkPermission();//檢查權限
+
 
         caredata.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +79,24 @@ public class ais extends AppCompatActivity {
         {
             ActivityCompat.requestPermissions(ais.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 200);
+        }else{
+            runjob();
+        }
+    }
+    public void runjob(){
+        /*job工作排程*/
+        myScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        Jinfo = new JobInfo.Builder(1, new ComponentName(this, alarm_backGroundjob.class))
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)// WIFI網路就執行
+                .setPersisted(true)
+                .setPeriodic( 15 * 60 * 1000) // 週期15分鐘
+                .build();
+        int result = myScheduler.schedule(Jinfo);
+        if(result == JobScheduler.RESULT_SUCCESS){
+            Log.d("mjob","背景執行規劃");
+        }
+        else{
+            Log.d("mjob","背景執行規劃失敗");
         }
     }
     @Override
@@ -101,21 +106,20 @@ public class ais extends AppCompatActivity {
         IntentFilter gpsfilt = new IntentFilter("gps_ok");//新增gps廣播事件
         registerReceiver(gpsrec, gpsfilt);
 
-
-        str[0].setText(HealthRecord.getString("gzil1",""));
-        str[1].setText(HealthRecord.getString("gzil2",""));
-
         IntentFilter filter = new IntentFilter("com.example.user.ast.task");//新增過濾事件
         registerReceiver(receiver, filter);
 
-        StartTime(); //計時器
+        Tstr.setText(HealthRecord.getString("gzil1","汝曾看過天空嗎?????"));
+
+
+
     }
     @Override
     protected void onPause() {
         super.onPause();
 
-        unregisterReceiver(receiver);
         unregisterReceiver(gpsrec);
+        unregisterReceiver(receiver);
     }
     private void open_activity(){//開啟觀測站資訊頁面
         Intent intent= new Intent();
@@ -133,6 +137,7 @@ public class ais extends AppCompatActivity {
                         PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(ais.this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED){
                     Toast.makeText(ais.this, "定位授權成功", Toast.LENGTH_SHORT).show();
+                    runjob();
                 }
                 else{
                     Toast.makeText(this, "程式需要定位權限才能運作", Toast.LENGTH_SHORT).show();
@@ -144,6 +149,7 @@ public class ais extends AppCompatActivity {
 
     /*設定嚴重等級*/
     public void colorSet(int cas, TextView mystate){
+        Log.d("mjob","顏色");
         switch (cas){
             case 0:
                 mystate.setText("維修");
@@ -198,8 +204,7 @@ public class ais extends AppCompatActivity {
     int k=0;
     void updatetext(){
         if(k==0){
-            str[0].setText(HealthRecord.getString("gzil1",""));
-            str[1].setText("");
+            Tstr.setText(HealthRecord.getString("gzil1",""));
             if(HealthRecord.getString("gzil2","not").equals("")||HealthRecord.getString("gzil2","not").equals("not")){
                 k=0;
             }
@@ -208,8 +213,7 @@ public class ais extends AppCompatActivity {
             }
         }
         else{
-            str[1].setText(HealthRecord.getString("gzil2",""));
-            str[0].setText("");
+            Tstr.setText(HealthRecord.getString("gzil2",""));
             if(HealthRecord.getString("gzil1","not").equals("")||HealthRecord.getString("gzil1","not").equals("not")){
                 k=1;
             }
@@ -219,10 +223,10 @@ public class ais extends AppCompatActivity {
         }
     }
     /*自定義廣播接收物件*/
-    public class GPSbrrc extends BroadcastReceiver {
+    public class myBCRC extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("shit","廣播訊息:設定顏色囉");
+            Log.d("mjob","設定顏色囉");
             colorSet(HealthRecord.getInt("acp", -1), curState);
         }
     }
@@ -235,8 +239,8 @@ public class ais extends AppCompatActivity {
             SharedPreferences saveid = getApplication().getSharedPreferences("ssssid", Context.MODE_PRIVATE);
             name.setText("觀測站-"+saveid.getString("idsave", "沒收到"));
 
-            /*開始任務*/
-            startService(new Intent(ais.this, MyService.class));
+            StartTime(); //計時器 句子
+
         }
     }
 }

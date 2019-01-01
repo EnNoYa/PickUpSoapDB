@@ -30,6 +30,7 @@ public class MyService extends Service {
     SharedPreferences HealthRecord;// 存檔用
     SharedPreferences.Editor editor;
 
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;

@@ -9,36 +9,27 @@
 
     <Button
         android:id="@+id/bns"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/button_3"
         android:text="@string/stringns"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/bmrs"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/nsb"
+        app:layout_constraintEnd_toStartOf="@+id/setr"
+        app:layout_constraintStart_toStartOf="@+id/setl"
+        app:layout_constraintTop_toTopOf="@+id/nst" />
 
     <Button
         android:id="@+id/bmrs"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/button_3"
         android:text="@string/stringmrs"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/linetop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bns" />
+        app:layout_constraintBottom_toTopOf="@+id/mrsb"
+        app:layout_constraintEnd_toStartOf="@+id/setr"
+        app:layout_constraintStart_toStartOf="@+id/setl"
+        app:layout_constraintTop_toTopOf="@+id/mrst" />
 
     <View
         android:id="@+id/linetop"
@@ -55,7 +46,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
         android:gravity="center"
         android:text="@string/str_choose_area"
         android:textSize="16sp"
@@ -85,7 +75,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:entries="@array/arr_Taipei"
         android:spinnerMode="dialog"
         android:visibility="visible"
@@ -102,6 +91,48 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sp_area" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/setl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/setr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/nst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.17" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/nsb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.27" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/mrst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.39" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/mrsb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.49" />
 
 
 </android.support.constraint.ConstraintLayout>

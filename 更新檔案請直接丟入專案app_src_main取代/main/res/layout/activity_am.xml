@@ -8,21 +8,91 @@
     tools:context=".am">
 
 
+    <android.support.constraint.Guideline
+        android:id="@+id/sobsl2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.135" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/sobsr2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.865" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/sobst2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.26" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/sobsb2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.34" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/currl2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.21" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/currr2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.79" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/currt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/currb2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.685" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/toait2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.83" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/toail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
+
     <View
         android:id="@+id/areaView2"
-        android:layout_width="300dp"
-        android:layout_height="55dp"
-        android:background="@color/gray"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:alpha="0.3"
-        app:layout_constraintBottom_toTopOf="@+id/currState2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@color/gray"
+        app:layout_constraintBottom_toTopOf="@+id/sobsb2"
+        app:layout_constraintEnd_toEndOf="@+id/sobsr2"
+        app:layout_constraintStart_toStartOf="@+id/sobsl2"
+        app:layout_constraintTop_toTopOf="@+id/sobst2" />
 
     <TextView
         android:id="@+id/area2"
-        android:layout_width="300dp"
-        android:layout_height="55dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/view"
         android:gravity="center"
         android:text="@string/obs"
@@ -30,50 +100,49 @@
         android:textColor="@color/cardview_dark_background"
         android:textColorLink="@color/b"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/currState2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/sobsb2"
+        app:layout_constraintEnd_toStartOf="@+id/sobsr2"
+        app:layout_constraintStart_toStartOf="@+id/sobsl2"
+        app:layout_constraintTop_toTopOf="@+id/sobst2" />
 
     <Button
         android:id="@+id/obs_get2"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
         android:layout_marginBottom="60dp"
         android:background="@drawable/button_3"
+
         android:gravity="center"
         android:text="@string/strobs_get"
-
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/toail"
+        app:layout_constraintTop_toTopOf="@+id/toait2" />
 
     <View
         android:id="@+id/currstate_view2"
-        android:layout_width="240dp"
-        android:layout_height="55dp"
-        android:layout_marginBottom="35dp"
-        android:background="@color/gray"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:alpha="0.3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/area2" />
+        android:background="@color/gray"
+        app:layout_constraintBottom_toTopOf="@+id/currb2"
+        app:layout_constraintEnd_toStartOf="@+id/currr2"
+        app:layout_constraintStart_toStartOf="@+id/currl2"
+        app:layout_constraintTop_toTopOf="@+id/currt2" />
 
     <TextView
         android:id="@+id/currState2"
-        android:layout_width="240dp"
-        android:layout_height="55dp"
-        android:layout_marginBottom="35dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/view"
         android:contentDescription="@string/strgas_good"
         android:gravity="center"
         android:text="@string/strgas_good"
         android:textSize="32sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/area2" />
+        app:layout_constraintBottom_toTopOf="@+id/currb2"
+        app:layout_constraintEnd_toStartOf="@+id/currr2"
+        app:layout_constraintStart_toStartOf="@+id/currl2"
+        app:layout_constraintTop_toTopOf="@+id/currt2" />
 </android.support.constraint.ConstraintLayout>

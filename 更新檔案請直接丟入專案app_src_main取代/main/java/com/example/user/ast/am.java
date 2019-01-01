@@ -217,6 +217,7 @@ public class am extends AppCompatActivity {
         }
         return result;
     }
+
     /*自定義廣播接收物件*/
     public class myBCRC extends BroadcastReceiver {
         @Override

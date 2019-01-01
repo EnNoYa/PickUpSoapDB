@@ -39,6 +39,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 public class alarm_backGroundjob extends JobService {
 
@@ -56,6 +60,10 @@ public class alarm_backGroundjob extends JobService {
     int cas; //狀況 處理
     String uri; //音樂
     SharedPreferences sp; //設定的存檔
+    String strgzil2 = new String(""); //句子2
+    String strgzil1= new String(""); //句子1
+    SharedPreferences HealthRecord;// 存檔用 病例 acp
+    SharedPreferences.Editor editor;
 
     @SuppressLint("MissingPermission")
     @Override
@@ -64,6 +72,9 @@ public class alarm_backGroundjob extends JobService {
 
         sp = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE); // 設定音樂
         uri = sp.getString("music_rw",""); //拿音樂位置
+
+        HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE); //病例 存檔
+        editor = HealthRecord.edit();
 
         mRQ = Volley.newRequestQueue(this);
         mgr = (LocationManager)getSystemService(LOCATION_SERVICE);
@@ -77,9 +88,11 @@ public class alarm_backGroundjob extends JobService {
                         Log.d("mjob", "定位更新");
                         currPoint = new LatLng(location.getLatitude(), location.getLongitude());
                         save_data(shortest_place(currPoint)); //存現在位置觀測站編號
-                        sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
+
                         /*發警告通知檢查*/
                         jsonParse();
+
+                        sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
                     }
                     @Override
                     public void onStatusChanged (String provider,int status, Bundle extras){
@@ -128,7 +141,7 @@ public class alarm_backGroundjob extends JobService {
         final SharedPreferences sp = getApplication().getSharedPreferences("user_aqi",Context.MODE_PRIVATE);//api load
         /*讀取使用值*/
         for(int i=0; i<6; ++i){
-            AQI[i] = sp.getInt("aqi" + String.valueOf(i), 0);
+            AQI[i] = sp.getInt("aqi" + String.valueOf(i), 1);
         }
         state = sp.getInt("st", 0); //取值
 
@@ -142,6 +155,7 @@ public class alarm_backGroundjob extends JobService {
                             cas = state; // default
                             boolean noti = false, good = false;
                             String str = "";
+                            int maxdegree=0;int whomax=-1;
 
                             for(int i=0; i<response.length(); ++i) {
                                 JSONObject tmp = response.getJSONObject(i); //json物件
@@ -152,6 +166,8 @@ public class alarm_backGroundjob extends JobService {
                             }
                             if(id==-1){//沒有這個觀測站
                                 //e04
+                                editor.putInt("acp", 0).commit();
+                                Log.d("mjob","數值維修");
                             }
                             else {
                                 for(int i=0; i<6; i++){
@@ -160,11 +176,13 @@ public class alarm_backGroundjob extends JobService {
                                         break;
                                     }
                                 }
+                                List<Double> aqilist = new ArrayList<>(); //暫存aqi數值
 
                                 JSONObject tmp = response.getJSONObject(id); //json物件
                                 if (!tmp.isNull("SO2Ans")) {
                                     String SO2 = tmp.getString("SO2Ans");
                                     int val = Integer.valueOf(SO2);
+                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[0]){ // SO2嚴重了
                                         cas = 2;
                                         noti = true;
@@ -174,11 +192,16 @@ public class alarm_backGroundjob extends JobService {
                                         good = machine(state);
                                     }
                                     AQI[0] = val;
+                                    if(val>=maxdegree)
+                                    {
+                                        maxdegree=val;whomax=2;
+                                    }
                                 }
 
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     int val = Integer.valueOf(CO);
+                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[1]){ // CO嚴重了
                                         cas = 2;
                                         noti = true;
@@ -189,11 +212,16 @@ public class alarm_backGroundjob extends JobService {
                                             good = machine(state);
                                     }
                                     AQI[1] = val;
+                                    if(val>=maxdegree)
+                                    {
+                                        maxdegree=val;whomax=0;
+                                    }
                                 }
 
                                 if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     int val = Integer.valueOf(O3);
+                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[2]){ // O3嚴重了
                                         cas = 2;
                                         noti = true;
@@ -204,11 +232,16 @@ public class alarm_backGroundjob extends JobService {
                                             good = machine(state);
                                     }
                                     AQI[2] = val;
+                                    if(val>=maxdegree)
+                                    {
+                                        maxdegree=val;whomax=5;
+                                    }
                                 }
 
                                 if (!tmp.isNull("PM10Ans")) {
                                     String PM10 = tmp.getString("PM10Ans");
                                     int val = Integer.valueOf(PM10);
+                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[3]){ // PM10嚴重了
                                         cas = 2;
                                         noti = true;
@@ -219,11 +252,16 @@ public class alarm_backGroundjob extends JobService {
                                             good = machine(state);
                                     }
                                     AQI[3] = val;
+                                    if(val>=maxdegree)
+                                    {
+                                        maxdegree=val;whomax=4;
+                                    }
                                 }
 
                                 if (!tmp.isNull("PM25Ans")) {
                                     String PM25 = tmp.getString("PM25Ans");
                                     int val = Integer.valueOf(PM25);
+                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[4]){ // PM25嚴重了
                                         cas = 2;
                                         noti = true;
@@ -234,11 +272,16 @@ public class alarm_backGroundjob extends JobService {
                                             good = machine(state);
                                     }
                                     AQI[4] = val;
+                                    if(val>=maxdegree)
+                                    {
+                                        maxdegree=val;whomax=1;
+                                    }
                                 }
 
                                 if (!tmp.isNull("NO2Ans")) {
                                     String NO2 = tmp.getString("NO2Ans");
                                     int val = Integer.valueOf(NO2);
+                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[5]){ // NO2嚴重了
                                         cas = 2;
                                         noti = true;
@@ -249,21 +292,59 @@ public class alarm_backGroundjob extends JobService {
                                             good = machine(state);
                                     }
                                     AQI[5] = val;
+                                    if(val>=maxdegree)
+                                    {
+                                        maxdegree=val;whomax=3;
+                                    }
                                 }
+
+                                Collections.sort(aqilist); //排序
+                                Collections.reverse(aqilist); //由大到小
 
                                 for(int i=0; i<6; ++i){ //記得存檔回去
                                     sp.edit().putInt("aqi"+String.valueOf(i), AQI[i]).apply();
                                 }
                                 sp.edit().putInt("st",cas).apply(); //狀態
 
-                                if(noti){
+                                if(noti){ //bad
                                     Notice(str.substring(0, str.length()-1), 1);
                                 }
                                 else if(good){
                                     Notice("",0);
                                 }
 
+                                /*acp等級*/
+                                if(HealthRecord.getInt("acp",-1) != -1)//不是空的就刪除
+                                    editor.remove("acp").commit();
+                                if(aqilist.size()>1){
+                                    editor.putInt("acp", (int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2)).commit();
+                                    Log.d("mjob","數值"+String.valueOf(Math.ceil((aqilist.get(0)+aqilist.get(1))/2)));
+                                }
+                                else if(aqilist.size() == 1){
+                                    editor.putInt("acp", aqilist.get(0).intValue()).commit();
+                                    Log.d("mjob","數值"+String.valueOf(aqilist.get(0).intValue()));
+                                }
+                                else{
+                                    editor.putInt("acp", 0).commit();
+                                    Log.d("mjob","數值維修");
+                                }
+                                sendBroadcast(new Intent("com.example.user.ast.task"));
                             }
+                            aboutyourbreath(maxdegree,whomax);
+
+                            /*句子1*/
+                            if(!HealthRecord.getString("gzil1","").equals(""))//不是空的就刪除
+                                editor.remove("gzil1").commit();
+                            editor.putString("gzil1", strgzil1).commit();
+
+                            /*句子2*/
+                            if(!HealthRecord.getString("gzil2","").equals(""))
+                                editor.remove("gzil2").commit();
+                            if(!strgzil2.isEmpty()){
+                                strgzil2 = "可能引起:\n\t\t\t" + strgzil2;
+                            }
+                            editor.putString("gzil2",strgzil2).commit();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -291,6 +372,102 @@ public class alarm_backGroundjob extends JobService {
                 break;
         }
         return false;
+    }
+
+    public void aboutyourbreath(int num,int who) {//引發疾病
+
+        if(who==-1)who=0;
+        if(HealthRecord.getBoolean("checkedHeartDisease",true)==false&&HealthRecord.getBoolean("checkedDVC",true)==false&&HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false&&HealthRecord.getBoolean("checkedConjunctivitis",true)==false&&HealthRecord.getBoolean("checkedAllergicRhinitis",true)==false||who==0){
+            if (num ==1) {
+                strgzil1+="非常新鮮的空氣，多到戶外走走吧!";
+            } else if (num ==2) {
+                strgzil1+="新鮮的空氣，放心到戶外走走吧!";
+            } else if (num ==3) {
+                strgzil1+="正常不正常邊緣的空氣，盡量別待在戶外太久!";
+            } else if(num==4) {
+                strgzil1 += "戴一下口罩吧!這空氣有點髒!";
+            }else if(num==5){
+                strgzil1+="別出門了，要不然戴個防毒面具好不?";
+            }else if(num==6){
+                strgzil1+="求你了，別出門，防毒面具也救不了你";
+            }else if(num==7){
+                strgzil1+="求你了，別出門，生命是很寶貴的!";
+            }
+        }
+        else{
+            if(HealthRecord.getBoolean("checkedHeartDisease",true)==false&&HealthRecord.getBoolean("checkedDVC",true)==false&&HealthRecord.getBoolean("checkedRespiratoryDisease",true)==true&&HealthRecord.getBoolean("checkedConjunctivitis",true)==false&&HealthRecord.getBoolean("checkedAllergicRhinitis",true)==false){
+                if (num ==1) {
+                    strgzil1+="非常新鮮的空氣，多到戶外走走吧!";
+                } else if (num ==2) {
+                    strgzil1+="新鮮的空氣，放心到戶外走走吧!";
+                } else if (num ==3) {
+                    strgzil1+="正常不正常邊緣的空氣，記得要戴口罩喔!";
+                } else if(num==4) {
+                    strgzil1 += "這空氣有點髒!還是別出門了吧!";
+                }else if(num==5){
+                    strgzil1+="沒防毒面具救別出門了!";
+                }else if(num==6){
+                    strgzil1+="求你了，別出門，防毒面具也救不了你";
+                }else if(num==7){
+                    strgzil1+="求你了，別出門，生命是很寶貴的!";
+                }
+            }
+            else{
+                if (num ==1) {
+                    strgzil1+="多C一點O氣";
+                } else if (num ==2) {
+                    strgzil1+=" 可以正常出門";
+                } else if (num ==3) {
+                    strgzil1+="要出門要戴口罩!";
+                } else if(num==4) {
+                    strgzil1 += "不建議出門";
+                }else if(num==5){
+                    strgzil1+="不能出門，出門會造成身體危害";
+                }else if(num==6){
+                    strgzil1+="絕對不能出門，出門會直接傷害到您的生命";
+                }else if(num==7){
+                    strgzil1+="絕對不能出門，外面應該是世界末日了!";
+                }
+            }
+        }
+
+        boolean checkmul=false;
+
+        if (who == 1 && num > 2 || who == 2 && num > 2 || who == 3 && num > 2 || who == 4 && num > 2 || who == 5 && num > 2)
+        {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="肺功能下降";
+        }
+        if (who == 1 && num > 2 || who == 2 && num > 2 || who == 3 && num > 2  || who == 5 && num > 2) {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="咳嗽";
+        }
+        if (who == 1 && num > 2|| who == 5 && num > 2) {
+            if(checkmul)strgzil2+="、";
+            checkmul=true;
+            strgzil2+="肺癌、血癌、自律神經失調";
+        }
+        if ( who == 2 && num > 2) {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="呼吸困難、呼吸道阻塞";
+        }
+        if ( who == 5 && num > 2) {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="加速老化、皮膚疾病";
+        }
+        if (who == 3 && num > 2|| who == 4 && num > 2 ) {
+            if(checkmul) strgzil2+="、";
+            checkmul=true;
+            strgzil2+="頭痛";
+        }
+        if (who == 4 && num > 2 ) {
+            if(checkmul) strgzil2+="、";
+            strgzil2+="噁心、虛弱";
+        }
     }
 
     private void Notice(String message, int chid){ // 警告通知
