@@ -42,6 +42,7 @@ public class ai extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String strgzil2 = new String(""); //句子2
     String strgzil1= new String(""); //句子1
+    int prev; //我上一個是從哪個按鍵來的
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class ai extends AppCompatActivity {
         acp_value = findViewById(R.id.aqiv);
         acp_state = findViewById(R.id.aqilevel);
         mRQ = Volley.newRequestQueue(this);
+        prev = getIntent().getIntExtra("acp", 0); // 從誰而來 不可能0
 
         /*拿資料*/
         SharedPreferences saveid = getApplication().getSharedPreferences("ssssid",Context.MODE_PRIVATE);
@@ -572,12 +574,23 @@ public class ai extends AppCompatActivity {
         editor.putString("gzil2",strgzil2).commit();
 
         /*acp等級*/
-        if(HealthRecord.getInt("acp",-1) != -1)//不是空的就刪除
-            editor.remove("acp").commit();
-        if(acp_value.getText().toString().equals("維修")) //維修狀態
-            editor.putInt("acp", 0).commit();
-        else{
-            editor.putInt("acp", Integer.valueOf(acp_value.getText().toString())).commit();
+        if(prev == 1){ //從ais 來
+            if(HealthRecord.getInt("acp",-1) != -1)//不是空的就刪除
+                editor.remove("acp").commit();
+            if(acp_value.getText().toString().equals("維修")) //維修狀態
+                editor.putInt("acp", 0).commit();
+            else{
+                editor.putInt("acp", Integer.valueOf(acp_value.getText().toString())).commit();
+            }
+        }
+        else{ //從am來
+            if(HealthRecord.getInt("acp2",-1) != -1)//不是空的就刪除
+                editor.remove("acp2").commit();
+            if(acp_value.getText().toString().equals("維修")) //維修狀態
+                editor.putInt("acp2", 0).commit();
+            else{
+                editor.putInt("acp2", Integer.valueOf(acp_value.getText().toString())).commit();
+            }
         }
     }
 }

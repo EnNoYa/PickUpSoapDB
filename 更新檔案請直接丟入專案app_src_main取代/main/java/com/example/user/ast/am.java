@@ -77,9 +77,9 @@ public class am extends AppCompatActivity {
         receiver = new myBCRC();
     }
     private void open_activity(){//開啟觀測站資訊頁面
-        Intent intent;
-        intent = new Intent();
+        Intent intent =new Intent();
         intent.setClass(am.this,ai.class);
+        intent.putExtra("acp", 2); //從am而來
         startActivity(intent);
     }
     private void save_data(int id){//存入當前地區
@@ -104,7 +104,7 @@ public class am extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
 
-        colorSet(HealthRecord.getInt("acp", -1), curState);
+        colorSet(HealthRecord.getInt("acp2", -1), curState);
         IntentFilter filter = new IntentFilter();
         filter.addAction("com.example.user.ast.task"); //新增過濾事件
         registerReceiver(receiver, filter);
@@ -222,7 +222,7 @@ public class am extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("shit","設定顏色囉");
-            colorSet(HealthRecord.getInt("acp", -1), curState);
+            colorSet(HealthRecord.getInt("acp2", -1), curState);
         }
     }
 }

@@ -118,9 +118,9 @@ public class ais extends AppCompatActivity {
         unregisterReceiver(gpsrec);
     }
     private void open_activity(){//開啟觀測站資訊頁面
-        Intent intent;
-        intent = new Intent();
+        Intent intent= new Intent();
         intent.setClass(ais.this,ai.class);
+        intent.putExtra("acp",1); //ai來的
         startActivity(intent);
     }
 
@@ -218,7 +218,6 @@ public class ais extends AppCompatActivity {
             }
         }
     }
-
     /*自定義廣播接收物件*/
     public class GPSbrrc extends BroadcastReceiver {
         @Override

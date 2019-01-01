@@ -26,7 +26,7 @@ import java.util.GregorianCalendar;
 
 public class MessageInBackground extends JobService{
     SharedPreferences TimeToMessage; //抓時間
-    SharedPreferences Healthrecord; //看是否有開啟
+    SharedPreferences Healthrecord; // 病例
     SharedPreferences Setting;  //設定
     JobParameters Jpar;
     int messagehour;
@@ -132,11 +132,9 @@ public class MessageInBackground extends JobService{
             notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
         }
 
-        Notification tmp = notificationBuilder.build(); //建立完成
-        tmp.flags |= Notification.FLAG_INSISTENT; //設定參數 持續直到通知取消 或 被查看
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, tmp);
+        notificationManager.notify(1, notificationBuilder.build()); //送通知id:1
 
 
     }

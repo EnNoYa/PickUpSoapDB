@@ -77,7 +77,7 @@ public class MyService extends Service {
                                 }
                             }
                             if(id==-1){//沒有這個觀測站
-                                editor.putInt("acp", 0).commit();
+                                editor.putInt("acp2", 0).commit();
                                 Log.d("shit","數值維修");
                             }
                             else {
@@ -121,24 +121,24 @@ public class MyService extends Service {
                                 Collections.sort(aqilist); //排序
                                 Collections.reverse(aqilist); //由大到小
                                 /*acp等級*/
-                                if(HealthRecord.getInt("acp",-1) != -1)//不是空的就刪除
-                                    editor.remove("acp").commit();
+                                if(HealthRecord.getInt("acp2",-1) != -1)//不是空的就刪除
+                                    editor.remove("acp2").commit();
                                 if(aqilist.size()>1){
-                                    editor.putInt("acp", (int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2)).commit();
+                                    editor.putInt("acp2", (int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2)).commit();
                                     Log.d("shit","數值"+String.valueOf(Math.ceil((aqilist.get(0)+aqilist.get(1))/2)));
                                 }
                                 else if(aqilist.size() == 1){
-                                    editor.putInt("acp", aqilist.get(0).intValue()).commit();
+                                    editor.putInt("acp2", aqilist.get(0).intValue()).commit();
                                     Log.d("shit","數值"+String.valueOf(aqilist.get(0).intValue()));
                                 }
                                 else{
-                                    editor.putInt("acp", 0).commit();
+                                    editor.putInt("acp2", 0).commit();
                                     Log.d("shit","數值維修");
                                 }
                             }
                             sendBroadcast(new Intent("com.example.user.ast.task"));
                             Log.d("shit","完成+廣播");
-                            stopSelf();
+                            stopSelf(); //停止自己
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

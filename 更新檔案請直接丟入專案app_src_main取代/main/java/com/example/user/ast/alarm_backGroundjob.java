@@ -2,6 +2,7 @@ package com.example.user.ast;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.app.job.JobParameters;
@@ -13,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
@@ -52,11 +54,17 @@ public class alarm_backGroundjob extends JobService {
     String sitename; //觀測站名稱
     int AQI[] = new int[6]; // SO2 CO O3 PM10 PM2.5 NO2
     int cas; //狀況 處理
+    String uri; //音樂
+    SharedPreferences sp; //設定的存檔
 
     @SuppressLint("MissingPermission")
     @Override
     public boolean onStartJob(final JobParameters params) {
         Log.d("mjob","背景執行開始");
+
+        sp = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE); // 設定音樂
+        uri = sp.getString("music_rw",""); //拿音樂位置
+
         mRQ = Volley.newRequestQueue(this);
         mgr = (LocationManager)getSystemService(LOCATION_SERVICE);
         new Thread(){
@@ -270,7 +278,7 @@ public class alarm_backGroundjob extends JobService {
         );
         mRQ.add(request);
     }
-    private boolean machine(int state){
+    private boolean machine(int state){ // 下降機制
         switch (state){
             case 2:
                 cas = 1;
@@ -290,23 +298,27 @@ public class alarm_backGroundjob extends JobService {
         if(chid == 1){
             String ch = "ch1"; //頻道
             notificationBuilder = new NotificationCompat.Builder(this, ch)
-                    .setDefaults(NotificationCompat.DEFAULT_ALL)
                     .setSmallIcon(R.drawable.fa)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
                     .setContentTitle("提醒您!!!")
                     .setContentText("此地區" + message + "濃度變高了");
-
-
         }
         else{
             String ch = "ch2"; //頻道
             notificationBuilder = new NotificationCompat.Builder(this, ch)
-                    .setDefaults(NotificationCompat.DEFAULT_ALL)
                     .setSmallIcon(R.drawable.fa)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
                     .setContentTitle("恭喜您!!!")
                     .setContentText("此地區現在空氣非常優質");
         }
+        if(!uri.equals("") && (sp.getBoolean("icschecked",true) == true) ){ //設定有開
+            if(sp.getBoolean("icrchecked",true) == true)  //鈴聲 開關
+                notificationBuilder.setSound(Uri.parse(uri)) ; //音樂來一夏
+        }
+        if(sp.getBoolean("icvchecked",true) == true){ //震動開關
+            notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+        }
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); //管理員取得服務
         notificationManager.notify(9487, notificationBuilder.build());//通知開始
     }
