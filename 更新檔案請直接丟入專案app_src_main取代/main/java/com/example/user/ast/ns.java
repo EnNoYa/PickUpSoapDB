@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.os.Bundle;
@@ -27,7 +28,8 @@ public class ns extends AppCompatActivity {
     SharedPreferences.Editor Timedit;
     Button ins ; //吸入量按鍵
     Button rns; //通知設定按鍵
-    JobScheduler MyMessage;
+    JobScheduler MyMessage; // 訊息排程
+    JobInfo messagejob; // 任務須知
     Spinner SetHour ;
     Spinner SetMin;
 
@@ -40,6 +42,13 @@ public class ns extends AppCompatActivity {
         TimetoMessage = getApplication().getSharedPreferences("timetomessage",MODE_PRIVATE);
         SettingsSave = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE);
         editorsettings = SettingsSave.edit();
+
+        //run time job
+        MyMessage = (JobScheduler)getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        messagejob= new JobInfo.Builder(878,new ComponentName(getPackageName(),MessageInBackground.class.getName()))
+                .setPeriodic(23 * 60 * 60 *1000)  // 23小時執行第二次
+                .setPersisted(true)
+                .build();
 
         final Bundle bdi = new Bundle();
         ins = findViewById(R.id.irt);
@@ -319,14 +328,7 @@ public class ns extends AppCompatActivity {
         super.onBackPressed();
         if(SettingsSave.getBoolean("rcschecked",true)==true){
 
-            //run time
-            MyMessage = (JobScheduler)getSystemService(Context.JOB_SCHEDULER_SERVICE);
-            JobInfo messagejob= new JobInfo.Builder(878,new ComponentName(getPackageName(),MessageInBackground.class.getName()))
-                    .setPeriodic(23 * 60 * 60 *1000)  // 23小時執行第二次
-                    .setPersisted(true)
-                    .build();
             if(MyMessage.schedule(messagejob)== JobScheduler.RESULT_SUCCESS){
-
                 Log.d("ExampleService","success");
             }
             else{

@@ -47,7 +47,8 @@ public class MessageInBackground extends JobService{
         uri = Setting.getString("music_rw2","");
         Log.d("Exam","3小音樂怒"+uri);
 
-        new task().execute(); //go
+        new task().execute();
+
 
         return false;
     }
@@ -56,23 +57,28 @@ public class MessageInBackground extends JobService{
 
         @Override
         protected Void doInBackground(Void...parm) {
+            Log.d("Exam", "進入AsyncTask");
             while (messagehour != 24 && messagemin != 60) {
+                if(this.isCancelled()){
+                    return null; // 取消老的-> 新的Task來
+                }
+                messagehour=TimeToMessage.getInt("SetHour",24); //在抓一次
+                messagemin=TimeToMessage.getInt("SetMin",60); //在抓一次
                 //得到時間
                 int pm = new GregorianCalendar().get(Calendar.AM_PM);
                 int hour = new GregorianCalendar().get(Calendar.HOUR);
                 int min = new GregorianCalendar().get(Calendar.MINUTE);
-                Log.d("Exam","ampm:"+String.valueOf(pm));
-                Log.d("Exam","hour"+String.valueOf(hour));
-                Log.d("Exam","min"+String.valueOf(min));
+                Log.d("Exam","ampm:"+String.valueOf(pm)+" hour: "+String.valueOf(hour)
+                        + " min: "+String.valueOf(min));
                 // 轉換12小時制
-                if ((pm== 1 && hour == (messagehour-12) && min == messagemin) || (hour == messagehour && min == messagemin)) {
+                if ( ( ( pm == 1 ) && ( hour == (messagehour-12) ) && ( min == messagemin ) ) ||  ( ( hour == messagehour ) && ( min == messagemin ) ) ) {
                     notificationcall(Healthrecord.getInt("acp", 0));
                     jobFinished(Jpar, true); //end 釋放資源
                     Log.d("ExampleService", "JOBOVER");
                     break;
                 }
                 try {
-                    Thread.sleep(1000);//sleep 1s
+                    Thread.sleep(1000);//sleep1s
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -84,7 +90,7 @@ public class MessageInBackground extends JobService{
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        Log.d("ExampleService", "JOBEND");
+        Log.d("ExampleService", "prev JobEnd");
         return false;
     }
 
