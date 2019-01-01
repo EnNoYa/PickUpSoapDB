@@ -313,25 +313,30 @@ public class ns extends AppCompatActivity {
     @Override
     public void onPause(){
         super.onPause();
-
     }
     @Override
-    public void onDestroy(){
-        super.onDestroy();
+    public void onBackPressed(){
+        super.onBackPressed();
         if(SettingsSave.getBoolean("rcschecked",true)==true){
 
             //run time
             MyMessage = (JobScheduler)getSystemService(Context.JOB_SCHEDULER_SERVICE);
             JobInfo messagejob= new JobInfo.Builder(878,new ComponentName(getPackageName(),MessageInBackground.class.getName()))
-                    .setPeriodic(15*60*1000)
+                    .setPeriodic(23 * 60 * 60 *1000)  // 23小時執行第二次
                     .setPersisted(true)
                     .build();
             if(MyMessage.schedule(messagejob)== JobScheduler.RESULT_SUCCESS){
+
                 Log.d("ExampleService","success");
             }
             else{
                 Log.d("ExampleService","fail");
             }
         }
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
     }
 }

@@ -105,7 +105,7 @@ public class alarm_backGroundjob extends JobService {
             }
         }.start();
 
-        return true;
+        return false;
     }
 
     @Override

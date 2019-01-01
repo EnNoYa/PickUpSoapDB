@@ -1,41 +1,55 @@
 package com.example.user.ast;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.nfc.Tag;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 
 
 public class MessageInBackground extends JobService{
-    SharedPreferences TimeToMessage;
-    SharedPreferences Healthrecord;
+    SharedPreferences TimeToMessage; //抓時間
+    SharedPreferences Healthrecord; //看是否有開啟
+    SharedPreferences Setting;  //設定
     JobParameters Jpar;
     int messagehour;
     int messagemin;
+    String uri;  // 路徑
     @Override
     public boolean onStartJob(final JobParameters params) {
         Log.d("ExampleService","JOBSTART");
         TimeToMessage = getApplication().getSharedPreferences("timetomessage",0);
         Healthrecord = getApplication().getSharedPreferences("healthresult",0);
+        Setting = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE); //讀音樂資料
         messagehour=TimeToMessage.getInt("SetHour",24);
         messagemin=TimeToMessage.getInt("SetMin",60);
         Log.d("Exam",String.valueOf(messagehour));
         Log.d("Exam",String.valueOf(messagemin));
         Jpar = params;
+
+        uri = Setting.getString("music_rw2","");
+        Log.d("Exam","3小音樂怒"+uri);
+
         new task().execute(); //go
 
-        return true;
+        return false;
     }
 
     public class task extends AsyncTask<Void, Void, Void >{
@@ -43,15 +57,17 @@ public class MessageInBackground extends JobService{
         @Override
         protected Void doInBackground(Void...parm) {
             while (messagehour != 24 && messagemin != 60) {
+                //得到時間
                 int pm = new GregorianCalendar().get(Calendar.AM_PM);
                 int hour = new GregorianCalendar().get(Calendar.HOUR);
                 int min = new GregorianCalendar().get(Calendar.MINUTE);
                 Log.d("Exam","ampm:"+String.valueOf(pm));
                 Log.d("Exam","hour"+String.valueOf(hour));
                 Log.d("Exam","min"+String.valueOf(min));
+                // 轉換12小時制
                 if ((pm== 1 && hour == (messagehour-12) && min == messagemin) || (hour == messagehour && min == messagemin)) {
                     notificationcall(Healthrecord.getInt("acp", 0));
-                    jobFinished(Jpar, true); //end
+                    jobFinished(Jpar, true); //end 釋放資源
                     Log.d("ExampleService", "JOBOVER");
                     break;
                 }
@@ -73,6 +89,7 @@ public class MessageInBackground extends JobService{
     }
 
     public void notificationcall(int num){
+        Log.d("ExampleService", "通知");
         String noteMessage;
         noteMessage="";
         switch (num){
@@ -101,15 +118,25 @@ public class MessageInBackground extends JobService{
                 break;
         }
 
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
+
+        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this,"ch3")
                 .setSmallIcon(R.drawable.fa)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
                 .setContentTitle("今日的空氣狀況是!!!")
                 .setContentText(noteMessage);
+        if(!uri.equals("") && (Setting.getBoolean("rcschecked",true) == true) ){
+            if(Setting.getBoolean("rcrchecked",true) == true)
+                notificationBuilder.setSound(Uri.parse(uri)) ; //音樂來一夏
+        }
+        if(Setting.getBoolean("rcvchecked",true) == true){
+            notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+        }
+
+        Notification tmp = notificationBuilder.build(); //建立完成
+        tmp.flags |= Notification.FLAG_INSISTENT; //設定參數 持續直到通知取消 或 被查看
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1,notificationBuilder.build());
+        notificationManager.notify(1, tmp);
 
 
     }

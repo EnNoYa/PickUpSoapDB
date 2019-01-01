@@ -165,7 +165,8 @@ public class insa extends AppCompatActivity {
             if(!sp.getString("music_rw","").equals("")) //不是空的
                 sp.edit().remove("music_rw").commit();
             sp.edit().putString("music_rw", currentLocation.get(tmppos)).commit();
-            Toast.makeText(insa.this, "選擇成功:" + "\n" + "你選的是:"+currentTitle.get(tmppos),Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(insa.this, "選擇成功:" + "\n" + "你選的是:"+ currentLocation.get(tmppos),Toast.LENGTH_SHORT).show();
         }
         else{
             if(!sp.getString("music_rw","").equals(""))
