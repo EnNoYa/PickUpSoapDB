@@ -60,74 +60,88 @@ public class alarm_backGroundjob extends JobService {
     int cas; //狀況 處理
     String uri; //音樂
     SharedPreferences sp; //設定的存檔
-    String strgzil2 = new String(""); //句子2
-    String strgzil1= new String(""); //句子1
+    String strgzil2; //句子2
+    String strgzil1; //句子1
     SharedPreferences HealthRecord;// 存檔用 病例 acp
     SharedPreferences.Editor editor;
+    JobParameters jobpar;  // job額外參數
+    myprocess tmp = new myprocess(); //子 只有1 個
 
     @SuppressLint("MissingPermission")
     @Override
-    public boolean onStartJob(final JobParameters params) {
+    public boolean onStartJob(JobParameters params) {
         Log.d("mjob","背景執行開始");
 
         sp = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE); // 設定音樂
         uri = sp.getString("music_rw",""); //拿音樂位置
+
+        jobpar = params;
+
+        /*清空句子*/
+        strgzil2 = ""; //句子2
+        strgzil1 = ""; //句子1
 
         HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE); //病例 存檔
         editor = HealthRecord.edit();
 
         mRQ = Volley.newRequestQueue(this);
         mgr = (LocationManager)getSystemService(LOCATION_SERVICE);
-        new Thread(){
-            public void run(){
-                Log.d("mjob","進入thread");
 
-                lis =new LocationListener() {
-                    @Override
-                    public void onLocationChanged (Location location){
-                        Log.d("mjob", "定位更新");
-                        currPoint = new LatLng(location.getLatitude(), location.getLongitude());
-                        save_data(shortest_place(currPoint)); //存現在位置觀測站編號
+        tmp.start(); // 開始thread
 
-                        /*發警告通知檢查*/
-                        jsonParse();
+        return false;
+    }
 
-                        sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
-                    }
-                    @Override
-                    public void onStatusChanged (String provider,int status, Bundle extras){
-                    }
-                    @Override
-                    public void onProviderEnabled (String provider){
-                    }
-                    @Override
-                    public void onProviderDisabled (String provider){
+    @SuppressLint("MissingPermission")
+    private class myprocess extends Thread{
 
-                    }
-                };
-                Looper.prepare();
+        /*開始任務*/
+        public void run(){
+
+            Log.d("mjob","進入thread");
+
+            lis =new LocationListener() {
+                @Override
+                public void onLocationChanged (Location location){
+                    Log.d("mjob", "定位更新");
+                    currPoint = new LatLng(location.getLatitude(), location.getLongitude());
+                    save_data(shortest_place(currPoint)); //存現在位置觀測站編號
+
+                    /*發警告通知檢查*/
+                    jsonParse();
+
+                    sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
+                }
+                @Override
+                public void onStatusChanged (String provider,int status, Bundle extras){
+                }
+                @Override
+                public void onProviderEnabled (String provider){
+                }
+                @Override
+                public void onProviderDisabled (String provider){
+
+                }
+            };
+            Looper.prepare();
                 //檢查 GPS 與網路定位是否可用
                 isGPSEnabled =mgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 isNetworkEnabled =mgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
                 if(isGPSEnabled||isNetworkEnabled) {
                     Log.d("mjob", "GPS");
-                    mgr.requestLocationUpdates(   //向 GPS 定位提供者註冊位置事件監聽器
-                            LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
+                mgr.requestLocationUpdates(   //向 GPS 定位提供者註冊位置事件監聽器
+                    LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
                     Log.d("mjob", "WIFI");
-                    mgr.requestLocationUpdates(   //向網路定位提供者註冊位置事件監聽器
-                            LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
+                mgr.requestLocationUpdates(   //向網路定位提供者註冊位置事件監聽器
+                    LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
                 }
                 else {
                     Toast.makeText(alarm_backGroundjob.this, "請開啟定位，才行哦", Toast.LENGTH_LONG).show();
                 }
-                jobFinished(params, true); //OVER
-                Log.d("mjob","背景執行結束");
-                Looper.loop();  //格黨 無限
-            }
-        }.start();
-
-        return false;
-    }
+            Log.d("mjob","背景執行迴圈");
+            Looper.loop();  //格黨 無限
+        }
+    };
 
     @Override
     public boolean onStopJob(JobParameters params) {
@@ -379,54 +393,54 @@ public class alarm_backGroundjob extends JobService {
         if(who==-1)who=0;
         if(HealthRecord.getBoolean("checkedHeartDisease",true)==false&&HealthRecord.getBoolean("checkedDVC",true)==false&&HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false&&HealthRecord.getBoolean("checkedConjunctivitis",true)==false&&HealthRecord.getBoolean("checkedAllergicRhinitis",true)==false||who==0){
             if (num ==1) {
-                strgzil1+="非常新鮮的空氣，多到戶外走走吧!";
+                strgzil1 ="非常新鮮的空氣，多到戶外走走吧!";
             } else if (num ==2) {
-                strgzil1+="新鮮的空氣，放心到戶外走走吧!";
+                strgzil1 ="新鮮的空氣，放心到戶外走走吧!";
             } else if (num ==3) {
-                strgzil1+="正常不正常邊緣的空氣，盡量別待在戶外太久!";
+                strgzil1 ="正常不正常邊緣的空氣，盡量別待在戶外太久!";
             } else if(num==4) {
-                strgzil1 += "戴一下口罩吧!這空氣有點髒!";
+                strgzil1 = "戴一下口罩吧!這空氣有點髒!";
             }else if(num==5){
-                strgzil1+="別出門了，要不然戴個防毒面具好不?";
+                strgzil1 ="別出門了，要不然戴個防毒面具好不?";
             }else if(num==6){
-                strgzil1+="求你了，別出門，防毒面具也救不了你";
+                strgzil1 ="求你了，別出門，防毒面具也救不了你";
             }else if(num==7){
-                strgzil1+="求你了，別出門，生命是很寶貴的!";
+                strgzil1 ="求你了，別出門，生命是很寶貴的!";
             }
         }
         else{
             if(HealthRecord.getBoolean("checkedHeartDisease",true)==false&&HealthRecord.getBoolean("checkedDVC",true)==false&&HealthRecord.getBoolean("checkedRespiratoryDisease",true)==true&&HealthRecord.getBoolean("checkedConjunctivitis",true)==false&&HealthRecord.getBoolean("checkedAllergicRhinitis",true)==false){
                 if (num ==1) {
-                    strgzil1+="非常新鮮的空氣，多到戶外走走吧!";
+                    strgzil1 ="非常新鮮的空氣，多到戶外走走吧!";
                 } else if (num ==2) {
-                    strgzil1+="新鮮的空氣，放心到戶外走走吧!";
+                    strgzil1 ="新鮮的空氣，放心到戶外走走吧!";
                 } else if (num ==3) {
-                    strgzil1+="正常不正常邊緣的空氣，記得要戴口罩喔!";
+                    strgzil1 ="正常不正常邊緣的空氣，記得要戴口罩喔!";
                 } else if(num==4) {
-                    strgzil1 += "這空氣有點髒!還是別出門了吧!";
+                    strgzil1  = "這空氣有點髒!還是別出門了吧!";
                 }else if(num==5){
-                    strgzil1+="沒防毒面具救別出門了!";
+                    strgzil1 ="沒防毒面具救別出門了!";
                 }else if(num==6){
-                    strgzil1+="求你了，別出門，防毒面具也救不了你";
+                    strgzil1 ="求你了，別出門，防毒面具也救不了你";
                 }else if(num==7){
-                    strgzil1+="求你了，別出門，生命是很寶貴的!";
+                    strgzil1 ="求你了，別出門，生命是很寶貴的!";
                 }
             }
             else{
                 if (num ==1) {
-                    strgzil1+="多C一點O氣";
+                    strgzil1 ="多C一點O氣";
                 } else if (num ==2) {
-                    strgzil1+=" 可以正常出門";
+                    strgzil1 =" 可以正常出門";
                 } else if (num ==3) {
-                    strgzil1+="要出門要戴口罩!";
+                    strgzil1 ="要出門要戴口罩!";
                 } else if(num==4) {
-                    strgzil1 += "不建議出門";
+                    strgzil1 = "不建議出門";
                 }else if(num==5){
-                    strgzil1+="不能出門，出門會造成身體危害";
+                    strgzil1 ="不能出門，出門會造成身體危害";
                 }else if(num==6){
-                    strgzil1+="絕對不能出門，出門會直接傷害到您的生命";
+                    strgzil1 ="絕對不能出門，出門會直接傷害到您的生命";
                 }else if(num==7){
-                    strgzil1+="絕對不能出門，外面應該是世界末日了!";
+                    strgzil1 ="絕對不能出門，外面應該是世界末日了!";
                 }
             }
         }

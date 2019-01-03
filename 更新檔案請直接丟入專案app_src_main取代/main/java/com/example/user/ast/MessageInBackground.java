@@ -32,8 +32,9 @@ public class MessageInBackground extends JobService{
     int messagehour;
     int messagemin;
     String uri;  // 路徑
+
     @Override
-    public boolean onStartJob(final JobParameters params) {
+    public boolean onStartJob(JobParameters params) {
         Log.d("ExampleService","JOBSTART");
         TimeToMessage = getApplication().getSharedPreferences("timetomessage",0);
         Healthrecord = getApplication().getSharedPreferences("healthresult",0);
@@ -50,20 +51,26 @@ public class MessageInBackground extends JobService{
         new task().execute();
 
 
+
         return false;
     }
 
     public class task extends AsyncTask<Void, Void, Void >{
 
         @Override
-        protected Void doInBackground(Void...parm) {
+        protected Void doInBackground(Void... voids) {
             Log.d("Exam", "進入AsyncTask");
+
             while (messagehour != 24 && messagemin != 60) {
-                if(this.isCancelled()){
-                    return null; // 取消老的-> 新的Task來
+
+                //如果發現跟之前不一樣 停止
+                int f1 = TimeToMessage.getInt("SetHour",24);
+                int f2 = TimeToMessage.getInt("SetMin",60);
+                if(f1 != messagehour || f2 != messagemin){
+                    Log.d("ExampleService", "GG");
+                    return null; //新工作開始
                 }
-                messagehour=TimeToMessage.getInt("SetHour",24); //在抓一次
-                messagemin=TimeToMessage.getInt("SetMin",60); //在抓一次
+
                 //得到時間
                 int pm = new GregorianCalendar().get(Calendar.AM_PM);
                 int hour = new GregorianCalendar().get(Calendar.HOUR);
@@ -85,7 +92,6 @@ public class MessageInBackground extends JobService{
             }
             return null;
         }
-
     }
 
     @Override

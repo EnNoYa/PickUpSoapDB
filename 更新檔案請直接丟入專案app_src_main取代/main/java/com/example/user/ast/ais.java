@@ -87,9 +87,8 @@ public class ais extends AppCompatActivity {
         /*job工作排程*/
         myScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         Jinfo = new JobInfo.Builder(1, new ComponentName(this, alarm_backGroundjob.class))
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)// WIFI網路就執行
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)// 任何網路就執行
                 .setPersisted(true)
-                .setPeriodic( 15 * 60 * 1000) // 週期15分鐘
                 .build();
         int result = myScheduler.schedule(Jinfo);
         if(result == JobScheduler.RESULT_SUCCESS){
