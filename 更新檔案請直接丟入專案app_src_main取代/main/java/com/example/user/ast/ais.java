@@ -92,6 +92,8 @@ public class ais extends AppCompatActivity {
                 .build();
         int result = myScheduler.schedule(Jinfo);
         if(result == JobScheduler.RESULT_SUCCESS){
+
+
             Log.d("mjob","背景執行規劃");
         }
         else{

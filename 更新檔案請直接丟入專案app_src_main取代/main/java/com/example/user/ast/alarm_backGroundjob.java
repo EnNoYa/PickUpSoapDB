@@ -66,6 +66,7 @@ public class alarm_backGroundjob extends JobService {
     SharedPreferences.Editor editor;
     JobParameters jobpar;  // job額外參數
     myprocess tmp = new myprocess(); //子 只有1 個
+    int maxdegree = 0, whomax = -1; // 最大acp ， 跟誰最大
 
     @SuppressLint("MissingPermission")
     @Override
@@ -98,7 +99,7 @@ public class alarm_backGroundjob extends JobService {
         /*開始任務*/
         public void run(){
 
-            Log.d("mjob","進入thread");
+            Log.d("mjob","進入thread"+Thread.currentThread().getName());
 
             lis =new LocationListener() {
                 @Override
@@ -139,11 +140,6 @@ public class alarm_backGroundjob extends JobService {
                     Toast.makeText(alarm_backGroundjob.this, "請開啟定位，才行哦", Toast.LENGTH_LONG).show();
                 }
             Log.d("mjob","背景執行迴圈");
-            try {
-                sleep(100); // 休息0.1秒再跑回圈
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             Looper.loop();  //格黨 無限
         }
     }
@@ -153,6 +149,7 @@ public class alarm_backGroundjob extends JobService {
         Log.d("mjob","背景執行END");
         return false;
     }
+
 
     public void jsonParse(){
 
@@ -174,7 +171,8 @@ public class alarm_backGroundjob extends JobService {
                             cas = state; // default
                             boolean noti = false, good = false;
                             String str = "";
-                            int maxdegree=0;int whomax=-1;
+                            maxdegree = 0;
+                            whomax = -1;
 
                             for(int i=0; i<response.length(); ++i) {
                                 JSONObject tmp = response.getJSONObject(i); //json物件
@@ -205,12 +203,10 @@ public class alarm_backGroundjob extends JobService {
                                         noti = true;
                                         str += "SO2、";
                                     }
-                                    else{
-                                        if(!noti) // 沒有 壞消息 就看看好消息
-                                            good = machine(state);
-                                    }
+                                    else if(val < AQI[0])
+                                        good = true;
                                     AQI[0] = val;
-                                    if(val>=maxdegree)
+                                    if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=2;
                                     }
@@ -224,12 +220,10 @@ public class alarm_backGroundjob extends JobService {
                                         noti = true;
                                         str += "CO、";
                                     }
-                                    else{
-                                        if(!noti)
-                                            good = machine(state);
-                                    }
+                                    else if(val < AQI[1])
+                                        good = true;
                                     AQI[1] = val;
-                                    if(val>=maxdegree)
+                                    if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=0;
                                     }
@@ -243,12 +237,10 @@ public class alarm_backGroundjob extends JobService {
                                         noti = true;
                                         str += "O3、";
                                     }
-                                    else{
-                                        if(!noti)
-                                            good = machine(state);
-                                    }
+                                    else if(val < AQI[2])
+                                        good = true;
                                     AQI[2] = val;
-                                    if(val>=maxdegree)
+                                    if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=5;
                                     }
@@ -262,12 +254,10 @@ public class alarm_backGroundjob extends JobService {
                                         noti = true;
                                         str += "PM10、";
                                     }
-                                    else{
-                                        if(!noti)
-                                            good = machine(state);
-                                    }
+                                    else if(val < AQI[3])
+                                        good = true;
                                     AQI[3] = val;
-                                    if(val>=maxdegree)
+                                    if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=4;
                                     }
@@ -281,12 +271,10 @@ public class alarm_backGroundjob extends JobService {
                                         noti = true;
                                         str += "PM25、";
                                     }
-                                    else{
-                                        if(!noti)
-                                            good = machine(state);
-                                    }
+                                    else if(val < AQI[4])
+                                        good = true;
                                     AQI[4] = val;
-                                    if(val>=maxdegree)
+                                    if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=1;
                                     }
@@ -300,23 +288,28 @@ public class alarm_backGroundjob extends JobService {
                                         noti = true;
                                         str += "NO2、";
                                     }
-                                    else {
-                                        if(!noti)
-                                            good = machine(state);
-                                    }
+                                    else if(val < AQI[5])
+                                        good = true;
                                     AQI[5] = val;
-                                    if(val>=maxdegree)
+                                    if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=3;
                                     }
                                 }
 
-
+                                boolean allclear = true; // 空氣乾淨
                                 for(int i=0; i<6; ++i){ //記得存檔回去
                                     sp.edit().putInt("aqi"+String.valueOf(i), AQI[i]).apply();
+                                    if(AQI[i] > 1)
+                                        allclear = false;
                                 }
-                                sp.edit().putInt("st",cas).apply(); //狀態
+                                if(good && !noti){ // 表示任意一個值有下降，但不能有壞消息
+                                    good = down_fsm(cas, allclear);
+                                }
 
+                                sp.edit().putInt("st",cas).apply(); //狀態save
+
+                                Log.d("mjob","通知檢查+哪個cas"+String.valueOf(cas));
                                 if(noti){ //bad 通知訊息
                                     Notice(str.substring(0, str.length()-1), 1);
                                 }
@@ -366,19 +359,26 @@ public class alarm_backGroundjob extends JobService {
         );
         mRQ.add(request);
     }
-    private boolean machine(int state){ // 下降機制
+
+    /*當前狀態--下降機制*/
+    private boolean down_fsm(int state, boolean clear){
         switch (state){
             case 2:
-                cas = 1;
-                break;
+                if(!clear){
+                    cas = 1;
+                    return false;
+                }
+                else{
+                    cas = 0;
+                    return true;
+                }
             case 1:
                 cas = 0;
                 return true;
-            case 0:
+            default:
                 cas = 0;
-                break;
+                return false;
         }
-        return false;
     }
 
     public void aboutyourbreath(int num,int who) {//引發疾病
@@ -477,15 +477,34 @@ public class alarm_backGroundjob extends JobService {
         }
     }
 
+    private String judge(){
+        switch (maxdegree){
+            case 2:
+                return "目前acp為普通，此地區還可以待一陣子。";
+            case 3:
+                return "目前acp為不好，我建議您出門戴個口罩，如果已經在外面，去買一個吧!!";
+            case 4:
+                return "目前acp為糟，不建議出門。若出門的朋友，請地區不宜久留。";
+            case 5:
+                return "目前acp為很糟，不建議出門，待在家比較好，開著空氣清淨機，戴著口罩";
+            case 6:
+                return "目前acp為極度危險，您還看的見天空嗎???快離開這裡，此地危險。";
+            case 7:
+                return "災害等級:核爆，不建議留在這裡，勸你迅速脫離此地區。"+'\n'+"或選擇攜帶空氣清淨機，並且停止呼吸";
+            default:
+                return "";
+        }
+    }
     private void Notice(String message, int chid){ // 警告通知
         NotificationCompat.Builder notificationBuilder;
         if(chid == 1){
             String ch = "ch1"; //頻道
+            String s_content = judge(); // 字串內容
             notificationBuilder = new NotificationCompat.Builder(this, ch)
                     .setSmallIcon(R.drawable.fa)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
                     .setContentTitle("提醒您!!!")
-                    .setContentText("此地區" + message + "濃度變高了");
+                    .setContentText("此地區" + message + "濃度變高了"+ s_content);
         }
         else{
             String ch = "ch2"; //頻道
