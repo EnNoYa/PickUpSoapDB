@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sky"
+    tools:context=".ns">
+
+    <TextView
+        android:id="@+id/in_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lb"
+        android:gravity="center"
+        android:text="@string/currpos_warningn"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rn_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lb"
+        android:gravity="center"
+        android:text="@string/rnsn"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/irts" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/inss"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/currpos_warning"
+        android:textSize="18sp"
+        android:theme="@style/sw"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/in_setting" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/dg"
+        app:layout_constraintTop_toBottomOf="@+id/inss" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/insv"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/nsv"
+        android:textSize="18sp"
+        android:theme="@style/sw"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inss" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/dg"
+        app:layout_constraintTop_toBottomOf="@+id/insv" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/irts"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/rt"
+        android:textSize="18sp"
+        android:theme="@style/sw"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/irt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/insv" />
+
+    <Button
+        android:id="@+id/irt"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/button_2"
+        android:text="@string/srt"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/rn_setting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/insv" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/rnss"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/rns"
+        android:textSize="18sp"
+        android:theme="@style/sw"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rn_setting" />
+
+    <View
+        android:id="@+id/line3"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/dg"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+    <Spinner
+        android:id="@+id/hsp"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="10dp"
+        android:dropDownWidth="40dp"
+        android:entries="@array/srha"
+        android:gravity="center"
+        android:popupBackground="@color/lb"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintEnd_toStartOf="@+id/h"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+    <Spinner
+        android:id="@+id/msp"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="10dp"
+        android:dropDownWidth="40dp"
+        android:entries="@array/srma"
+        android:gravity="center"
+        android:popupBackground="@color/lb"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintEnd_toStartOf="@+id/m"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+    <View
+        android:id="@+id/line4"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/dg"
+        app:layout_constraintTop_toBottomOf="@+id/msp" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/rnsv"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/nsv"
+        android:textSize="18sp"
+        android:theme="@style/sw"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/msp" />
+
+    <View
+        android:id="@+id/line5"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/dg"
+        app:layout_constraintTop_toBottomOf="@+id/rnsv" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/rrts"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/rt"
+        android:textSize="18sp"
+        android:theme="@style/sw"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/rrt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rnsv" />
+
+    <Button
+        android:id="@+id/rrt"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/button_2"
+        android:text="@string/srt"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/rrts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rnsv" />
+
+    <View
+        android:id="@+id/line6"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/dg"
+        app:layout_constraintTop_toBottomOf="@+id/rrts" />
+
+    <TextView
+        android:id="@+id/sptv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/spt"
+        android:textSize="18sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+    <TextView
+        android:id="@+id/h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/hour"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintEnd_toStartOf="@+id/msp"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+    <TextView
+        android:id="@+id/m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/minute"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/rnsv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rnss" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".mrsa">
+
+    <ScrollView
+        android:id="@+id/mrmainsv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/mrr"
+                android:layout_width="135dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/view"
+                android:gravity="center"
+                android:text="@string/please_choose"
+                android:textColor="#ff0000ff"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/HeartDisease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/heart_d"
+                app:layout_constraintEnd_toStartOf="@+id/RespiratoryDisease"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mrr" />
+
+            <CheckBox
+                android:id="@+id/RespiratoryDisease"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/respiratory_d"
+                app:layout_constraintEnd_toStartOf="@+id/Conjunctivitis"
+                app:layout_constraintStart_toEndOf="@+id/HeartDisease"
+                app:layout_constraintTop_toBottomOf="@+id/mrr" />
+
+            <CheckBox
+                android:id="@+id/Conjunctivitis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/conj_d"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/RespiratoryDisease"
+                app:layout_constraintTop_toBottomOf="@+id/mrr" />
+
+            <CheckBox
+                android:id="@+id/DVC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+
+                android:layout_marginTop="50dp"
+                android:text="@string/dvc_d"
+                app:layout_constraintEnd_toStartOf="@+id/AllergicRhinitis"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/HeartDisease" />
+
+            <CheckBox
+                android:id="@+id/AllergicRhinitis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/allergicrh_d"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/DVC"
+                app:layout_constraintTop_toBottomOf="@+id/RespiratoryDisease" />
+
+            <TextView
+                android:id="@+id/patientCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/your_chosen_d"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/AllergicRhinitis" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

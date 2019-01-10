@@ -1,0 +1,681 @@
+<resources>
+    <string name="app_name">多C一點O氣</string>
+    <string name="stringm">地圖</string>
+    <string name="stringas">設定</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="stringtbts">tbs</string>
+    <string name="stringns">通知設定</string>
+    <string name="tbtoff">一般</string>
+    <string name="tbton">暗色</string>
+    <string name="tth">外觀主題</string>
+    <string name="ins">吸入量</string>
+    <string name="rns">定時通知</string>
+    <string name="stringmrs">病歷設定</string>
+    <string name="nson">開啟通知</string>
+    <string name="nsoff">關閉通知</string>
+    <string name="nsv">震動</string>
+    <string name="rt">鈴聲</string>
+    <string name="srt">選擇鈴聲</string>
+    <string-array name="srha">
+        <item>00</item>
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+    </string-array>
+    <string-array name="srma">
+        <item>00</item>
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+    </string-array>
+    <string name="title_activity_am">地圖</string>
+    <string name="airaqi">ACP</string>
+    <string name="airindex">指標</string>
+    <string name="airlevel">等級</string>
+    <string name="airnum">數值</string>
+    <string name="airp1">SO2</string>
+    <string name="airp2">CO</string>
+    <string name="airp3">O3</string>
+    <string name="airp4">PM10</string>
+    <string name="airp5">PM2.5</string>
+    <string name="airp6">NO2</string>
+    <string name="airlkaqiv">0</string>
+    <string name="airlcaqiv">0</string>
+    <string name="airaqiv">0</string>
+    <string name="ailevelv1">良好</string>
+    <string name="ailevelv2">普通</string>
+    <string name="ailevelv3">敏感X</string>
+    <string name="ailevelv4">所有X</string>
+    <string name="ailevelv5">非常差</string>
+    <string name="ailevelv6">危害</string>
+    <string name="con">汙染物</string>
+    <string name="so2i" >0</string>
+    <string name="coi">0</string>
+    <string name="o3i">0</string>
+    <string name="pm10i">0</string>
+    <string name="pm2_5i">0</string>
+    <string name="no2i">0</string>
+    <string name="aircontaminant">小時濃度</string>
+    <string name="so2v">0</string>
+    <string name="co2v">0</string>
+    <string name="o3v">0</string>
+    <string name="pm10v">0</string>
+    <string name="no2v">0</string>
+    <string name="pm2_5v">0</string>
+    <string name="aidan">危險值</string>
+    <string name="aidist">距危險值</string>
+    <string name="idso2">0</string>
+    <string name="idco">0</string>
+    <string name="ido3">0</string>
+    <string name="idpm10">0</string>
+    <string name="idpm2_5">0</string>
+    <string name="idno2">0</string>
+    <string name="inso2">0</string>
+    <string name="inco">0</string>
+    <string name="ino3">0</string>
+    <string name="inpm10">0</string>
+    <string name="inpm2_5">0</string>
+    <string name="inno2">0</string>
+    <string name="itso2">0</string>
+    <string name="itco">0</string>
+    <string name="ito3">0</string>
+    <string name="itpm10">0</string>
+    <string name="itpm2_5">0</string>
+    <string name="itno2">0</string>
+    <string name="obs" translatable="false">觀測站loading</string>
+    <string name="getobs">當前觀測站資訊</string>
+    <string name="lc">所在地區</string>
+    <string name="lk">指定地區</string>
+    <string name="lcn">所在地名</string>
+    <string name="lkn">鎖定地名</string>
+    <string name="strgas_good">良好</string>
+    <string name="strgas_normal">普通</string>
+    <string name="strgas_notgood">不好</string>
+    <string name="strgas_bad">糟</string>
+    <string name="strgas_verybad">很糟</string>
+    <string name="strgas_god">極度危險</string>
+    <string name="strobs_get">詳細資料</string>
+    <string name="str_choose_area">選擇指定地區</string>
+    <string name="rnsn">定時通知設定▼</string>
+    <string name="hour">時</string>
+    <string name="minute">分</string>
+    <string name="spt">提醒時間設定</string>
+    <string name="please_choose">請選擇您的\n病例</string>
+    <string name="heart_d">心臟疾病</string>
+    <string name="respiratory_d">呼吸道疾病</string>
+    <string name="conj_d">結膜炎</string>
+    <string name="dvc_d">心血管疾病</string>
+    <string name="allergicrh_d">過敏性鼻炎</string>
+    <string name="your_chosen_d">您選擇的病例是：</string>
+    <string name="currpos_warning">所在地空汙警告</string>
+    <string name="currpos_warningn">即時空汙警告設定▼</string>
+    <string-array name="arr_city">
+        <item>臺北市</item>
+        <item>新北市</item>
+        <item>桃園市</item>
+        <item>臺中市</item>
+        <item>臺南市</item>
+        <item>高雄市</item>
+        <item>基隆市</item>
+        <item>新竹市</item>
+        <item>嘉義市</item>
+        <item>新竹縣</item>
+        <item>苗栗縣</item>
+        <item>彰化縣</item>
+        <item>南投縣</item>
+        <item>雲林縣</item>
+        <item>嘉義縣</item>
+        <item>屏東縣</item>
+        <item>宜蘭縣</item>
+        <item>花蓮縣</item>
+        <item>臺東縣</item>
+        <item>澎湖縣</item>
+    </string-array>
+    <string-array name="arr_Taipei">
+        <item>中正區</item>
+        <item>大同區</item>
+        <item>中山區</item>
+        <item>松山區</item>
+        <item>大安區</item>
+        <item>萬華區</item>
+        <item>信義區</item>
+        <item>士林區</item>
+        <item>北投區</item>
+        <item>內湖區</item>
+        <item>南港區</item>
+        <item>文山區</item>
+    </string-array>
+    <string-array name="arr_NewTaipei">
+        <item>板橋區</item>
+        <item>新莊區</item>
+        <item>中和區</item>
+        <item>永和區</item>
+        <item>土城區</item>
+        <item>樹林區</item>
+        <item>三峽區</item>
+        <item>鶯歌區</item>
+        <item>三重區</item>
+        <item>蘆洲區</item>
+        <item>五股區</item>
+        <item>泰山區</item>
+        <item>林口區</item>
+        <item>八里區</item>
+        <item>淡水區</item>
+        <item>三芝區</item>
+        <item>石門區</item>
+        <item>金山區</item>
+        <item>萬里區</item>
+        <item>汐止區</item>
+        <item>瑞芳區</item>
+        <item>貢寮區</item>
+        <item>平溪區</item>
+        <item>雙溪區</item>
+        <item>新店區</item>
+        <item>深坑區</item>
+        <item>石碇區</item>
+        <item>坪林區</item>
+        <item>烏來區</item>
+    </string-array>
+    <string-array name="arr_Taoyuan">
+        <item>桃園區</item>
+        <item>八德區</item>
+        <item>龜山區</item>
+        <item>蘆竹區</item>
+        <item>大園區</item>
+        <item>大溪區</item>
+        <item>中壢區</item>
+        <item>平鎮區</item>
+        <item>楊梅區</item>
+        <item>龍潭區</item>
+        <item>新屋區</item>
+        <item>觀音區</item>
+        <item>復興區</item>
+    </string-array>
+    <string-array name="arr_Taichung">
+        <item>中區</item>
+        <item>東區</item>
+        <item>南區</item>
+        <item>西區</item>
+        <item>北區</item>
+        <item>北屯區</item>
+        <item>西屯區</item>
+        <item>南屯區</item>
+        <item>太平區</item>
+        <item>大里區</item>
+        <item>霧峰區</item>
+        <item>烏日區</item>
+        <item>豐原區</item>
+        <item>后里區</item>
+        <item>石岡區</item>
+        <item>東勢區</item>
+        <item>和平區</item>
+        <item>新社區</item>
+        <item>潭子區</item>
+        <item>大雅區</item>
+        <item>神岡區</item>
+        <item>大肚區</item>
+        <item>龍井區</item>
+        <item>沙鹿區</item>
+        <item>梧棲區</item>
+        <item>清水區</item>
+        <item>大甲區</item>
+        <item>外埔區</item>
+        <item>大安區</item>
+    </string-array>
+    <string-array name="arr_Tainan">
+        <item>東區</item>
+        <item>南區</item>
+        <item>北區</item>
+        <item>安南區</item>
+        <item>安平區</item>
+        <item>中西區</item>
+        <item>新營區</item>
+        <item>鹽水區</item>
+        <item>白河區</item>
+        <item>柳營區</item>
+        <item>後壁區</item>
+        <item>東山區</item>
+        <item>麻豆區</item>
+        <item>下營區</item>
+        <item>六甲區</item>
+        <item>官田區</item>
+        <item>大內區</item>
+        <item>佳里區</item>
+        <item>學甲區</item>
+        <item>西港區</item>
+        <item>七股區</item>
+        <item>將軍區</item>
+        <item>北門區</item>
+        <item>新化區</item>
+        <item>善化區</item>
+        <item>新市區</item>
+        <item>安定區</item>
+        <item>山上區</item>
+        <item>玉井區</item>
+        <item>楠西區</item>
+        <item>南化區</item>
+        <item>左鎮區</item>
+        <item>仁德區</item>
+        <item>歸仁區</item>
+        <item>關廟區</item>
+        <item>龍崎區</item>
+        <item>永康區</item>
+    </string-array>
+    <string-array name="arr_Kaohsiung">
+        <item>鹽埕區</item>
+        <item>鼓山區</item>
+        <item>左營區</item>
+        <item>楠梓區</item>
+        <item>三民區</item>
+        <item>新興區</item>
+        <item>前金區</item>
+        <item>苓雅區</item>
+        <item>前鎮區</item>
+        <item>旗津區</item>
+        <item>小港區</item>
+        <item>鳳山區</item>
+        <item>林園區</item>
+        <item>大寮區</item>
+        <item>大樹區</item>
+        <item>大社區</item>
+        <item>仁武區</item>
+        <item>鳥松區</item>
+        <item>岡山區</item>
+        <item>橋頭區</item>
+        <item>燕巢區</item>
+        <item>田寮區</item>
+        <item>阿蓮區</item>
+        <item>路竹區</item>
+        <item>湖內區</item>
+        <item>茄萣區</item>
+        <item>永安區</item>
+        <item>彌陀區</item>
+        <item>梓官區</item>
+        <item>旗山區</item>
+        <item>美濃區</item>
+        <item>六龜區</item>
+        <item>甲仙區</item>
+        <item>杉林區</item>
+        <item>內門區</item>
+        <item>茂林區</item>
+        <item>桃源區</item>
+        <item>那瑪夏區</item>
+    </string-array>
+    <string-array name="arr_Keelung">
+        <item>中正區</item>
+        <item>七堵區</item>
+        <item>暖暖區</item>
+        <item>仁愛區</item>
+        <item>中山區</item>
+        <item>安樂區</item>
+        <item>信義區</item>
+    </string-array>
+    <string-array name="arr_Hsinchu">
+        <item>東區</item>
+        <item>北區</item>
+        <item>香山區</item>
+    </string-array>
+    <string-array name="arr_Chiayi">
+        <item>東區</item>
+        <item>西區</item>
+    </string-array>
+    <string-array name="arr_HsinchuLine">
+        <item>竹北市</item>
+        <item>關西鎮</item>
+        <item>新埔鎮</item>
+        <item>竹東鎮</item>
+        <item>湖口鄉</item>
+        <item>橫山鄉</item>
+        <item>新豐鄉</item>
+        <item>芎林鄉</item>
+        <item>寶山鄉</item>
+        <item>北埔鄉</item>
+        <item>峨眉鄉</item>
+        <item>尖石鄉</item>
+        <item>五峰鄉</item>
+    </string-array>
+    <string-array name="arr_Miaoli">
+        <item>苗栗市</item>
+        <item>頭份市</item>
+        <item>苑裡鎮</item>
+        <item>通霄鎮</item>
+        <item>竹南鎮</item>
+        <item>後龍鎮</item>
+        <item>卓蘭鎮</item>
+        <item>大湖鄉</item>
+        <item>公館鄉</item>
+        <item>銅鑼鄉</item>
+        <item>南庄鄉</item>
+        <item>頭屋鄉</item>
+        <item>三義鄉</item>
+        <item>西湖鄉</item>
+        <item>造橋鄉</item>
+        <item>三灣鄉</item>
+        <item>獅潭鄉</item>
+        <item>泰安鄉</item>
+    </string-array>
+    <string-array name="arr_Changhua">
+        <item>彰化市</item>
+        <item>員林市</item>
+        <item>鹿港鎮</item>
+        <item>和美鎮</item>
+        <item>北斗鎮</item>
+        <item>溪湖鎮</item>
+        <item>田中鎮</item>
+        <item>二林鎮</item>
+        <item>線西鄉</item>
+        <item>伸港鄉</item>
+        <item>福興鄉</item>
+        <item>秀水鄉</item>
+        <item>花壇鄉</item>
+        <item>芬園鄉</item>
+        <item>大村鄉</item>
+        <item>埔鹽鄉</item>
+        <item>埔心鄉</item>
+        <item>永靖鄉</item>
+        <item>社頭鄉</item>
+        <item>二水鄉</item>
+        <item>田尾鄉</item>
+        <item>埤頭鄉</item>
+        <item>芳苑鄉</item>
+        <item>大城鄉</item>
+        <item>竹塘鄉</item>
+        <item>溪州鄉</item>
+    </string-array>
+    <string-array name="arr_Nantou">
+        <item>南投市</item>
+        <item>埔里鎮</item>
+        <item>草屯鎮</item>
+        <item>竹山鎮</item>
+        <item>集集鎮</item>
+        <item>名間鄉</item>
+        <item>鹿谷鄉</item>
+        <item>中寮鄉</item>
+        <item>魚池鄉</item>
+        <item>國姓鄉</item>
+        <item>水里鄉</item>
+        <item>信義鄉</item>
+        <item>仁愛鄉</item>
+    </string-array>
+    <string-array name="arr_Yunlin">
+        <item>斗六市</item>
+        <item>斗南鎮</item>
+        <item>虎尾鎮</item>
+        <item>西螺鎮</item>
+        <item>土庫鎮</item>
+        <item>北港鎮</item>
+        <item>古坑鄉</item>
+        <item>大埤鄉</item>
+        <item>莿桐鄉</item>
+        <item>林內鄉</item>
+        <item>二崙鄉</item>
+        <item>崙背鄉</item>
+        <item>麥寮鄉</item>
+        <item>東勢鄉</item>
+        <item>褒忠鄉</item>
+        <item>臺西鄉</item>
+        <item>元長鄉</item>
+        <item>四湖鄉</item>
+        <item>口湖鄉</item>
+        <item>水林鄉</item>
+    </string-array>
+    <string-array name="arr_ChiayiLine">
+        <item>太保市</item>
+        <item>朴子市</item>
+        <item>布袋鎮</item>
+        <item>大林鎮</item>
+        <item>民雄鄉</item>
+        <item>溪口鄉</item>
+        <item>新港鄉</item>
+        <item>六腳鄉</item>
+        <item>東石鄉</item>
+        <item>義竹鄉</item>
+        <item>鹿草鄉</item>
+        <item>水上鄉</item>
+        <item>中埔鄉</item>
+        <item>竹崎鄉</item>
+        <item>梅山鄉</item>
+        <item>番路鄉</item>
+        <item>大埔鄉</item>
+        <item>阿里山鄉</item>
+    </string-array>
+    <string-array name="arr_Pingtung">
+        <item>屏東市</item>
+        <item>潮州鎮</item>
+        <item>東港鎮</item>
+        <item>恆春鎮</item>
+        <item>萬丹鄉</item>
+        <item>長治鄉</item>
+        <item>麟洛鄉</item>
+        <item>九如鄉</item>
+        <item>里港鄉</item>
+        <item>鹽埔鄉</item>
+        <item>高樹鄉</item>
+        <item>萬巒鄉</item>
+        <item>內埔鄉</item>
+        <item>竹田鄉</item>
+        <item>新埤鄉</item>
+        <item>枋寮鄉</item>
+        <item>新園鄉</item>
+        <item>崁頂鄉</item>
+        <item>林邊鄉</item>
+        <item>南州鄉</item>
+        <item>佳冬鄉</item>
+        <item>琉球鄉</item>
+        <item>車城鄉</item>
+        <item>滿州鄉</item>
+        <item>枋山鄉</item>
+        <item>三地門鄉</item>
+        <item>霧臺鄉</item>
+        <item>瑪家鄉</item>
+        <item>泰武鄉</item>
+        <item>來義鄉</item>
+        <item>春日鄉</item>
+        <item>獅子鄉</item>
+        <item>牡丹鄉</item>
+    </string-array>
+    <string-array name="arr_Yilan">
+        <item>宜蘭市</item>
+        <item>羅東鎮</item>
+        <item>蘇澳鎮</item>
+        <item>頭城鎮</item>
+        <item>礁溪鄉</item>
+        <item>壯圍鄉</item>
+        <item>員山鄉</item>
+        <item>冬山鄉</item>
+        <item>五結鄉</item>
+        <item>三星鄉</item>
+        <item>大同鄉</item>
+        <item>南澳鄉</item>
+    </string-array>
+    <string-array name="arr_Hualien">
+        <item>花蓮市</item>
+        <item>鳳林鎮</item>
+        <item>玉里鎮</item>
+        <item>新城鄉</item>
+        <item>吉安鄉</item>
+        <item>壽豐鄉</item>
+        <item>光復鄉</item>
+        <item>豐濱鄉</item>
+        <item>瑞穗鄉</item>
+        <item>富里鄉</item>
+        <item>秀林鄉</item>
+        <item>萬榮鄉</item>
+        <item>卓溪鄉</item>
+    </string-array>
+    <string-array name="arr_Taitung">
+        <item>臺東市</item>
+        <item>成功鎮</item>
+        <item>關山鎮</item>
+        <item>卑南鄉</item>
+        <item>大武鄉</item>
+        <item>太麻里鄉</item>
+        <item>東河鄉</item>
+        <item>長濱鄉</item>
+        <item>鹿野鄉</item>
+        <item>池上鄉</item>
+        <item>綠島鄉</item>
+        <item>延平鄉</item>
+        <item>海端鄉</item>
+        <item>達仁鄉</item>
+        <item>金峰鄉</item>
+        <item>蘭嶼鄉</item>
+    </string-array>
+    <string-array name="arr_Wuhu">
+        <item>馬公市</item>
+        <item>湖西鄉</item>
+        <item>白沙鄉</item>
+        <item>西嶼鄉</item>
+        <item>望安鄉</item>
+        <item>七美鄉</item>
+    </string-array>
+
+</resources>
