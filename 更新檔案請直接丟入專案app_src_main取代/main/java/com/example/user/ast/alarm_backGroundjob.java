@@ -60,6 +60,7 @@ public class alarm_backGroundjob extends JobService {
     int cas; //狀況 處理
     String uri; //音樂
     SharedPreferences sp; //設定的存檔
+    SharedPreferences tc; //thread的存檔
     String strgzil2; //句子2
     String strgzil1; //句子1
     SharedPreferences HealthRecord;// 存檔用 病例 acp
@@ -74,6 +75,7 @@ public class alarm_backGroundjob extends JobService {
         Log.d("mjob","背景執行開始");
 
         sp = getApplication().getSharedPreferences("settingsave",Context.MODE_PRIVATE); // 設定音樂
+        tc = getApplication().getSharedPreferences("thread_cnt",Context.MODE_PRIVATE); // 讀thread數量
         uri = sp.getString("music_rw",""); //拿音樂位置
 
         jobpar = params;
@@ -88,18 +90,17 @@ public class alarm_backGroundjob extends JobService {
         mRQ = Volley.newRequestQueue(this);
         mgr = (LocationManager)getSystemService(LOCATION_SERVICE);
 
-        tmp.start(); // 開始thread
+        tmp.execute(); // 開始thread
 
         return false;
     }
 
     @SuppressLint("MissingPermission")
-    private class myprocess extends Thread{
-
+    private class myprocess extends AsyncTask<Void, Void, Void>{
         /*開始任務*/
-        public void run(){
-
-            Log.d("mjob","進入thread"+Thread.currentThread().getName());
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d("mjob","進入AsyncTask");
 
             lis =new LocationListener() {
                 @Override
@@ -125,22 +126,34 @@ public class alarm_backGroundjob extends JobService {
                 }
             };
             Looper.prepare();
-                //檢查 GPS 與網路定位是否可用
-                isGPSEnabled =mgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                isNetworkEnabled =mgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                if(isGPSEnabled||isNetworkEnabled) {
-                    Log.d("mjob", "GPS");
+            //檢查 GPS 與網路定位是否可用
+            isGPSEnabled =mgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isNetworkEnabled =mgr.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if(isGPSEnabled||isNetworkEnabled) {
+                Log.d("mjob", "GPS");
                 mgr.requestLocationUpdates(   //向 GPS 定位提供者註冊位置事件監聽器
-                    LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
-                    Log.d("mjob", "WIFI");
+                        LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
+                Log.d("mjob", "WIFI");
                 mgr.requestLocationUpdates(   //向網路定位提供者註冊位置事件監聽器
-                    LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
-                }
-                else {
-                    Toast.makeText(alarm_backGroundjob.this, "請開啟定位，才行哦", Toast.LENGTH_LONG).show();
-                }
+                        LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DIST, lis, Looper.myLooper());
+            }
+            else {
+                Toast.makeText(alarm_backGroundjob.this, "請開啟定位，才行哦", Toast.LENGTH_LONG).show();
+            }
             Log.d("mjob","背景執行迴圈");
+
+            int cnt = tc.getInt("thread_cnt", 1); //thread數量
+            Log.d("mjob","數量"+String.valueOf(cnt));
+            if( cnt > 1 ){
+                if(tc.contains("thread_cnt"))
+                    tc.edit().clear().apply(); //清空檔案避免過大
+                tc.edit().putInt("thread_cnt", --cnt);
+                Log.d("mjob","數量=2才停止");
+                return null;
+            }
+
             Looper.loop();  //格黨 無限
+            return null;
         }
     }
 
@@ -173,6 +186,7 @@ public class alarm_backGroundjob extends JobService {
                             String str = "";
                             maxdegree = 0;
                             whomax = -1;
+                            int primecheck = 0; //質數選擇空氣
 
                             for(int i=0; i<response.length(); ++i) {
                                 JSONObject tmp = response.getJSONObject(i); //json物件
@@ -208,7 +222,8 @@ public class alarm_backGroundjob extends JobService {
                                     AQI[0] = val;
                                     if(val >= maxdegree)
                                     {
-                                        maxdegree=val;whomax=2;
+                                        maxdegree = val;whomax=2;
+                                        primecheck |= 4;
                                     }
                                 }
 
@@ -226,6 +241,7 @@ public class alarm_backGroundjob extends JobService {
                                     if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=0;
+                                        primecheck |= 1;
                                     }
                                 }
 
@@ -243,6 +259,7 @@ public class alarm_backGroundjob extends JobService {
                                     if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=5;
+                                        primecheck |= 32;
                                     }
                                 }
 
@@ -260,6 +277,7 @@ public class alarm_backGroundjob extends JobService {
                                     if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=4;
+                                        primecheck |= 16;
                                     }
                                 }
 
@@ -277,6 +295,7 @@ public class alarm_backGroundjob extends JobService {
                                     if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=1;
+                                        primecheck |= 2;
                                     }
                                 }
 
@@ -294,6 +313,7 @@ public class alarm_backGroundjob extends JobService {
                                     if(val >= maxdegree)
                                     {
                                         maxdegree=val;whomax=3;
+                                        primecheck |= 8;
                                     }
                                 }
 
@@ -330,7 +350,7 @@ public class alarm_backGroundjob extends JobService {
                                 }
                                 sendBroadcast(new Intent("com.example.user.ast.task"));
                             }
-                            aboutyourbreath(maxdegree,whomax);
+                            aboutyourbreath(maxdegree, whomax, primecheck);
 
                             /*句子1*/
                             if(!HealthRecord.getString("gzil1","").equals(""))//不是空的就刪除
@@ -381,7 +401,7 @@ public class alarm_backGroundjob extends JobService {
         }
     }
 
-    public void aboutyourbreath(int num,int who) {//引發疾病
+    public void aboutyourbreath(int num, int who, int gas_select) {//引發疾病
 
         if(who==-1)who=0;
         if(HealthRecord.getBoolean("checkedHeartDisease",true)==false&&HealthRecord.getBoolean("checkedDVC",true)==false&&HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false&&HealthRecord.getBoolean("checkedConjunctivitis",true)==false&&HealthRecord.getBoolean("checkedAllergicRhinitis",true)==false||who==0){
@@ -440,38 +460,37 @@ public class alarm_backGroundjob extends JobService {
 
         boolean checkmul=false;
 
-        if (who == 1 && num > 2 || who == 2 && num > 2 || who == 3 && num > 2 || who == 4 && num > 2 || who == 5 && num > 2)
+        if ( (gas_select & 2) == 2 && num > 2 || (gas_select & 4) == 4 && num > 2 || (gas_select & 8) == 8 && num > 2 || (gas_select & 16) == 16 && num > 2 || (gas_select & 32) == 32 && num > 2)
         {
-            if(checkmul) strgzil2+="、";
             checkmul=true;
             strgzil2+="肺功能下降";
         }
-        if (who == 1 && num > 2 || who == 2 && num > 2 || who == 3 && num > 2  || who == 5 && num > 2) {
+        if ( (gas_select & 2) == 2 && num > 2 || (gas_select & 4) == 4 && num > 2 || (gas_select & 8) == 8 && num > 2  || (gas_select & 32) == 32 && num > 2) {
             if(checkmul) strgzil2+="、";
             checkmul=true;
             strgzil2+="咳嗽";
         }
-        if (who == 1 && num > 2|| who == 5 && num > 2) {
+        if ( (gas_select & 2)==2 && num > 2|| (gas_select & 32) == 32 && num > 2) {
             if(checkmul)strgzil2+="、";
             checkmul=true;
             strgzil2+="肺癌、血癌、自律神經失調";
         }
-        if ( who == 2 && num > 2) {
+        if ( (gas_select & 4) == 4 && num > 2) {
             if(checkmul) strgzil2+="、";
             checkmul=true;
             strgzil2+="呼吸困難、呼吸道阻塞";
         }
-        if ( who == 5 && num > 2) {
+        if ( (gas_select & 32) == 32 && num > 2) {
             if(checkmul) strgzil2+="、";
             checkmul=true;
             strgzil2+="加速老化、皮膚疾病";
         }
-        if (who == 3 && num > 2|| who == 4 && num > 2 ) {
+        if ( (gas_select & 8) == 8 && num > 2|| (gas_select & 16) == 16 && num > 2 ) {
             if(checkmul) strgzil2+="、";
             checkmul=true;
             strgzil2+="頭痛";
         }
-        if (who == 4 && num > 2 ) {
+        if ( (gas_select & 16) == 16 && num > 2 ) {
             if(checkmul) strgzil2+="、";
             strgzil2+="噁心、虛弱";
         }
