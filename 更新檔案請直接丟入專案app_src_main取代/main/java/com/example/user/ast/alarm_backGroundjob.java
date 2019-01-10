@@ -139,9 +139,14 @@ public class alarm_backGroundjob extends JobService {
                     Toast.makeText(alarm_backGroundjob.this, "請開啟定位，才行哦", Toast.LENGTH_LONG).show();
                 }
             Log.d("mjob","背景執行迴圈");
+            try {
+                sleep(100); // 休息0.1秒再跑回圈
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Looper.loop();  //格黨 無限
         }
-    };
+    }
 
     @Override
     public boolean onStopJob(JobParameters params) {
@@ -190,20 +195,19 @@ public class alarm_backGroundjob extends JobService {
                                         break;
                                     }
                                 }
-                                List<Double> aqilist = new ArrayList<>(); //暫存aqi數值
 
                                 JSONObject tmp = response.getJSONObject(id); //json物件
                                 if (!tmp.isNull("SO2Ans")) {
                                     String SO2 = tmp.getString("SO2Ans");
                                     int val = Integer.valueOf(SO2);
-                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[0]){ // SO2嚴重了
                                         cas = 2;
                                         noti = true;
                                         str += "SO2、";
                                     }
                                     else{
-                                        good = machine(state);
+                                        if(!noti) // 沒有 壞消息 就看看好消息
+                                            good = machine(state);
                                     }
                                     AQI[0] = val;
                                     if(val>=maxdegree)
@@ -215,7 +219,6 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     int val = Integer.valueOf(CO);
-                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[1]){ // CO嚴重了
                                         cas = 2;
                                         noti = true;
@@ -235,7 +238,6 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     int val = Integer.valueOf(O3);
-                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[2]){ // O3嚴重了
                                         cas = 2;
                                         noti = true;
@@ -255,7 +257,6 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("PM10Ans")) {
                                     String PM10 = tmp.getString("PM10Ans");
                                     int val = Integer.valueOf(PM10);
-                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[3]){ // PM10嚴重了
                                         cas = 2;
                                         noti = true;
@@ -275,7 +276,6 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("PM25Ans")) {
                                     String PM25 = tmp.getString("PM25Ans");
                                     int val = Integer.valueOf(PM25);
-                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[4]){ // PM25嚴重了
                                         cas = 2;
                                         noti = true;
@@ -295,7 +295,6 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("NO2Ans")) {
                                     String NO2 = tmp.getString("NO2Ans");
                                     int val = Integer.valueOf(NO2);
-                                    aqilist.add(Double.valueOf(val));
                                     if(val > AQI[5]){ // NO2嚴重了
                                         cas = 2;
                                         noti = true;
@@ -312,15 +311,13 @@ public class alarm_backGroundjob extends JobService {
                                     }
                                 }
 
-                                Collections.sort(aqilist); //排序
-                                Collections.reverse(aqilist); //由大到小
 
                                 for(int i=0; i<6; ++i){ //記得存檔回去
                                     sp.edit().putInt("aqi"+String.valueOf(i), AQI[i]).apply();
                                 }
                                 sp.edit().putInt("st",cas).apply(); //狀態
 
-                                if(noti){ //bad
+                                if(noti){ //bad 通知訊息
                                     Notice(str.substring(0, str.length()-1), 1);
                                 }
                                 else if(good){
@@ -330,13 +327,9 @@ public class alarm_backGroundjob extends JobService {
                                 /*acp等級*/
                                 if(HealthRecord.getInt("acp",-1) != -1)//不是空的就刪除
                                     editor.remove("acp").commit();
-                                if(aqilist.size()>1){
-                                    editor.putInt("acp", (int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2)).commit();
-                                    Log.d("mjob","數值"+String.valueOf(Math.ceil((aqilist.get(0)+aqilist.get(1))/2)));
-                                }
-                                else if(aqilist.size() == 1){
-                                    editor.putInt("acp", aqilist.get(0).intValue()).commit();
-                                    Log.d("mjob","數值"+String.valueOf(aqilist.get(0).intValue()));
+                                if(maxdegree != 0){
+                                    editor.putInt("acp", maxdegree).commit();
+                                    Log.d("mjob","數值"+String.valueOf(maxdegree));
                                 }
                                 else{
                                     editor.putInt("acp", 0).commit();
@@ -500,7 +493,7 @@ public class alarm_backGroundjob extends JobService {
                     .setSmallIcon(R.drawable.fa)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
                     .setContentTitle("恭喜您!!!")
-                    .setContentText("此地區現在空氣非常優質");
+                    .setContentText("此地區現在空氣非常優質，請多C一點O氣");
         }
         if(!uri.equals("") && (sp.getBoolean("icschecked",true) == true) ){ //設定有開
             if(sp.getBoolean("icrchecked",true) == true)  //鈴聲 開關

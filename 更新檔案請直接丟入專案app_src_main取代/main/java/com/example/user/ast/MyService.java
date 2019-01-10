@@ -82,55 +82,55 @@ public class MyService extends Service {
                                 Log.d("shit","數值維修");
                             }
                             else {
-                                List<Double> aqilist = new ArrayList<>(); //暫存aqi數值
+                                int max_acp = 0; // 取最大值
                                 JSONObject tmp = response.getJSONObject(id); //json物件
                                 if (!tmp.isNull("SO2Ans")) {
                                     String SO2 = tmp.getString("SO2Ans");
                                     int val = Integer.valueOf(SO2);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                 }
 
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     int val = Integer.valueOf(CO);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                 }
 
                                 if (!tmp.isNull("PM10Ans")) {
                                     String PM10 = tmp.getString("PM10Ans");
                                     int val = Integer.valueOf(PM10);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                 }
 
                                 if (!tmp.isNull("PM25Ans")) {
                                     String PM25 = tmp.getString("PM25Ans");
                                     int val = Integer.valueOf(PM25);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                 }
 
                                 if (!tmp.isNull("NO2Ans")) {
                                     String NO2 = tmp.getString("NO2Ans");
                                     int val = Integer.valueOf(NO2);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                 }
 
                                 if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     int val = Integer.valueOf(O3);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                 }
-                                Collections.sort(aqilist); //排序
-                                Collections.reverse(aqilist); //由大到小
                                 /*acp等級*/
                                 if(HealthRecord.getInt("acp2",-1) != -1)//不是空的就刪除
                                     editor.remove("acp2").commit();
-                                if(aqilist.size()>1){
-                                    editor.putInt("acp2", (int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2)).commit();
-                                    Log.d("shit","數值"+String.valueOf(Math.ceil((aqilist.get(0)+aqilist.get(1))/2)));
-                                }
-                                else if(aqilist.size() == 1){
-                                    editor.putInt("acp2", aqilist.get(0).intValue()).commit();
-                                    Log.d("shit","數值"+String.valueOf(aqilist.get(0).intValue()));
+                                if(max_acp != 0){
+                                    editor.putInt("acp2", max_acp).commit();
+                                    Log.d("shit","數值"+String.valueOf(max_acp));
                                 }
                                 else{
                                     editor.putInt("acp2", 0).commit();

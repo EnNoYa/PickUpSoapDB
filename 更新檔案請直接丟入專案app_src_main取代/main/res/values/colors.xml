@@ -10,6 +10,7 @@
     <color name="w">#ffffff</color>
     <color name="gray">#959595</color>
     <color name="dg">#656565</color>
+    <color name="dgpb">#7520303d</color>
 
     <color name="dark_red">#cf0e1f</color>
     <color name="dark_green">#107101</color>
@@ -19,5 +20,14 @@
     <color name="r">#ed2424</color>
     <color name="p">#ca45eb</color>
     <color name="br">#856151</color>
+
+    <color name="lgray">#cecece</color>
+    <color name="lg">#6dff70</color>
+    <color name="ly">#fdfc8c</color>
+    <color name="lo">#ffc86f</color>
+    <color name="lr">#f17f7f</color>
+    <color name="lp">#cb7adf</color>
+    <color name="lbr">#89776f</color>
+    <color name="lcolorAccent">#d44d7e</color>
 
 </resources>

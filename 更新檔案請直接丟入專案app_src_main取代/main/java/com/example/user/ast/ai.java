@@ -37,7 +37,6 @@ public class ai extends AppCompatActivity {
     private String idname;//當前觀測站名稱
     private int id = -1;//index 觀測站
     private int id2 = -1; //index 小時濃度
-    List<Double> aqilist = new ArrayList<>(); //暫存aqi數值
     SharedPreferences HealthRecord;// 存檔用 病例
     SharedPreferences.Editor editor;
     int prev; //我上一個是從哪個按鍵來的
@@ -114,11 +113,13 @@ public class ai extends AppCompatActivity {
                             }
                             else {
                                 JSONObject tmp = response.getJSONObject(id); //json物件
+                                int max_acp = 0; // 取最大值
                                 if (!tmp.isNull("SO2Ans")) {
                                     String SO2 = tmp.getString("SO2Ans");
                                     int val = Integer.valueOf(SO2);
                                     Tgas[0].setText(SO2);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                     colorSet(val, state[0]);//設等級
 
                                 } else{
@@ -129,7 +130,8 @@ public class ai extends AppCompatActivity {
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     int val = Integer.valueOf(CO);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                     Tgas[1].setText(CO);
                                     colorSet(val, state[1]);//設等級
 
@@ -142,7 +144,8 @@ public class ai extends AppCompatActivity {
                                     String PM10 = tmp.getString("PM10Ans");
                                     int val = Integer.valueOf(PM10);
                                     Tgas[3].setText(PM10);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                     colorSet(val, state[3]);//設等級
 
                                 } else{
@@ -154,7 +157,8 @@ public class ai extends AppCompatActivity {
                                     String PM25 = tmp.getString("PM25Ans");
                                     int val = Integer.valueOf(PM25);
                                     Tgas[4].setText(PM25);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                     colorSet(val, state[4]);//設等級
 
                                 } else {
@@ -166,7 +170,8 @@ public class ai extends AppCompatActivity {
                                     String NO2 = tmp.getString("NO2Ans");
                                     int val = Integer.valueOf(NO2);
                                     Tgas[5].setText(NO2);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                     colorSet(val, state[5]);//設等級
 
                                 } else{
@@ -178,25 +183,20 @@ public class ai extends AppCompatActivity {
                                     String O3 = tmp.getString("O3Ans");
                                     int val = Integer.valueOf(O3);
                                     Tgas[2].setText(O3);
-                                    aqilist.add(Double.valueOf(val));
+                                    if(val > max_acp)
+                                        max_acp = val;
                                     colorSet(val, state[2]);//設等級
 
                                 } else{
                                     Tgas[2].setText("維修");
                                     colorSet(0, state[2]);//設等級
                                 }
-                                Collections.sort(aqilist); //排序
-                                Collections.reverse(aqilist); //由大到小
                                 /*aqi設定值*/
-                                if(aqilist.size()>1){
-                                    acp_value.setText(String.valueOf((int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2)));
-                                    colorSet((int)Math.ceil((aqilist.get(0)+aqilist.get(1))/2), acp_state);//設等級
+                                if(max_acp != 0 ){
+                                    acp_value.setText(String.valueOf(max_acp));
+                                    colorSet(max_acp, acp_state);//設等級
                                 }
-                                else if(aqilist.size()==1){
-                                    acp_value.setText(String.valueOf(aqilist.get(0).intValue()));
-                                    colorSet(aqilist.get(0).intValue(), acp_state);//設等級
-                                }
-                                else{
+                                else {
                                     acp_value.setText("維修");
                                     colorSet(0, acp_state);//設等級
                                 }
@@ -254,7 +254,7 @@ public class ai extends AppCompatActivity {
 
                                 if (!tmp.isNull("PM10")&&tmp.getDouble("PM10")>=0) {
                                     Double dtmp = Double.parseDouble(df.format(tmp.getDouble("PM10")));
-                                    hourgas[3].setText(String.valueOf(tmp.getDouble("PM10")));
+                                    hourgas[3].setText(String.valueOf(dtmp));
                                 } else
                                     hourgas[3].setText("維修");
 
@@ -296,35 +296,35 @@ public class ai extends AppCompatActivity {
         switch (cas){
             case 0:
                 mystate.setText("維修");
-                mystate.setTextColor(getResources().getColor(R.color.gray));
+                mystate.setTextColor(getResources().getColor(R.color.lgray));
                 break;
             case 1:
                 mystate.setText(getResources().getString(R.string.strgas_good));
-                mystate.setTextColor(getResources().getColor(R.color.g));
+                mystate.setTextColor(getResources().getColor(R.color.lg));
                 break;
             case 2:
                 mystate.setText(getResources().getString(R.string.strgas_normal));
-                mystate.setTextColor(getResources().getColor(R.color.y));
+                mystate.setTextColor(getResources().getColor(R.color.ly));
                 break;
             case 3:
                 mystate.setText(getResources().getString(R.string.strgas_notgood));
-                mystate.setTextColor(getResources().getColor(R.color.o));
+                mystate.setTextColor(getResources().getColor(R.color.lo));
                 break;
             case 4:
                 mystate.setText(getResources().getString(R.string.strgas_bad));
-                mystate.setTextColor(getResources().getColor(R.color.r));
+                mystate.setTextColor(getResources().getColor(R.color.lr));
                 break;
             case 5:
                 mystate.setText(getResources().getString(R.string.strgas_verybad));
-                mystate.setTextColor(getResources().getColor(R.color.colorAccent));
+                mystate.setTextColor(getResources().getColor(R.color.lcolorAccent));
                 break;
             case 6:
                 mystate.setText(getResources().getString(R.string.strgas_god));
-                mystate.setTextColor(getResources().getColor(R.color.p));
+                mystate.setTextColor(getResources().getColor(R.color.lp));
                 break;
             case 7:
                 mystate.setText(getResources().getString(R.string.strgas_god));
-                mystate.setTextColor(getResources().getColor(R.color.br));
+                mystate.setTextColor(getResources().getColor(R.color.lbr));
                 break;
         }
     }

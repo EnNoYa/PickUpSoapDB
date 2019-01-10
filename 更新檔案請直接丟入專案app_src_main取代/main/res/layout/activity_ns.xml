@@ -33,7 +33,7 @@
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/inss"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
@@ -54,12 +54,10 @@
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/insv"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
         android:text="@string/nsv"
         android:textSize="18sp"
         android:theme="@style/sw"
@@ -80,9 +78,7 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
         android:text="@string/rt"
         android:textSize="18sp"
         android:theme="@style/sw"
@@ -94,23 +90,23 @@
     <Button
         android:id="@+id/irt"
         android:layout_width="100dp"
-        android:layout_height="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/button_2"
         android:text="@string/srt"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/rn_setting"
+        app:layout_constraintBottom_toBottomOf="@+id/irts"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/insv" />
+        app:layout_constraintTop_toTopOf="@+id/irts" />
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/rnss"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
         android:text="@string/rns"
         android:textSize="18sp"
         android:theme="@style/sw"
@@ -162,12 +158,10 @@
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/rnsv"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
         android:text="@string/nsv"
         android:textSize="18sp"
         android:theme="@style/sw"
@@ -202,14 +196,16 @@
     <Button
         android:id="@+id/rrt"
         android:layout_width="100dp"
-        android:layout_height="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/button_2"
         android:text="@string/srt"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/rrts"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rnsv" />
+        app:layout_constraintTop_toTopOf="@+id/rrts" />
 
     <View
         android:id="@+id/line6"
