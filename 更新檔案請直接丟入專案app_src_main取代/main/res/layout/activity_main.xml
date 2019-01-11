@@ -13,10 +13,10 @@
         android:id="@+id/button_local_area"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/button_3"
-        android:text="@string/lc"
+        android:background="@drawable/mapicon"
         android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/sodib"
+        app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toStartOf="@+id/mainbr"
         app:layout_constraintStart_toStartOf="@+id/mainbl"
         app:layout_constraintTop_toTopOf="@+id/sodit" />
@@ -25,10 +25,10 @@
         android:id="@+id/button_sodi_area"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/button_3"
-        android:text="@string/lk"
+        android:background="@drawable/mapicons"
         android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/localb"
+        app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toStartOf="@+id/mainbr"
         app:layout_constraintStart_toStartOf="@+id/mainbl"
         app:layout_constraintTop_toTopOf="@+id/localt" />
@@ -64,8 +64,8 @@
         android:background="#00000000"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/bsl"
         app:layout_constraintTop_toTopOf="@+id/bst"
         app:srcCompat="@drawable/settingicon" />
 
@@ -88,28 +88,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.44" />
+        app:layout_constraintGuide_percent="0.52" />
 
     <android.support.constraint.Guideline
         android:id="@+id/sodib"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <android.support.constraint.Guideline
         android:id="@+id/localt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.70" />
 
     <android.support.constraint.Guideline
         android:id="@+id/localb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.76" />
+        app:layout_constraintGuide_percent="0.83" />
 
     <android.support.constraint.Guideline
         android:id="@+id/bst"
@@ -117,12 +117,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.85" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/bsl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="84dp" />
 
 </android.support.constraint.ConstraintLayout>

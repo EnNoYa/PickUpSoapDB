@@ -61,15 +61,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Guideline x = findViewById(R.id.bsl);
-
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        float scrheight = dm.ydpi/160*dm.heightPixels;  //螢幕的高
-        //dip/px=dpi/160
-        //dip=dpi/160*px
-
-        x.setGuidelineEnd((int)(dm.heightPixels*0.15));
-
     }
 }
