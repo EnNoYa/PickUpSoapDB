@@ -92,29 +92,7 @@ public class alarm_backGroundjob extends JobService {
         mgr = (LocationManager)getSystemService(LOCATION_SERVICE);
 
         tmp.start(); // 開始thread
-        lis =new LocationListener() {
-            @Override
-            public void onLocationChanged (Location location){
-                Log.d("mjob", "定位更新");
-                currPoint = new LatLng(location.getLatitude(), location.getLongitude());
-                save_data(shortest_place(currPoint)); //存現在位置觀測站編號
 
-                /*發警告通知檢查*/
-                jsonParse();
-
-                sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
-            }
-            @Override
-            public void onStatusChanged (String provider,int status, Bundle extras){
-            }
-            @Override
-            public void onProviderEnabled (String provider){
-            }
-            @Override
-            public void onProviderDisabled (String provider){
-                Toast.makeText(alarm_backGroundjob.this, "你人生是不是沒有方向，汝尋彼岸否，要開定位", Toast.LENGTH_SHORT).show();
-            }
-        };
         return false;
     }
 
@@ -124,7 +102,29 @@ public class alarm_backGroundjob extends JobService {
         @Override
         public void run() {
             Log.d("mjob","進入Thread");
+            lis =new LocationListener() {
+                @Override
+                public void onLocationChanged (Location location){
+                    Log.d("mjob", "定位更新");
+                    currPoint = new LatLng(location.getLatitude(), location.getLongitude());
+                    save_data(shortest_place(currPoint)); //存現在位置觀測站編號
 
+                    /*發警告通知檢查*/
+                    jsonParse();
+
+                    sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
+                }
+                @Override
+                public void onStatusChanged (String provider,int status, Bundle extras){
+                }
+                @Override
+                public void onProviderEnabled (String provider){
+                }
+                @Override
+                public void onProviderDisabled (String provider){
+                    Toast.makeText(alarm_backGroundjob.this, "你人生是不是沒有方向，汝尋彼岸否，要開定位", Toast.LENGTH_SHORT).show();
+                }
+            };
 
             Looper.prepare();
             //檢查 GPS 與網路定位是否可用
