@@ -68,9 +68,11 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/text"
-        android:textSize="18sp"
         android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/currt"
+        app:layout_constraintDimensionRatio="4:3"
         app:layout_constraintEnd_toStartOf="@+id/stringsr"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/stringst" />
@@ -151,7 +153,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.48" />
+        app:layout_constraintGuide_percent="0.4" />
 
     <android.support.constraint.Guideline
         android:id="@+id/stringsr"
