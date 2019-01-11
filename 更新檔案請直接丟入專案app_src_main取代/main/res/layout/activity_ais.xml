@@ -54,23 +54,9 @@
         android:id="@+id/currstate_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:alpha="0.3"
-        android:background="@color/gray"
+        android:background="@drawable/bad5n"
         app:layout_constraintBottom_toTopOf="@+id/currb"
-        app:layout_constraintEnd_toStartOf="@+id/currr"
-        app:layout_constraintStart_toStartOf="@+id/currl"
-        app:layout_constraintTop_toTopOf="@+id/currt" />
-
-    <TextView
-        android:id="@+id/currState"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/view"
-        android:contentDescription="@string/strgas_good"
-        android:gravity="center"
-        android:text="@string/strgas_good"
-        android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@+id/currb"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/currr"
         app:layout_constraintStart_toStartOf="@+id/currl"
         app:layout_constraintTop_toTopOf="@+id/currt" />
@@ -83,10 +69,10 @@
         android:layout_marginEnd="10dp"
         android:background="@drawable/text"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/obs_get"
-        app:layout_constraintTop_toTopOf="@+id/stringst"/>
+        app:layout_constraintBottom_toTopOf="@+id/currt"
+        app:layout_constraintEnd_toStartOf="@+id/stringsr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stringst" />
 
 
     <android.support.constraint.Guideline
@@ -108,42 +94,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.26" />
+        app:layout_constraintGuide_percent="0.15" />
 
     <android.support.constraint.Guideline
         android:id="@+id/sobsb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.34" />
+        app:layout_constraintGuide_percent="0.3" />
 
     <android.support.constraint.Guideline
         android:id="@+id/currl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.21" />
+        app:layout_constraintGuide_percent="0.52" />
 
     <android.support.constraint.Guideline
         android:id="@+id/currr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.79" />
+        app:layout_constraintGuide_percent="0.82" />
 
     <android.support.constraint.Guideline
         android:id="@+id/currt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <android.support.constraint.Guideline
         android:id="@+id/currb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.685" />
+        app:layout_constraintGuide_percent="0.835" />
 
     <android.support.constraint.Guideline
         android:id="@+id/toait"
@@ -164,6 +150,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.86" />
+        app:layout_constraintGuide_percent="0.48" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/stringsr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
 
 </android.support.constraint.ConstraintLayout>

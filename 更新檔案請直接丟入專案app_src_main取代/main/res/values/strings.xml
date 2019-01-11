@@ -236,6 +236,7 @@
     <string name="lk">指定地區</string>
     <string name="lcn">所在地名</string>
     <string name="lkn">鎖定地名</string>
+    <string name="strgas_none">Loading</string>
     <string name="strgas_good">良好</string>
     <string name="strgas_normal">普通</string>
     <string name="strgas_notgood">不好</string>

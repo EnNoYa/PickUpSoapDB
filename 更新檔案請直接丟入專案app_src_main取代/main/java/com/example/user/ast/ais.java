@@ -100,7 +100,6 @@ public class ais extends AppCompatActivity {
         if(sp.contains("thread_cnt"))
             sp.edit().clear().apply(); //清空檔案避免過大
         sp.edit().putInt("thread_cnt", ++thread_count).apply();
-        Log.d("mjob","數量"+String.valueOf(thread_count));
 
         if(result == JobScheduler.RESULT_SUCCESS){
             Log.d("mjob","背景執行規劃");

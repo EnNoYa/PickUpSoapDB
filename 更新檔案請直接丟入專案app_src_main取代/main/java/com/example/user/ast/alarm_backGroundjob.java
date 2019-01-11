@@ -42,12 +42,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
 
 
 public class alarm_backGroundjob extends JobService {
 
     private RequestQueue mRQ;
-    static final int MIN_TIME = 5 * 60 *1000; //位置更新條件：5分鐘
+    static final int MIN_TIME = 5 * 60 * 1000; //位置更新條件：60s
     static final float MIN_DIST = 100;   //位置更新條件：100 公尺
     LocationManager mgr;    // 定位管理員
     LocationListener lis;    // 定位聆聽
@@ -90,41 +91,41 @@ public class alarm_backGroundjob extends JobService {
         mRQ = Volley.newRequestQueue(this);
         mgr = (LocationManager)getSystemService(LOCATION_SERVICE);
 
-        tmp.execute(); // 開始thread
+        tmp.start(); // 開始thread
+        lis =new LocationListener() {
+            @Override
+            public void onLocationChanged (Location location){
+                Log.d("mjob", "定位更新");
+                currPoint = new LatLng(location.getLatitude(), location.getLongitude());
+                save_data(shortest_place(currPoint)); //存現在位置觀測站編號
 
+                /*發警告通知檢查*/
+                jsonParse();
+
+                sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
+            }
+            @Override
+            public void onStatusChanged (String provider,int status, Bundle extras){
+            }
+            @Override
+            public void onProviderEnabled (String provider){
+            }
+            @Override
+            public void onProviderDisabled (String provider){
+                Toast.makeText(alarm_backGroundjob.this, "你人生是不是沒有方向，汝尋彼岸否，要開定位", Toast.LENGTH_SHORT).show();
+            }
+        };
         return false;
     }
 
     @SuppressLint("MissingPermission")
-    private class myprocess extends AsyncTask<Void, Void, Void>{
+    private class myprocess extends Thread{
         /*開始任務*/
         @Override
-        protected Void doInBackground(Void... voids) {
-            Log.d("mjob","進入AsyncTask");
+        public void run() {
+            Log.d("mjob","進入Thread");
 
-            lis =new LocationListener() {
-                @Override
-                public void onLocationChanged (Location location){
-                    Log.d("mjob", "定位更新");
-                    currPoint = new LatLng(location.getLatitude(), location.getLongitude());
-                    save_data(shortest_place(currPoint)); //存現在位置觀測站編號
 
-                    /*發警告通知檢查*/
-                    jsonParse();
-
-                    sendBroadcast(new Intent("gps_ok"));//開廣播 王小明
-                }
-                @Override
-                public void onStatusChanged (String provider,int status, Bundle extras){
-                }
-                @Override
-                public void onProviderEnabled (String provider){
-                }
-                @Override
-                public void onProviderDisabled (String provider){
-
-                }
-            };
             Looper.prepare();
             //檢查 GPS 與網路定位是否可用
             isGPSEnabled =mgr.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -142,18 +143,7 @@ public class alarm_backGroundjob extends JobService {
             }
             Log.d("mjob","背景執行迴圈");
 
-            int cnt = tc.getInt("thread_cnt", 1); //thread數量
-            Log.d("mjob","數量"+String.valueOf(cnt));
-            if( cnt > 1 ){
-                if(tc.contains("thread_cnt"))
-                    tc.edit().clear().apply(); //清空檔案避免過大
-                tc.edit().putInt("thread_cnt", --cnt);
-                Log.d("mjob","數量=2才停止");
-                return null;
-            }
-
             Looper.loop();  //格黨 無限
-            return null;
         }
     }
 
@@ -170,7 +160,7 @@ public class alarm_backGroundjob extends JobService {
         final SharedPreferences sp = getApplication().getSharedPreferences("user_aqi",Context.MODE_PRIVATE);//api load
         /*讀取使用值*/
         for(int i=0; i<6; ++i){
-            AQI[i] = sp.getInt("aqi" + String.valueOf(i), 1);
+            AQI[i] = sp.getInt("aqi" + String.valueOf(i), -1);
         }
         state = sp.getInt("st", 0); //取值
 
@@ -212,13 +202,15 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("SO2Ans")) {
                                     String SO2 = tmp.getString("SO2Ans");
                                     int val = Integer.valueOf(SO2);
-                                    if(val > AQI[0]){ // SO2嚴重了
-                                        cas = 2;
-                                        noti = true;
-                                        str += "SO2、";
+                                    if(AQI[0] !=-1){// 第一次的判斷
+                                        if(val > AQI[0]){ // SO2嚴重了
+                                            cas = 2;
+                                            noti = true;
+                                            str += "SO2、";
+                                        }
+                                        else if(val < AQI[0])
+                                            good = true;
                                     }
-                                    else if(val < AQI[0])
-                                        good = true;
                                     AQI[0] = val;
                                     if(val >= maxdegree)
                                     {
@@ -230,13 +222,15 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("COAns")) {
                                     String CO = tmp.getString("COAns");
                                     int val = Integer.valueOf(CO);
-                                    if(val > AQI[1]){ // CO嚴重了
-                                        cas = 2;
-                                        noti = true;
-                                        str += "CO、";
+                                    if(AQI[1] !=-1){
+                                        if(val > AQI[1]){ // CO嚴重了
+                                            cas = 2;
+                                            noti = true;
+                                            str += "CO、";
+                                        }
+                                        else if(val < AQI[1])
+                                            good = true;
                                     }
-                                    else if(val < AQI[1])
-                                        good = true;
                                     AQI[1] = val;
                                     if(val >= maxdegree)
                                     {
@@ -248,13 +242,15 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("O3Ans")) {
                                     String O3 = tmp.getString("O3Ans");
                                     int val = Integer.valueOf(O3);
-                                    if(val > AQI[2]){ // O3嚴重了
-                                        cas = 2;
-                                        noti = true;
-                                        str += "O3、";
+                                    if(AQI[2] !=-1){
+                                        if(val > AQI[2]){ // O3嚴重了
+                                            cas = 2;
+                                            noti = true;
+                                            str += "O3、";
+                                        }
+                                        else if(val < AQI[2])
+                                            good = true;
                                     }
-                                    else if(val < AQI[2])
-                                        good = true;
                                     AQI[2] = val;
                                     if(val >= maxdegree)
                                     {
@@ -266,13 +262,15 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("PM10Ans")) {
                                     String PM10 = tmp.getString("PM10Ans");
                                     int val = Integer.valueOf(PM10);
-                                    if(val > AQI[3]){ // PM10嚴重了
-                                        cas = 2;
-                                        noti = true;
-                                        str += "PM10、";
+                                    if(AQI[3] !=-1){
+                                        if(val > AQI[3]){ // PM10嚴重了
+                                            cas = 2;
+                                            noti = true;
+                                            str += "PM10、";
+                                        }
+                                        else if(val < AQI[3])
+                                            good = true;
                                     }
-                                    else if(val < AQI[3])
-                                        good = true;
                                     AQI[3] = val;
                                     if(val >= maxdegree)
                                     {
@@ -284,13 +282,15 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("PM25Ans")) {
                                     String PM25 = tmp.getString("PM25Ans");
                                     int val = Integer.valueOf(PM25);
-                                    if(val > AQI[4]){ // PM25嚴重了
-                                        cas = 2;
-                                        noti = true;
-                                        str += "PM25、";
+                                    if(AQI[4] !=-1){
+                                        if(val > AQI[4]){ // PM25嚴重了
+                                            cas = 2;
+                                            noti = true;
+                                            str += "PM25、";
+                                        }
+                                        else if(val < AQI[4])
+                                            good = true;
                                     }
-                                    else if(val < AQI[4])
-                                        good = true;
                                     AQI[4] = val;
                                     if(val >= maxdegree)
                                     {
@@ -302,13 +302,15 @@ public class alarm_backGroundjob extends JobService {
                                 if (!tmp.isNull("NO2Ans")) {
                                     String NO2 = tmp.getString("NO2Ans");
                                     int val = Integer.valueOf(NO2);
-                                    if(val > AQI[5]){ // NO2嚴重了
-                                        cas = 2;
-                                        noti = true;
-                                        str += "NO2、";
+                                    if(AQI[5] !=-1){
+                                        if(val > AQI[5]){ // NO2嚴重了
+                                            cas = 2;
+                                            noti = true;
+                                            str += "NO2、";
+                                        }
+                                        else if(val < AQI[5])
+                                            good = true;
                                     }
-                                    else if(val < AQI[5])
-                                        good = true;
                                     AQI[5] = val;
                                     if(val >= maxdegree)
                                     {
