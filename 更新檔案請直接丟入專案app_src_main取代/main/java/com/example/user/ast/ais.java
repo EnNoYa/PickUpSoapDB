@@ -39,7 +39,6 @@ public class ais extends AppCompatActivity {
     myBCRC receiver; //顏色廣播接收者
     JobScheduler myScheduler; //管理員
     JobInfo Jinfo; //工作須知
-    int thread_count; // 數 thread 數量
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +92,6 @@ public class ais extends AppCompatActivity {
                 .build();
         int result = myScheduler.schedule(Jinfo);
 
-        //線呈運作
-        SharedPreferences sp =  getApplication().getSharedPreferences("thread_cnt", Context.MODE_PRIVATE);
-
-        thread_count = sp.getInt("thread_cnt", 0);
-        if(sp.contains("thread_cnt"))
-            sp.edit().clear().apply(); //清空檔案避免過大
-        sp.edit().putInt("thread_cnt", ++thread_count).apply();
 
         if(result == JobScheduler.RESULT_SUCCESS){
             Log.d("mjob","背景執行規劃");
@@ -161,7 +153,7 @@ public class ais extends AppCompatActivity {
         Log.d("mjob","顏色");
         switch (cas){
             case 0:
-                mystate.setBackground(getResources().getDrawable(R.drawable.bad5n, null));
+                mystate.setBackground(getResources().getDrawable(R.drawable.fixing, null));
                 break;
             case 1:
                 mystate.setBackground(getResources().getDrawable(R.drawable.goodn, null));

@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class am extends AppCompatActivity {
     public int nowid = 0;   //當前觀測站編號
     SharedPreferences HealthRecord;//read file
     View curState ; //當前狀態
+    TextView Tstr; // Textview句子
     private String place_name[] = {
             "富貴角", "陽明", "萬里", "淡水", "基隆", "士林", "林口", "三重", "菜寮", "汐止", "大同", "中山", "大園", "松山",
             "萬華", "新莊", "觀音", "古亭", "永和", "板橋", "桃園", "土城", "新店", "平鎮", "中壢", "龍潭", "湖口", "新竹",
@@ -53,6 +55,7 @@ public class am extends AppCompatActivity {
         /*詳細資料按鈕*/
         caredata = findViewById(R.id.obs_get2);
         name = findViewById(R.id.area2);
+        Tstr= findViewById(R.id.str2);
         /*讀檔案*/
         SharedPreferences tmp = getApplication().getSharedPreferences("area_data",Context.MODE_PRIVATE);
         name.setText(tmp.getString("area_save", "臺北市中正區"));
@@ -109,6 +112,7 @@ public class am extends AppCompatActivity {
         filter.addAction("com.example.user.ast.task"); //新增過濾事件
         registerReceiver(receiver, filter);
 
+        Tstr.setText(HealthRecord.getString("gzil1","汝曾看過天空嗎?????"));
     }
     @Override
     protected void onPause(){
@@ -145,6 +149,45 @@ public class am extends AppCompatActivity {
                 break;
         }
     }
+
+    long mTimeLeftMillis = 6000000;
+    private void StartTime(){
+        new CountDownTimer(mTimeLeftMillis,5000){  //5秒更新
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mTimeLeftMillis=millisUntilFinished;
+                updatetext();
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+    }
+
+    int k=0;
+    void updatetext(){
+        if(k==0){
+            Tstr.setText(HealthRecord.getString("gzil1",""));
+            if(HealthRecord.getString("gzil2","not").equals("")||HealthRecord.getString("gzil2","not").equals("not")){
+                k=0;
+            }
+            else{
+                k=1;
+            }
+        }
+        else{
+            Tstr.setText(HealthRecord.getString("gzil2",""));
+            if(HealthRecord.getString("gzil1","not").equals("")||HealthRecord.getString("gzil1","not").equals("not")){
+                k=1;
+            }
+            else{
+                k=0;
+            }
+        }
+    }
+
     /*觀測站位置資訊*/
     public LatLng LLplace[] = {
             new LatLng(25.29743611,121.537975), new LatLng(25.18272222,121.5295833), new LatLng(25.17966667,121.6898806),
@@ -217,6 +260,8 @@ public class am extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Log.d("shit","設定顏色囉");
             colorSet(HealthRecord.getInt("acp2", -1), curState);
+
+            StartTime(); //計時器 句子
         }
     }
 }

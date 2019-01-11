@@ -363,7 +363,7 @@ public class alarm_backGroundjob extends JobService {
                             if(!HealthRecord.getString("gzil2","").equals(""))
                                 editor.remove("gzil2").commit();
                             if(!strgzil2.isEmpty()){
-                                strgzil2 = "可能引起:\n\t\t\t" + strgzil2;
+                                strgzil2 = "可能引起:\t\t\t" + strgzil2;
                             }
                             editor.putString("gzil2",strgzil2).commit();
 
@@ -501,15 +501,15 @@ public class alarm_backGroundjob extends JobService {
     private String judge(){
         switch (maxdegree){
             case 2:
-                return "目前acp為普通，此地區還可以待一陣子。";
+                return "acp為普通，此地區還可以待一陣子。";
             case 3:
-                return "目前acp為不好，我建議您出門戴個口罩，如果已經在外面，去買一個吧!!";
+                return "acp為不好，我建議您出門戴個口罩!!";
             case 4:
-                return "目前acp為糟，不建議出門。若出門的朋友，請地區不宜久留。";
+                return "acp為糟，不建議出門。若出門此地不宜久留。";
             case 5:
-                return "目前acp為很糟，不建議出門，待在家比較好，開著空氣清淨機，戴著口罩";
+                return "acp為很糟，開著空氣清淨機，戴著口罩";
             case 6:
-                return "目前acp為極度危險，您還看的見天空嗎???快離開這裡，此地危險。";
+                return "acp為極度危險，您還看的見天空嗎???快離開這裡，此地危險。";
             case 7:
                 return "災害等級:核爆，不建議留在這裡，勸你迅速脫離此地區。"+'\n'+"或選擇攜帶空氣清淨機，並且停止呼吸";
             default:
@@ -524,8 +524,8 @@ public class alarm_backGroundjob extends JobService {
             notificationBuilder = new NotificationCompat.Builder(this, ch)
                     .setSmallIcon(R.drawable.fa)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
-                    .setContentTitle("提醒您!!!")
-                    .setContentText("此地區" + message + "濃度變高了"+ s_content);
+                    .setContentTitle(s_content)
+                    .setContentText("此地區" + message + "濃度變高了");
         }
         else{
             String ch = "ch2"; //頻道
