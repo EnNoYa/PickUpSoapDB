@@ -35,7 +35,7 @@ public class am extends AppCompatActivity {
     private int M = 79; //最大值
     public int nowid = 0;   //當前觀測站編號
     SharedPreferences HealthRecord;//read file
-    TextView curState ; //當前狀態
+    View curState ; //當前狀態
     private String place_name[] = {
             "富貴角", "陽明", "萬里", "淡水", "基隆", "士林", "林口", "三重", "菜寮", "汐止", "大同", "中山", "大園", "松山",
             "萬華", "新莊", "觀音", "古亭", "永和", "板橋", "桃園", "土城", "新店", "平鎮", "中壢", "龍潭", "湖口", "新竹",
@@ -69,7 +69,7 @@ public class am extends AppCompatActivity {
 
         /*read */
         HealthRecord = getApplication().getSharedPreferences("healthresult", Context.MODE_PRIVATE);
-        curState = findViewById(R.id.currState2);
+        curState = findViewById(R.id.currstate_view2);
         /*執行任務囉*/
         startService(new Intent(am.this, MyService.class));
 
@@ -116,39 +116,32 @@ public class am extends AppCompatActivity {
         unregisterReceiver(receiver);
     }
     /*設定嚴重等級*/
-    public void colorSet(int cas, TextView mystate){
+    public void colorSet(int cas, View mystate){
+        Log.d("mjob","顏色");
         switch (cas){
             case 0:
-                mystate.setText("維修");
-                mystate.setTextColor(getResources().getColor(R.color.gray));
+                mystate.setBackground(getResources().getDrawable(R.drawable.bad5n, null));
                 break;
             case 1:
-                mystate.setText(getResources().getString(R.string.strgas_good));
-                mystate.setTextColor(getResources().getColor(R.color.g));
+                mystate.setBackground(getResources().getDrawable(R.drawable.goodn, null));
                 break;
             case 2:
-                mystate.setText(getResources().getString(R.string.strgas_normal));
-                mystate.setTextColor(getResources().getColor(R.color.y));
+                mystate.setBackground(getResources().getDrawable(R.drawable.normaln, null));
                 break;
             case 3:
-                mystate.setText(getResources().getString(R.string.strgas_notgood));
-                mystate.setTextColor(getResources().getColor(R.color.o));
+                mystate.setBackground(getResources().getDrawable(R.drawable.badn, null));
                 break;
             case 4:
-                mystate.setText(getResources().getString(R.string.strgas_bad));
-                mystate.setTextColor(getResources().getColor(R.color.r));
+                mystate.setBackground(getResources().getDrawable(R.drawable.bad2n, null));
                 break;
             case 5:
-                mystate.setText(getResources().getString(R.string.strgas_verybad));
-                mystate.setTextColor(getResources().getColor(R.color.colorAccent));
+                mystate.setBackground(getResources().getDrawable(R.drawable.bad3n, null));
                 break;
             case 6:
-                mystate.setText(getResources().getString(R.string.strgas_god));
-                mystate.setTextColor(getResources().getColor(R.color.p));
+                mystate.setBackground(getResources().getDrawable(R.drawable.bad4n, null));
                 break;
             case 7:
-                mystate.setText(getResources().getString(R.string.strgas_god));
-                mystate.setTextColor(getResources().getColor(R.color.br));
+                mystate.setBackground(getResources().getDrawable(R.drawable.bad5n, null));
                 break;
         }
     }
