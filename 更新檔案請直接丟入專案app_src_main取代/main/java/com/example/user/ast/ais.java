@@ -53,7 +53,7 @@ public class ais extends AppCompatActivity {
         Tstr= findViewById(R.id.str1);
         curState = findViewById(R.id.currstate_view);
 
-        Toast.makeText(this,"地點抓取中請稍後...",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"地點抓取中請稍候...",Toast.LENGTH_LONG).show();
 
         gpsrec = new gift();
         /*創建一個接收器*/

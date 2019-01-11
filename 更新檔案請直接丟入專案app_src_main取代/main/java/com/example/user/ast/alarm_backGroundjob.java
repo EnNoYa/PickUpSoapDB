@@ -122,7 +122,7 @@ public class alarm_backGroundjob extends JobService {
                 }
                 @Override
                 public void onProviderDisabled (String provider){
-                    Toast.makeText(alarm_backGroundjob.this, "你人生是不是沒有方向，汝尋彼岸否，要開定位", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(alarm_backGroundjob.this, "您人生是不是沒有方向，汝尋彼岸否，要開定位", Toast.LENGTH_SHORT).show();
                 }
             };
 
@@ -363,7 +363,7 @@ public class alarm_backGroundjob extends JobService {
                             if(!HealthRecord.getString("gzil2","").equals(""))
                                 editor.remove("gzil2").commit();
                             if(!strgzil2.isEmpty()){
-                                strgzil2 = "可能引起:\t\t\t" + strgzil2;
+                                strgzil2 = "可能引起:　" + strgzil2;
                             }
                             editor.putString("gzil2",strgzil2).commit();
 
@@ -418,9 +418,9 @@ public class alarm_backGroundjob extends JobService {
             }else if(num==5){
                 strgzil1 ="別出門了，要不然戴個防毒面具好不?";
             }else if(num==6){
-                strgzil1 ="求你了，別出門，防毒面具也救不了你";
+                strgzil1 ="求您了，別出門，防毒面具也救不了您";
             }else if(num==7){
-                strgzil1 ="求你了，別出門，生命是很寶貴的!";
+                strgzil1 ="求您了，別出門，生命是很寶貴的!";
             }
         }
         else{
@@ -436,9 +436,9 @@ public class alarm_backGroundjob extends JobService {
                 }else if(num==5){
                     strgzil1 ="沒防毒面具救別出門了!";
                 }else if(num==6){
-                    strgzil1 ="求你了，別出門，防毒面具也救不了你";
+                    strgzil1 ="求您了，別出門，防毒面具也救不了您";
                 }else if(num==7){
-                    strgzil1 ="求你了，別出門，生命是很寶貴的!";
+                    strgzil1 ="求您了，別出門，生命是很寶貴的!";
                 }
             }
             else{
@@ -509,7 +509,7 @@ public class alarm_backGroundjob extends JobService {
             case 5:
                 return "acp為很糟，開著空氣清淨機，離開這裡";
             case 6:
-                return "acp為極度危險，您還看的見天空嗎???";
+                return "acp為極度危險，您還看得見天空嗎???";
             case 7:
                 return "災害等級:核爆，不建議留在這裡。";
             default:
@@ -528,13 +528,12 @@ public class alarm_backGroundjob extends JobService {
                     .setContentTitle("提醒您!!!")
                     .setContentText("此地區" + message + "濃度變高了"); //內容
 
-            t.addLine("此地區" + message + "濃度變高了")
-                .addLine(s_content);
+            t.addLine("此地區" + message + "濃度變高了").addLine(s_content);
             if(maxdegree == 6){
                 t.addLine("快離開這裡，此地危險。");
             }
             else if(maxdegree == 7){
-                t.addLine("勸你迅速脫離此地區。");
+                t.addLine("勸您迅速脫離此地區。");
                 t.addLine("或選擇攜帶空氣清淨機，並且停止呼吸");
             }
             if(maxdegree > 3){

@@ -190,12 +190,6 @@
     <string name="airlkaqiv">0</string>
     <string name="airlcaqiv">0</string>
     <string name="airaqiv">0</string>
-    <string name="ailevelv1">良好</string>
-    <string name="ailevelv2">普通</string>
-    <string name="ailevelv3">敏感X</string>
-    <string name="ailevelv4">所有X</string>
-    <string name="ailevelv5">非常差</string>
-    <string name="ailevelv6">危害</string>
     <string name="con">汙染物</string>
     <string name="so2i" >0</string>
     <string name="coi">0</string>

@@ -178,7 +178,7 @@ public class MyService extends Service {
                             if(!HealthRecord.getString("gzil2","").equals(""))
                                 editor.remove("gzil2").commit();
                             if(!strgzil2.isEmpty()){
-                                strgzil2 = "可能引起:\t\t\t" + strgzil2;
+                                strgzil2 = "可能引起:　" + strgzil2;
                             }
                             editor.putString("gzil2",strgzil2).commit();
 
@@ -217,9 +217,9 @@ public class MyService extends Service {
             }else if(num==5){
                 strgzil1 ="別出門了，要不然戴個防毒面具好不?";
             }else if(num==6){
-                strgzil1 ="求你了，別出門，防毒面具也救不了你";
+                strgzil1 ="求您了，別出門，防毒面具也救不了您";
             }else if(num==7){
-                strgzil1 ="求你了，別出門，生命是很寶貴的!";
+                strgzil1 ="求您了，別出門，生命是很寶貴的!";
             }
         }
         else{
@@ -235,9 +235,9 @@ public class MyService extends Service {
                 }else if(num==5){
                     strgzil1 ="沒防毒面具救別出門了!";
                 }else if(num==6){
-                    strgzil1 ="求你了，別出門，防毒面具也救不了你";
+                    strgzil1 ="求您了，別出門，防毒面具也救不了您";
                 }else if(num==7){
-                    strgzil1 ="求你了，別出門，生命是很寶貴的!";
+                    strgzil1 ="求您了，別出門，生命是很寶貴的!";
                 }
             }
             else{
