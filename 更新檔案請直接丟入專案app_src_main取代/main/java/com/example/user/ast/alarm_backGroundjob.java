@@ -505,13 +505,13 @@ public class alarm_backGroundjob extends JobService {
             case 3:
                 return "acp為不好，我建議您出門戴個口罩!!";
             case 4:
-                return "acp為糟，不建議出門。若出門此地不宜久留。";
+                return "acp為糟，不建議出門。若出門此地不宜久留";
             case 5:
-                return "acp為很糟，開著空氣清淨機，戴著口罩";
+                return "acp為很糟，開著空氣清淨機，離開這裡";
             case 6:
-                return "acp為極度危險，您還看的見天空嗎???快離開這裡，此地危險。";
+                return "acp為極度危險，您還看的見天空嗎???";
             case 7:
-                return "災害等級:核爆，不建議留在這裡，勸你迅速脫離此地區。"+'\n'+"或選擇攜帶空氣清淨機，並且停止呼吸";
+                return "災害等級:核爆，不建議留在這裡。";
             default:
                 return "";
         }
@@ -521,11 +521,26 @@ public class alarm_backGroundjob extends JobService {
         if(chid == 1){
             String ch = "ch1"; //頻道
             String s_content = judge(); // 字串內容
+            NotificationCompat.InboxStyle t = new NotificationCompat.InboxStyle(); //暫時存用 自訂折疊式通知
             notificationBuilder = new NotificationCompat.Builder(this, ch)
                     .setSmallIcon(R.drawable.fa)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.fa))
-                    .setContentTitle(s_content)
-                    .setContentText("此地區" + message + "濃度變高了");
+                    .setContentTitle("提醒您!!!")
+                    .setContentText("此地區" + message + "濃度變高了"); //內容
+
+            t.addLine("此地區" + message + "濃度變高了")
+                .addLine(s_content);
+            if(maxdegree == 6){
+                t.addLine("快離開這裡，此地危險。");
+            }
+            else if(maxdegree == 7){
+                t.addLine("勸你迅速脫離此地區。");
+                t.addLine("或選擇攜帶空氣清淨機，並且停止呼吸");
+            }
+            if(maxdegree > 3){
+                t.addLine("再次貼心提醒---口罩不離身");
+            }
+            notificationBuilder.setStyle(t); //自訂 帥帥
         }
         else{
             String ch = "ch2"; //頻道
