@@ -172,7 +172,7 @@ public class alarm_backGroundjob extends JobService {
                         try {
                             int id = -1; // 觀測站代碼
                             cas = state; // default
-                            boolean noti = false, good = false;
+                            boolean noti = false;
                             String str = "";
                             maxdegree = 0;
                             whomax = -1;
@@ -208,8 +208,6 @@ public class alarm_backGroundjob extends JobService {
                                             noti = true;
                                             str += "SO2、";
                                         }
-                                        else if(val < AQI[0])
-                                            good = true;
                                     }
                                     AQI[0] = val;
                                     if(val >= maxdegree)
@@ -228,8 +226,7 @@ public class alarm_backGroundjob extends JobService {
                                             noti = true;
                                             str += "CO、";
                                         }
-                                        else if(val < AQI[1])
-                                            good = true;
+
                                     }
                                     AQI[1] = val;
                                     if(val >= maxdegree)
@@ -248,8 +245,7 @@ public class alarm_backGroundjob extends JobService {
                                             noti = true;
                                             str += "O3、";
                                         }
-                                        else if(val < AQI[2])
-                                            good = true;
+
                                     }
                                     AQI[2] = val;
                                     if(val >= maxdegree)
@@ -268,8 +264,7 @@ public class alarm_backGroundjob extends JobService {
                                             noti = true;
                                             str += "PM10、";
                                         }
-                                        else if(val < AQI[3])
-                                            good = true;
+
                                     }
                                     AQI[3] = val;
                                     if(val >= maxdegree)
@@ -288,8 +283,6 @@ public class alarm_backGroundjob extends JobService {
                                             noti = true;
                                             str += "PM25、";
                                         }
-                                        else if(val < AQI[4])
-                                            good = true;
                                     }
                                     AQI[4] = val;
                                     if(val >= maxdegree)
@@ -308,8 +301,6 @@ public class alarm_backGroundjob extends JobService {
                                             noti = true;
                                             str += "NO2、";
                                         }
-                                        else if(val < AQI[5])
-                                            good = true;
                                     }
                                     AQI[5] = val;
                                     if(val >= maxdegree)
@@ -325,8 +316,12 @@ public class alarm_backGroundjob extends JobService {
                                     if(AQI[i] > 1)
                                         allclear = false;
                                 }
-                                if(good && !noti){ // 表示任意一個值有下降，但不能有壞消息
-                                    good = down_fsm(cas, allclear);
+
+                                if(allclear && cas != 0){
+                                    cas = 0; //全部乾淨
+                                }
+                                else{
+                                    allclear = false; //不通知了
                                 }
 
                                 sp.edit().putInt("st",cas).apply(); //狀態save
@@ -335,7 +330,7 @@ public class alarm_backGroundjob extends JobService {
                                 if(noti){ //bad 通知訊息
                                     Notice(str.substring(0, str.length()-1), 1);
                                 }
-                                else if(good){
+                                else if(allclear){ //全部乾淨
                                     Notice("",0);
                                 }
 
@@ -380,27 +375,6 @@ public class alarm_backGroundjob extends JobService {
                 }
         );
         mRQ.add(request);
-    }
-
-    /*當前狀態--下降機制*/
-    private boolean down_fsm(int state, boolean clear){
-        switch (state){
-            case 2:
-                if(!clear){
-                    cas = 1;
-                    return false;
-                }
-                else{
-                    cas = 0;
-                    return true;
-                }
-            case 1:
-                cas = 0;
-                return true;
-            default:
-                cas = 0;
-                return false;
-        }
     }
 
     public void aboutyourbreath(int num, int who, int gas_select) {//引發疾病
