@@ -54,7 +54,7 @@
         android:id="@+id/currstate_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bad5n"
+        android:background="@drawable/fixing"
         app:layout_constraintBottom_toTopOf="@+id/currb"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/currr"

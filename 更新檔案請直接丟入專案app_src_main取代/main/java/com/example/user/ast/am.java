@@ -124,7 +124,7 @@ public class am extends AppCompatActivity {
         Log.d("mjob","顏色");
         switch (cas){
             case 0:
-                mystate.setBackground(getResources().getDrawable(R.drawable.bad5n, null));
+                mystate.setBackground(getResources().getDrawable(R.drawable.fixing, null));
                 break;
             case 1:
                 mystate.setBackground(getResources().getDrawable(R.drawable.goodn, null));

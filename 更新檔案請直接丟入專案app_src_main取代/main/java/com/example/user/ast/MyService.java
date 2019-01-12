@@ -204,7 +204,10 @@ public class MyService extends Service {
 
     public void aboutyourbreath(int num, int who, int gas_select) {//引發疾病
 
-        if(who==-1)who=0;
+        if(who==-1){
+            strgzil1 ="維修中哦~~";
+            who=0;
+        }
         if(HealthRecord.getBoolean("checkedHeartDisease",true)==false&&HealthRecord.getBoolean("checkedDVC",true)==false&&HealthRecord.getBoolean("checkedRespiratoryDisease",true)==false&&HealthRecord.getBoolean("checkedConjunctivitis",true)==false&&HealthRecord.getBoolean("checkedAllergicRhinitis",true)==false||who==0){
             if (num ==1) {
                 strgzil1 ="非常新鮮的空氣，多到戶外走走吧!";
